@@ -1,5 +1,6 @@
 "use server";
 import { saveOtSettingsToDb } from "@/lib/mongodb/oTSettingsQueries";
+import { revalidatePath } from "next/cache";
 
 export async function createOtSettings(prevState, formData) {
   try {
@@ -94,6 +95,7 @@ export async function createOtSettings(prevState, formData) {
     const result = await saveOtSettingsToDb(cleanedData);
 
     if (result.modifiedCount) {
+      revalidatePath("/overtime/entry-form");
       return { success: true, message: "Data saved successfully!" };
     }
     return { success: false, message: "Nothing changed!" };

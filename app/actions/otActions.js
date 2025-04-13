@@ -76,6 +76,7 @@ export async function editOtEntry(prevData, formData) {
     const result = await updateOtById(parsedData);
 
     if (result.modifiedCount > 0) {
+      revalidatePath(`/overtime`);
       revalidatePath(`/overtime/report`);
       return { success: true, message: "Data updated successfully" };
     }
@@ -99,6 +100,8 @@ export async function deleteOtEntry(id) {
     });
 
     if (result.deletedCount === 0) {
+      revalidatePath(`/overtime`);
+      revalidatePath(`/overtime/report`);
       return { success: false, message: "Document not found!" };
     }
 

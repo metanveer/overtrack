@@ -1,12 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { MenuIcon, XIcon } from "lucide-react";
 import Link from "next/link";
+import Breadcrumb from "./components/Breadcrump";
 
 export default function LayoutShell({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const pathname = usePathname();
 
   // Close sidebar on outside click (only on small screens)
   useEffect(() => {
@@ -29,6 +32,16 @@ export default function LayoutShell({ children }) {
       setSidebarOpen(false);
     }
   };
+
+  const navLinks = [
+    { href: "/overtime/entry-form", label: "OT Entry Form" },
+    { href: "/overtime", label: "Overtime" },
+    { href: "/overtime/report/daily", label: "Daily" },
+    { href: "/overtime/report/monthly", label: "Monthly" },
+    { href: "/overtime/report/employee", label: "Employee Records" },
+    { href: "/overtime/report", label: "All OT Entries" },
+    { href: "/overtime/settings", label: "Settings" },
+  ];
 
   return (
     <div>
@@ -67,40 +80,27 @@ export default function LayoutShell({ children }) {
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           } md:translate-x-0 md:block`}
       >
-        <nav className="flex flex-col space-y-4">
-          <Link
-            href="/overtime/entry-form"
-            className="text-gray-700 hover:text-blue-600"
-            onClick={handleLinkClick}
-          >
-            OT Entry Form
-          </Link>
-          <Link
-            href="/overtime/report"
-            className="text-gray-700 hover:text-blue-600"
-            onClick={handleLinkClick}
-          >
-            OT Report
-          </Link>
-          <Link
-            href="/overtime"
-            className="text-gray-700 hover:text-blue-600"
-            onClick={handleLinkClick}
-          >
-            Overtime
-          </Link>
-          <Link
-            href="/overtime/settings"
-            className="text-gray-700 hover:text-blue-600"
-            onClick={handleLinkClick}
-          >
-            Settings
-          </Link>
+        <nav className="flex flex-col space-y-2">
+          {navLinks.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={handleLinkClick}
+              className={`px-2 py-1 rounded-md transition-colors duration-200 ${
+                pathname === href
+                  ? "text-blue-600 font-semibold bg-blue-100"
+                  : "text-black hover:text-blue-600"
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
       </aside>
 
       {/* Main Content */}
       <main className="pt-18 md:ml-52 p-4 transition-all duration-300">
+        <Breadcrumb />
         {children}
       </main>
     </div>

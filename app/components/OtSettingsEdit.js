@@ -23,7 +23,6 @@ const OtSettingsEdit = ({ dataFromDb }) => {
   const [data, setData] = useState(initData);
 
   const [state, formAction, isPending] = useActionState(createOtSettings, {});
-
   const router = useRouter();
 
   const handleSubmit = (e) => {
@@ -70,8 +69,8 @@ const OtSettingsEdit = ({ dataFromDb }) => {
   };
 
   const getLabel = (key) => {
-    if (key === "OtType") return "Add OT Types";
-    if (key === "OtTime") return "Define OT Times";
+    if (key === "OtType") return "OT Type";
+    if (key === "OtTime") return "OT Time";
     return key;
   };
 
@@ -99,7 +98,7 @@ const OtSettingsEdit = ({ dataFromDb }) => {
             <input
               key={field}
               type="text"
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={data[key][index][field] || ""}
               placeholder={getPlaceholder(field)}
               onChange={(e) => handleChange(key, index, field, e.target.value)}
@@ -111,7 +110,7 @@ const OtSettingsEdit = ({ dataFromDb }) => {
       return (
         <input
           type="text"
-          className="border p-2 rounded w-full"
+          className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={item || ""}
           placeholder={getPlaceholder(key)}
           onChange={(e) => handleChange(key, index, null, e.target.value)}
@@ -123,54 +122,64 @@ const OtSettingsEdit = ({ dataFromDb }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-xl shadow"
+      className="max-w-4xl mx-auto p-6 space-y-10 bg-white rounded-xl shadow-md"
     >
-      <h1 className="text-2xl font-semibold text-gray-800">
+      <h1 className="text-3xl font-bold text-gray-800 border-b pb-4">
         Dropdown Settings
       </h1>
 
       {Object.entries(data).map(([key, value]) => (
-        <div key={key}>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-semibold capitalize text-gray-700">
-              {getLabel(key)}
-            </h2>
-            <button
-              type="button"
-              onClick={() => handleAdd(key)}
-              className="flex items-center gap-1 text-blue-600 hover:underline"
-            >
-              <Plus size={16} /> Add
-            </button>
-          </div>
+        <div key={key} className="space-y-4">
+          <h2 className="text-xl font-semibold capitalize text-gray-700">
+            {getLabel(key)}
+          </h2>
+
           <div className="space-y-3">
             {value.map((item, index) => (
               <div
                 key={index}
-                className="flex flex-col sm:flex-row items-start sm:items-center gap-2"
+                className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-gray-50 p-4 rounded-lg shadow-sm"
               >
-                {renderInput(key, item, index)}
+                <div className="text-gray-500 font-medium min-w-[1.5rem]">
+                  {index + 1}.
+                </div>
+                <div className="flex-1 w-full">
+                  {renderInput(key, item, index)}
+                </div>
                 <button
                   type="button"
                   onClick={() => handleDelete(key, index)}
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 transition"
                 >
                   <Trash2 size={18} />
                 </button>
               </div>
             ))}
           </div>
+
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={() => handleAdd(key)}
+              className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 transition"
+            >
+              <Plus size={16} /> Add {getLabel(key)}
+            </button>
+          </div>
         </div>
       ))}
 
-      {/* <pre className="bg-gray-100 p-4 rounded text-sm text-gray-600 overflow-auto">
-        {JSON.stringify(data, null, 2)}
-      </pre> */}
-      {isPending ? "Saving data..." : <FormStatus state={state} />}
+      <FormStatus state={state} />
+      {isPending && (
+        <p className="text-blue-600 font-medium animate-pulse">
+          Saving data...
+        </p>
+      )}
+
       <div className="pt-4">
         <button
           type="submit"
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md"
         >
           Submit
         </button>

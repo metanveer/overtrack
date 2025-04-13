@@ -6,7 +6,7 @@ import DeleteBtnConfirm from "./DeleteBtnConfirm";
 
 const OtReport = ({ reports }) => {
   return (
-    <div className="overflow-x-auto shadow-md rounded-lg">
+    <div className="overflow-x-auto shadow-md">
       <table className="min-w-full table-auto border border-gray-300">
         <thead>
           <tr className="bg-gray-100">

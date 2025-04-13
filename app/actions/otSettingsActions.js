@@ -95,7 +95,10 @@ export async function createOtSettings(prevState, formData) {
     const result = await saveOtSettingsToDb(cleanedData);
 
     if (result.modifiedCount) {
+      revalidatePath("/overtime");
       revalidatePath("/overtime/entry-form");
+      revalidatePath("/overtime/settings/edit");
+
       return { success: true, message: "Data saved successfully!" };
     }
     return { success: false, message: "Nothing changed!" };

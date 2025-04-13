@@ -4,6 +4,7 @@ import {
   getMonthlyHr,
   insertMonthlyHr,
 } from "@/lib/mongodb/monthlyHourQueries";
+import { revalidatePath } from "next/cache";
 
 export default async function createMonthlyHr(prevData, formData) {
   try {
@@ -53,6 +54,7 @@ export default async function createMonthlyHr(prevData, formData) {
     const newData = await insertMonthlyHr(parsedData);
 
     if (newData.acknowledged) {
+      revalidatePath("/overtime/settings/monthly-data");
       return { success: true, message: "Data saved successfully." };
     }
 

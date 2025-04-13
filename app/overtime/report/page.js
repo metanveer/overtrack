@@ -21,8 +21,7 @@ const ReportPage = async () => {
   const reports = await getAllOtEntry();
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Report</h1>
+    <div className="p-2">
       <OtReport reports={reports} />
     </div>
   );

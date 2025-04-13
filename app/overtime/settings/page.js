@@ -4,7 +4,6 @@ import React from "react";
 const Settings = () => {
   return (
     <div>
-      <h1>Settings</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <CustomLink
           href={`/overtime/settings/edit`}

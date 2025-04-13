@@ -1,8 +1,19 @@
 import React from "react";
 
+const calculateTotalOtHours = (data) => {
+  return data.reduce((sum, item) => {
+    const employeeHours = item.Employees.reduce((empSum, emp) => {
+      return empSum + Number(emp.OtHour);
+    }, 0);
+    return sum + employeeHours;
+  }, 0);
+};
+
 const OtReportDaily = ({ records }) => {
+  const totalOtHours = calculateTotalOtHours(records);
+
   return (
-    <div className="overflow-x-auto shadow-md rounded-lg">
+    <div className="overflow-x-auto">
       <table className="min-w-full table-auto border border-gray-300">
         <thead>
           <tr className="bg-gray-100">
@@ -69,7 +80,7 @@ const OtReportDaily = ({ records }) => {
                   {emp.OtTime}
                 </td>
                 <td className="px-4 py-2 border border-gray-200">
-                  {emp?.OtHour}
+                  {emp.OtHour}
                 </td>
 
                 {empIndex === 0 && (
@@ -83,6 +94,18 @@ const OtReportDaily = ({ records }) => {
               </tr>
             ));
           })}
+
+          {/* Total Row */}
+          <tr className="bg-gray-100 font-semibold">
+            <td
+              className="px-4 py-2 border border-gray-300 text-right"
+              colSpan={6}
+            >
+              Total OT Hours
+            </td>
+            <td className="px-4 py-2 border border-gray-300">{totalOtHours}</td>
+            <td className="px-4 py-2 border border-gray-300"></td>
+          </tr>
         </tbody>
       </table>
     </div>

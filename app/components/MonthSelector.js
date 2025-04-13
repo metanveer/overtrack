@@ -1,0 +1,98 @@
+"use client";
+import Link from "next/link";
+import React, { useState } from "react";
+
+const MonthSelector = () => {
+  const currentDate = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(
+    String(currentDate.getMonth() + 1).padStart(2, "0")
+  );
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+
+  const monthOptions = [
+    { value: "01", label: "January" },
+    { value: "02", label: "February" },
+    { value: "03", label: "March" },
+    { value: "04", label: "April" },
+    { value: "05", label: "May" },
+    { value: "06", label: "June" },
+    { value: "07", label: "July" },
+    { value: "08", label: "August" },
+    { value: "09", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
+  ];
+
+  const monthSelected = `${selectedYear}-${selectedMonth}`;
+
+  return (
+    <div className="p-6 sm:p-8 lg:p-10 max-w-5xl mx-auto  bg-white rounded-2xl shadow-md border border-[#ddd]">
+      <h1 className="text-xl sm:text-2xl font-bold mb-6 text-gray-800 text-center">
+        Select Month and Year
+      </h1>
+      <form className="flex flex-col lg:flex-row gap-4 items-center justify-between flex-wrap">
+        <div className="lg:flex w-full gap-4">
+          <div className="w-full">
+            <label
+              htmlFor="month"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Month
+            </label>
+            <select
+              id="month"
+              name="month"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            >
+              {monthOptions.map((month) => (
+                <option key={month.value} value={month.value}>
+                  {month.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="w-full ">
+            <label
+              htmlFor="year"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Year
+            </label>
+            <input
+              type="number"
+              id="year"
+              name="year"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="w-full border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              min="2000"
+              max="2100"
+              required
+            />
+          </div>
+        </div>
+        <div className="w-full flex gap-4">
+          <Link
+            href={`/overtime/report/monthly?month=${monthSelected}`}
+            className="w-full text-center px-6 py-3 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
+          >
+            Detailed Report
+          </Link>
+          <Link
+            href={`/overtime/report/monthly?month=${monthSelected}&type=summary`}
+            className="w-full text-center px-6 py-3 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
+          >
+            Summary Report
+          </Link>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default MonthSelector;

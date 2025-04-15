@@ -28,8 +28,6 @@ const MonthlyReportPage = async ({ searchParams }) => {
 
   const result = await getDateWiseOtEntries(month);
 
-  console.log("result from monthly report", JSON.stringify(result, null, 2));
-
   return (
     <div className="p-2">
       {type === "summary" ? (

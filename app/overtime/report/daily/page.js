@@ -15,16 +15,6 @@ const DailyReportPage = async ({ searchParams }) => {
   if (!date) {
     return (
       <div className="p-2">
-        <h1 className="flex items-center text-xl font-bold mb-4 space-x-2 text-gray-800">
-          <Link
-            href="/overtime/report"
-            className="text-blue-600 hover:underline"
-          >
-            Daily Reports
-          </Link>
-          <ChevronRight className="w-5 h-5 text-gray-500" />
-          <span>{`Choose date`}</span>
-        </h1>
         <SelectDate />
       </div>
     );

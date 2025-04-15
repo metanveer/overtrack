@@ -8,7 +8,6 @@ import {
 } from "@/lib/mongodb/otQueries";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function createOtEntry(prevData, formData) {
   try {
@@ -48,7 +47,7 @@ export async function createOtEntry(prevData, formData) {
     return { success: false, message: "Failed to create OT." };
   } catch (error) {
     console.error("Error creating OT entry:", error);
-    return { success: false, error: `Error creating OT: ${error.message}` };
+    return { success: false, message: `Error creating OT: ${error.message}` };
   }
 }
 export async function editOtEntry(prevData, formData) {
@@ -84,7 +83,7 @@ export async function editOtEntry(prevData, formData) {
     return { success: false, message: "Failed to save or no change made!" };
   } catch (error) {
     console.error("Error creating OT entry:", error);
-    return { success: false, error: `Error creating OT: ${error.message}` };
+    return { success: false, message: `Error creating OT: ${error.message}` };
   }
 }
 
@@ -100,10 +99,10 @@ export async function deleteOtEntry(id) {
     });
 
     if (result.deletedCount === 0) {
-      revalidatePath(`/overtime`);
-      revalidatePath(`/overtime/report`);
       return { success: false, message: "Document not found!" };
     }
+    revalidatePath(`/overtime`);
+    revalidatePath(`/overtime/report`);
 
     return { success: true, message: "Deleted successfully!" };
   } catch (error) {

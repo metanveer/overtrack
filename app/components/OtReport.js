@@ -75,7 +75,14 @@ const OtReport = ({ reports }) => {
                       className="px-4 py-2 border border-gray-200"
                       rowSpan={employeeCount}
                     >
-                      {report.WorkDescription}
+                      <Link
+                        href={`/overtime/report/view?id=${report._id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline font-medium"
+                      >
+                        {report.WorkDescription}
+                      </Link>
                     </td>
                     <td
                       className="px-4 py-2 border border-gray-200"

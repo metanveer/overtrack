@@ -15,6 +15,7 @@ const Settings = () => {
           href={`/overtime/report/employee`}
           label={"Employee OT Records"}
         />
+        <CustomLink href={`/overtime/report/billing`} label={"Billing"} />
       </div>
     </>
   );

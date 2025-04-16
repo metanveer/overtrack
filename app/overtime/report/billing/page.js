@@ -6,7 +6,6 @@ import { getBillByMonth } from "@/lib/mongodb/billQueries";
 import { getEmployeesOtHours } from "@/lib/mongodb/otQueries";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import getMonthStartAndEnd from "@/utils/getMonthStartAndEnd";
-import React from "react";
 
 function isValidMonth(input) {
   const regex = /^\d{4}-(0[1-9]|1[0-2])$/;
@@ -19,11 +18,8 @@ const BillingPage = async ({ searchParams }) => {
   if (month && isValidMonth(month)) {
     const bill = await getBillByMonth(month);
 
-    console.log("bill", bill);
-
     if (bill) {
-
-      if (mode && mode === 'edit') {
+      if (mode && mode === "edit") {
         const date = getMonthStartAndEnd(month);
 
         const res = await getEmployeesOtHours(date.start, date.end);
@@ -33,7 +29,12 @@ const BillingPage = async ({ searchParams }) => {
         return (
           <div>
             <BillingMonthSelector initMonth={month} />
-            <EditBilling empMonthlyData={bill} employees={Employee} totalOtRecords={res} month={month} />
+            <EditBilling
+              empMonthlyData={bill}
+              employees={Employee}
+              totalOtRecords={res}
+              month={month}
+            />
           </div>
         );
       }
@@ -48,17 +49,15 @@ const BillingPage = async ({ searchParams }) => {
 
     const date = getMonthStartAndEnd(month);
 
-    console.log('date', date);
-
     const empHours = await getEmployeesOtHours(date.start, date.end);
-
-    console.log("getEmployeeOtHours", empHours);
 
     if (empHours.length === 0) {
       return (
         <div>
           <BillingMonthSelector initMonth={month} />
-          <p className="text-center my-8 text-xl"  >No OT records available for this month!</p>
+          <p className="text-center my-8 text-xl">
+            No OT records available for this month!
+          </p>
         </div>
       );
     }
@@ -81,5 +80,3 @@ const BillingPage = async ({ searchParams }) => {
 };
 
 export default BillingPage;
-
-

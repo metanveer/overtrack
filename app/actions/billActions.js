@@ -52,8 +52,8 @@ export async function createBill(prevData, formData) {
     const newBill = await insertBill({ billMonth, billData });
 
     if (newBill.acknowledged) {
-      revalidatePath("/overtime/report/billing/edit");
-      revalidatePath("/overtime/report/billing/view");
+      revalidatePath("/overtime/report/billing");
+      revalidatePath("/overtime/report/billing");
 
       return { success: true, message: "Bill data saved successfully." };
     }
@@ -98,8 +98,9 @@ export async function editBill(prevData, formData) {
     const updatedBill = await updateBill(billMonth, billData);
 
     if (updatedBill.modifiedCount > 0) {
-      revalidatePath("/overtime/report/billing/edit");
-      revalidatePath("/overtime/report/billing/view");
+      revalidatePath("/overtime/report/billing");
+      revalidatePath("/overtime/report/billing");
+
       return { success: true, message: "Data updated successfully" };
     }
 

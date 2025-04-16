@@ -1,13 +1,17 @@
 "use client";
 
-import React, { startTransition, useActionState, useState } from "react";
+import React, {
+  startTransition,
+  useActionState,
+  useEffect,
+  useState,
+} from "react";
 import { editBill } from "../actions/billActions";
 import FormStatus from "./FormStatus";
+import { useRouter } from "next/navigation";
 
 const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
-
-  const { billMonth, billData } = empMonthlyData
-
+  const { billMonth, billData } = empMonthlyData;
 
   const initializeRows = () => {
     return employees.map((emp) => {
@@ -28,9 +32,16 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
     });
   };
 
-
   const [rows, setRows] = useState(initializeRows());
   const [state, formAction, isPending] = useActionState(editBill, {});
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state?.success) {
+      router.push(`/overtime/report/billing?month=${billMonth}`);
+    }
+  }, [state, router, billMonth]);
 
   const handleChange = (index, key, value) => {
     const updated = [...rows];
@@ -93,11 +104,8 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
 
   return (
     <form className="py-6" onSubmit={handleSave}>
-      <div className="mb-6 text-2xl font-bold text-red-700">
-        Edit Bill for
-        <span className="px-1 font-bold">
-          {formatMonthName(month)}
-        </span>
+      <div className="mb-6 text-2xl font-bold text-red-700 text-center">
+        Edit Bill for {formatMonthName(month)}
       </div>
 
       <div className="overflow-auto rounded-lg shadow border border-gray-200">

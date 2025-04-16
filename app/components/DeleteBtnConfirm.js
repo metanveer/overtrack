@@ -1,25 +1,25 @@
 "use client";
 import { Delete } from "lucide-react";
 import Modal from "./Modal";
-import { deleteOtEntry } from "../actions/otActions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import FormStatus from "./FormStatus";
 
-const DeleteBtnConfirm = ({ currentId }) => {
+const DeleteBtnConfirm = ({ currentId, deleteAction, isIcon }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [status, setStatus] = useState({});
   const router = useRouter();
 
   async function handleDelete() {
     setStatus({ success: true, message: "Deleting entry..." });
-    const res = await deleteOtEntry(currentId);
+    const res = await deleteAction(currentId);
     if (res.success) {
       setStatus({ success: true, message: "Deleted successfully" });
       router.refresh();
       setSelectedId(null);
+    } else {
+      setStatus({ success: false, message: "Failed to delete!" });
     }
-    setStatus({ success: false, message: "Failed to delete!" });
   }
 
   return (
@@ -39,10 +39,11 @@ const DeleteBtnConfirm = ({ currentId }) => {
           setSelectedId(currentId);
           setStatus({});
         }}
-        className="text-red-500 hover:text-red-700 transition-colors"
+        className={isIcon ? "text-red-500 hover:text-red-700 transition-colors" : "bg-red-500 hover:bg-red-600 text-white font-medium px-8 py-2 my-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"}
       >
-        <Delete />
+        {isIcon ?<Delete /> : "Delete"}
       </button>
+   
     </>
   );
 };

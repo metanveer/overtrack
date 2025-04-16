@@ -1,6 +1,7 @@
 import Billing from "@/app/components/Billing";
 import BillingMonthSelector from "@/app/components/BillingMonthSelector";
 import BillingView from "@/app/components/BillingView";
+import EditBilling from "@/app/components/EditBilling";
 import { getBillByMonth } from "@/lib/mongodb/billQueries";
 import { getEmployeesOtHours } from "@/lib/mongodb/otQueries";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
@@ -13,7 +14,7 @@ function isValidMonth(input) {
 }
 
 const BillingPage = async ({ searchParams }) => {
-  const { month } = await searchParams;
+  const { month, mode } = await searchParams;
 
   if (month && isValidMonth(month)) {
     const bill = await getBillByMonth(month);
@@ -21,9 +22,25 @@ const BillingPage = async ({ searchParams }) => {
     console.log("bill", bill);
 
     if (bill) {
+
+      if (mode && mode === 'edit') {
+        const date = getMonthStartAndEnd(month);
+
+        const res = await getEmployeesOtHours(date.start, date.end);
+
+        const { Employee } = await getOtSettings();
+
+        return (
+          <div>
+            <BillingMonthSelector initMonth={month} />
+            <EditBilling empMonthlyData={bill} employees={Employee} totalOtRecords={res} month={month} />
+          </div>
+        );
+      }
+
       return (
         <div>
-          <BillingMonthSelector />
+          <BillingMonthSelector initMonth={month} />
           <BillingView data={bill} />
         </div>
       );
@@ -31,23 +48,38 @@ const BillingPage = async ({ searchParams }) => {
 
     const date = getMonthStartAndEnd(month);
 
-    const res = await getEmployeesOtHours(date.start, date.end);
+    console.log('date', date);
+
+    const empHours = await getEmployeesOtHours(date.start, date.end);
+
+    console.log("getEmployeeOtHours", empHours);
+
+    if (empHours.length === 0) {
+      return (
+        <div>
+          <BillingMonthSelector initMonth={month} />
+          <p className="text-center my-8 text-xl"  >No OT records available for this month!</p>
+        </div>
+      );
+    }
 
     const { Employee } = await getOtSettings();
 
     return (
       <div>
-        <BillingMonthSelector />
-        <Billing employees={Employee} totalOtRecords={res} month={month} />
+        <BillingMonthSelector initMonth={month} />
+        <Billing employees={Employee} totalOtRecords={empHours} month={month} />
       </div>
     );
   }
 
   return (
     <div>
-      <BillingMonthSelector />
+      <BillingMonthSelector initMonth={month} />
     </div>
   );
 };
 
 export default BillingPage;
+
+

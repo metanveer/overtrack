@@ -3,6 +3,7 @@ import { FileEditIcon } from "lucide-react";
 import Link from "next/link";
 
 import DeleteBtnConfirm from "./DeleteBtnConfirm";
+import { deleteOtEntry } from "../actions/otActions";
 
 const OtReport = ({ reports }) => {
   return (
@@ -119,7 +120,7 @@ const OtReport = ({ reports }) => {
                       >
                         <FileEditIcon />
                       </Link>
-                      <DeleteBtnConfirm currentId={report._id} />
+                      <DeleteBtnConfirm isIcon currentId={report._id} deleteAction={deleteOtEntry} />
                     </div>
                   </td>
                 )}

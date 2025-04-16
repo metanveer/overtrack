@@ -84,7 +84,7 @@ export async function editBill(prevData, formData) {
       return { success: false, message: "No bill data was provided!" };
     }
 
-    function hasMissingBillOrTriple(billData) {
+    function hasMissingBillOrTriple(data) {
       return data.some((item) => item.bill === "" || item.triple === "");
     }
 
@@ -105,8 +105,8 @@ export async function editBill(prevData, formData) {
 
     return { success: false, message: "Failed to save or no change made!" };
   } catch (error) {
-    console.error("Error creating bill:", error);
-    return { success: false, error: `Error creating bill: ${error.message}` };
+    console.error("Error updating bill:", error);
+    return { success: false, message: `Error updating bill: ${error.message}` };
   }
 }
 

@@ -1,7 +1,10 @@
 import React from "react";
+import DeleteBtnConfirm from "./DeleteBtnConfirm";
+import { deleteBill } from "../actions/billActions";
+import Link from "next/link";
 
 const BillingView = ({ data }) => {
-  if (!data || !data.billData || data.billData.length === 0)
+  if (!data || !data.billData || data.billData.length === 0 || !data.billMonth)
     return <div>No data available</div>;
 
   const month = new Date(data.billMonth + "-01").toLocaleString("default", {
@@ -23,8 +26,8 @@ const BillingView = ({ data }) => {
   );
 
   return (
-    <div className="p-0">
-      <h2 className="text-2xl font-bold mb-4">Billing Month: {month}</h2>
+    <div className="py-6">
+      <h2 className="text-2xl font-bold mb-4 text-center">Monthly Overtime Bill for {month}</h2>
       <div className="overflow-x-auto shadow rounded-lg border border-gray-200">
         <table className="min-w-full text-sm text-left text-gray-700">
           <thead className="bg-gray-100 text-xs uppercase font-semibold text-gray-600">
@@ -86,6 +89,14 @@ const BillingView = ({ data }) => {
           </tbody>
         </table>
       </div>
+      <Link
+        href={`/overtime/report/billing?month=${data.billMonth}&mode=edit`}
+        className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-2 mr-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
+      >
+        Edit
+      </Link>
+      <DeleteBtnConfirm currentId={data.billMonth} deleteAction={deleteBill} />
+
     </div>
   );
 };

@@ -1,28 +1,36 @@
 "use client";
 
 import React, { startTransition, useActionState, useState } from "react";
-import { createBill } from "../actions/billActions";
+import { editBill } from "../actions/billActions";
 import FormStatus from "./FormStatus";
 
-const Billing = ({ employees, totalOtRecords, month }) => {
+const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
+
+  const { billMonth, billData } = empMonthlyData
+
+
   const initializeRows = () => {
     return employees.map((emp) => {
       const ot =
         totalOtRecords.find((r) => r.name === emp.Name)?.totalOtHour || 0;
+
+      const existing = billData.find((b) => b.name === emp.Name);
+
       return {
         name: emp.Name,
         designation: emp.Designation,
         basic: Number(emp.BasicSalary),
         totalOt: ot,
-        triple: "",
-        bill: "",
-        remarks: "",
+        triple: existing?.triple ?? "",
+        bill: existing?.bill ?? "",
+        remarks: existing?.remarks ?? "",
       };
     });
   };
 
+
   const [rows, setRows] = useState(initializeRows());
-  const [state, formAction, isPending] = useActionState(createBill, {});
+  const [state, formAction, isPending] = useActionState(editBill, {});
 
   const handleChange = (index, key, value) => {
     const updated = [...rows];
@@ -85,13 +93,11 @@ const Billing = ({ employees, totalOtRecords, month }) => {
 
   return (
     <form className="py-6" onSubmit={handleSave}>
-      <div className="mb-6 mt-4 text-center">
-        <div className="text-2xl font-bold  text-blue-700 ">
-          Prepare Bill for {formatMonthName(month)}
-        </div>
-        <div className=" text-gray-500">
-          (Please insert employees' monthly claimed OT hours and triple value for preparing bill.)
-        </div>
+      <div className="mb-6 text-2xl font-bold text-red-700">
+        Edit Bill for
+        <span className="px-1 font-bold">
+          {formatMonthName(month)}
+        </span>
       </div>
 
       <div className="overflow-auto rounded-lg shadow border border-gray-200">
@@ -207,4 +213,4 @@ const Billing = ({ employees, totalOtRecords, month }) => {
   );
 };
 
-export default Billing;
+export default EditBilling;

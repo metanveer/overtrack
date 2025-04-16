@@ -28,8 +28,22 @@ const MonthlyReportPage = async ({ searchParams }) => {
 
   const result = await getDateWiseOtEntries(month);
 
+  console.log("Result", result);
+
+  if (result.length === 0) {
+    return (
+      <div className="p-2">
+        <MonthSelector />
+        <div className="text-center py-8 text-xl">
+          No overtime data available!
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-2">
+      <MonthSelector />
       {type === "summary" ? (
         <MonthlySummary data={result} />
       ) : (

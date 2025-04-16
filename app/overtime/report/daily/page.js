@@ -24,10 +24,18 @@ const DailyReportPage = async ({ searchParams }) => {
 
   return (
     <div className="p-2">
-      <h1 className="flex items-center text-xl font-bold mb-4 space-x-2 text-gray-800">
-        <span>{`Report dated ${formatDate(date)}`}</span>
-      </h1>
-      <OtReportDaily records={records} />
+      <SelectDate />
+
+      {records.length === 0 ? (
+        <div className="text-center text-xl py-12">No daily records found!</div>
+      ) : (
+        <>
+          <h1 className="flex items-center text-xl font-bold mb-4 mt-6 space-x-2 text-gray-800">
+            <span>{`Report dated ${formatDate(date)}`}</span>
+          </h1>
+          <OtReportDaily records={records} />
+        </>
+      )}
     </div>
   );
 };

@@ -90,7 +90,7 @@ const Billing = ({ employees, totalOtRecords, month }) => {
           Prepare Bill for {formatMonthName(month)}
         </div>
         <div className=" text-gray-500">
-          (Please insert employees' monthly claimed OT hours and triple value for preparing bill.)
+          {`(Please insert employees' monthly claimed OT hours and triple value for preparing bill.)`}
         </div>
       </div>
 

@@ -30,7 +30,7 @@ const DailyReportPage = async ({ searchParams }) => {
           <h1 className="flex items-center text-xl font-bold mb-4 mt-6 space-x-2 text-gray-800">
             <span>{`Report dated ${formatDate(date)}`}</span>
           </h1>
-          <OtReportDaily records={records} />
+          <OtReportDaily records={records} date={date} />
         </>
       )}
     </div>

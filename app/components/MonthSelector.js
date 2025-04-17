@@ -32,8 +32,8 @@ const MonthSelector = ({ initMonth }) => {
 
   return (
     <div className="p-6 mb-6 sm:p-8 lg:p-10 max-w-5xl mx-auto  bg-white rounded-2xl shadow-md border border-[#ddd]">
-      <h1 className="text-xl sm:text-2xl font-bold mb-6 text-gray-800 text-center">
-        Select Month and Year
+      <h1 className="text-xl sm:text-2xl font-bold mb-3 text-gray-800 text-center">
+        Select Month for Monthly Report
       </h1>
       <form className="flex flex-col lg:flex-row gap-4 items-center justify-between ">
         <div className="lg:flex w-full gap-4">

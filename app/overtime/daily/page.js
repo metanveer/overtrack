@@ -1,12 +1,9 @@
-import DailyReport from "@/app/components/OtReport";
 import OtReportDaily from "@/app/components/OtReportDaily";
 import { getOtEntriesByDate } from "@/lib/mongodb/otQueries";
 import formatDate from "@/utils/formatDate";
 
-import Link from "next/link";
-
 import React from "react";
-import { ChevronRight } from "lucide-react";
+
 import SelectDate from "@/app/components/SelectDate";
 
 const DailyReportPage = async ({ searchParams }) => {

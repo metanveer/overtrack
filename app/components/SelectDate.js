@@ -11,7 +11,7 @@ const SelectDate = () => {
   return (
     <div className="p-4 max-w-md mx-auto bg-white rounded-2xl shadow-md border border-[#eee]">
       <h1 className="text-xl sm:text-2xl font-bold mb-6 text-gray-800 text-center">
-        Select Date{" "}
+        Select Date for Daily Report
       </h1>
       <form className="flex flex-col gap-4 lg:flex-row">
         <div className="w-full">

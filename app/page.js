@@ -1,3 +1,3 @@
 export default function HomePage() {
-  return <div>Tanveer</div>;
+  return <div>INSTRUMENT WEB APP</div>;
 }

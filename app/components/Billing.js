@@ -1,11 +1,18 @@
 "use client";
 
-import React, { startTransition, useActionState, useState } from "react";
+import React, {
+  startTransition,
+  useActionState,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { createBill } from "../actions/billActions";
 import FormStatus from "./FormStatus";
+import { usePathname } from "next/navigation";
 
 const Billing = ({ employees, totalOtRecords, month }) => {
-  const initializeRows = () => {
+  const initializeRows = useCallback(() => {
     return employees.map((emp) => {
       const ot =
         totalOtRecords.find((r) => r.name === emp.Name)?.totalOtHour || 0;
@@ -19,10 +26,16 @@ const Billing = ({ employees, totalOtRecords, month }) => {
         remarks: "",
       };
     });
-  };
+  }, [employees, totalOtRecords]);
 
   const [rows, setRows] = useState(initializeRows());
   const [state, formAction, isPending] = useActionState(createBill, {});
+
+  const path = usePathname();
+
+  useEffect(() => {
+    setRows(initializeRows());
+  }, [path, initializeRows]);
 
   const handleChange = (index, key, value) => {
     const updated = [...rows];

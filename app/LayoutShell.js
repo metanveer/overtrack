@@ -34,13 +34,13 @@ export default function LayoutShell({ children }) {
   };
 
   const navLinks = [
-    { href: "/overtime/entry-form", label: "OT Entry Form" },
+    { href: "/overtime/entry-form", label: "Entry Form" },
     { href: "/overtime", label: "Overtime" },
-    { href: "/overtime/report/daily", label: "Daily" },
-    { href: "/overtime/report/monthly", label: "Monthly" },
-    { href: "/overtime/report/employee", label: "Employee Records" },
-    { href: "/overtime/report/billing", label: "Billing" },
-    { href: "/overtime/report", label: "All OT Entries" },
+    { href: "/overtime/daily", label: "Daily" },
+    { href: "/overtime/monthly", label: "Monthly" },
+    { href: "/overtime/employee", label: "Employee Records" },
+    { href: "/overtime/billing", label: "Billing" },
+    { href: "/overtime/entries", label: "Overtime Entries" },
     { href: "/overtime/settings", label: "Settings" },
   ];
 

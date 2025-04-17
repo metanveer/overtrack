@@ -3,7 +3,7 @@ import OtReport from "@/app/components/OtReport";
 import { getAllOtEntry } from "@/lib/mongodb/otQueries";
 import React from "react";
 
-const ReportPage = async () => {
+const EntriesPage = async () => {
   // const reports = [
   //   {
   //     Date: "2024-01-08",
@@ -27,4 +27,4 @@ const ReportPage = async () => {
   );
 };
 
-export default ReportPage;
+export default EntriesPage;

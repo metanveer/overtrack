@@ -2,12 +2,16 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-const MonthSelector = () => {
+const MonthSelector = ({ initMonth }) => {
   const currentDate = new Date();
-  const [selectedMonth, setSelectedMonth] = useState(
-    String(currentDate.getMonth() + 1).padStart(2, "0")
-  );
-  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+
+  const year = initMonth?.split("-")[0] || currentDate.getFullYear();
+  const month =
+    initMonth?.split("-")[1] ||
+    String(currentDate.getMonth() + 1).padStart(2, "0");
+
+  const [selectedMonth, setSelectedMonth] = useState(month);
+  const [selectedYear, setSelectedYear] = useState(year);
 
   const monthOptions = [
     { value: "01", label: "January" },
@@ -66,13 +70,13 @@ const MonthSelector = () => {
         </div>
         <div className="w-full flex gap-4">
           <Link
-            href={`/overtime/report/monthly?month=${monthSelected}`}
+            href={`/overtime/monthly?month=${monthSelected}`}
             className="w-full text-center px-6 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Detailed Report
           </Link>
           <Link
-            href={`/overtime/report/monthly?month=${monthSelected}&type=summary`}
+            href={`/overtime/monthly?month=${monthSelected}&type=summary`}
             className="w-full text-center px-6 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Summary Report

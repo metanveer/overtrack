@@ -40,11 +40,11 @@ const CriteriaSelector = ({ employeeOptions = [] }) => {
         endDateObj.getDate()
       ).padStart(2, "0")}`;
 
-      return `/overtime/report/employee?start=${start}&end=${end}&name=${employeeName}`;
+      return `/overtime/employee?start=${start}&end=${end}&name=${employeeName}`;
     }
 
     if (mode === "range" && isRangeFormValid) {
-      return `/overtime/report/employee?start=${startDate}&end=${endDate}&name=${employeeName}`;
+      return `/overtime/employee?start=${startDate}&end=${endDate}&name=${employeeName}`;
     }
 
     return "#";

@@ -40,7 +40,7 @@ export async function createOtEntry(prevData, formData) {
     const newOtEntry = await insertOt(parsedData);
 
     if (newOtEntry.acknowledged) {
-      revalidatePath("/overtime/report");
+      revalidatePath("/overtime/entries");
 
       return { success: true, message: "OT entry saved successfully." };
     }
@@ -76,7 +76,7 @@ export async function editOtEntry(prevData, formData) {
 
     if (result.modifiedCount > 0) {
       revalidatePath(`/overtime`);
-      revalidatePath(`/overtime/report`);
+      revalidatePath(`/overtime/entries`);
       return { success: true, message: "Data updated successfully" };
     }
 
@@ -102,7 +102,7 @@ export async function deleteOtEntry(id) {
       return { success: false, message: "Document not found!" };
     }
     revalidatePath(`/overtime`);
-    revalidatePath(`/overtime/report`);
+    revalidatePath(`/overtime/entries`);
 
     return { success: true, message: "Deleted successfully!" };
   } catch (error) {

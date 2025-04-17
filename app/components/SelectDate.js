@@ -10,6 +10,9 @@ const SelectDate = () => {
 
   return (
     <div className="p-4 max-w-md mx-auto bg-white rounded-2xl shadow-md border border-[#eee]">
+      <h1 className="text-xl sm:text-2xl font-bold mb-6 text-gray-800 text-center">
+        Select Date{" "}
+      </h1>
       <form className="flex flex-col gap-4 lg:flex-row">
         <div className="w-full">
           <input
@@ -23,7 +26,7 @@ const SelectDate = () => {
           />
         </div>
         <Link
-          href={`/overtime/report/daily?date=${dateSelected}`}
+          href={`/overtime/daily?date=${dateSelected}`}
           className=" px-12 py-2 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition text-center"
         >
           Submit

@@ -9,13 +9,6 @@ const Settings = () => {
           href={`/overtime/settings/edit`}
           label={"Edit Dropdown Options"}
         />
-        {/* Add more <CustomLink /> components as needed */}
-        <CustomLink
-          href={`/overtime/settings/monthly-data`}
-          label={"Edit Monthly Employee Data"}
-        />
-
-        {/* Repeat the links as necessary */}
       </div>
     </div>
   );

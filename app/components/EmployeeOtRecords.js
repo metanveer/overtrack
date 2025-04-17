@@ -75,14 +75,9 @@ const EmployeeOtRecords = ({ data }) => {
                         i % 2 === 0 ? "bg-white" : "bg-gray-50"
                       }`}
                     >
-                      {/* <td className="px-4 py-2 flex items-center gap-2 whitespace-nowrap">
-                        <Link href={`/overtime/report/view?id=${entry._id}`}>
-                          {entry.Date}
-                        </Link>
-                      </td> */}
                       <td className="px-4 py-2 flex items-center gap-2 whitespace-nowrap">
                         <Link
-                          href={`/overtime/report/view?id=${entry._id}`}
+                          href={`/overtime/view?id=${entry._id}`}
                           className="text-blue-600 hover:underline hover:text-blue-800"
                           target="_blank"
                           rel="noopener noreferrer"

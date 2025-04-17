@@ -39,7 +39,7 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
 
   useEffect(() => {
     if (state?.success) {
-      router.push(`/overtime/report/billing?month=${billMonth}`);
+      router.push(`/overtime/billing?month=${billMonth}`);
     }
   }, [state, router, billMonth]);
 

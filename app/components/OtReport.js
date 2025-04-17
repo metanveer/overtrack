@@ -60,7 +60,7 @@ const OtReport = ({ reports }) => {
                       rowSpan={employeeCount}
                     >
                       <Link
-                        href={`/overtime/report/daily?date=${report.Date}`}
+                        href={`/overtime/daily?date=${report.Date}`}
                         className="text-blue-600 hover:underline font-medium"
                       >
                         {formatDate(report.Date)}
@@ -77,7 +77,7 @@ const OtReport = ({ reports }) => {
                       rowSpan={employeeCount}
                     >
                       <Link
-                        href={`/overtime/report/view?id=${report._id}`}
+                        href={`/overtime/view?id=${report._id}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:underline font-medium"
@@ -115,12 +115,16 @@ const OtReport = ({ reports }) => {
                   >
                     <div className="flex gap-3">
                       <Link
-                        href={`/overtime/report/edit?id=${report._id}`}
+                        href={`/overtime/edit?id=${report._id}`}
                         className="text-blue-500 hover:text-blue-700 transition-colors"
                       >
                         <FileEditIcon />
                       </Link>
-                      <DeleteBtnConfirm isIcon currentId={report._id} deleteAction={deleteOtEntry} />
+                      <DeleteBtnConfirm
+                        isIcon
+                        currentId={report._id}
+                        deleteAction={deleteOtEntry}
+                      />
                     </div>
                   </td>
                 )}

@@ -42,11 +42,27 @@ const OtSettingsEdit = ({ dataFromDb }) => {
 
   const handleChange = (key, index, field, value) => {
     const newArray = [...data[key]];
-    if (typeof newArray[index] === "object") {
-      newArray[index] = { ...newArray[index], [field]: value };
+
+    // Sanitize and validate the Hour field inside OtTime
+    if (key === "OtTime" && field === "Hour") {
+      const trimmed = value.trim();
+      const isValid = /^(\d+(\.\d{0,1})?)?$/.test(trimmed); // allows numbers or one decimal place
+
+      if (!isValid) return; // don't update if input is invalid
+
+      newArray[index] = {
+        ...newArray[index],
+        [field]: trimmed, // store as trimmed string
+      };
+    } else if (typeof newArray[index] === "object") {
+      newArray[index] = {
+        ...newArray[index],
+        [field]: value,
+      };
     } else {
       newArray[index] = value;
     }
+
     setData({ ...data, [key]: newArray });
   };
 
@@ -97,7 +113,8 @@ const OtSettingsEdit = ({ dataFromDb }) => {
           {fields.map((field) => (
             <input
               key={field}
-              type="text"
+              type={field === "Hour" ? "text" : "text"}
+              inputMode={field === "Hour" ? "decimal" : "text"}
               className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={data[key][index][field] || ""}
               placeholder={getPlaceholder(field)}

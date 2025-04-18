@@ -2,6 +2,7 @@
 
 import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadDailyReport } from "@/utils/pdf-download/downloadDailyReport";
+import TextLink from "./TextLink";
 
 const calculateTotalOtHours = (data) => {
   return data.reduce((sum, item) => {
@@ -66,7 +67,10 @@ const OtReportDaily = ({ records, date }) => {
                         className="px-4 py-2 border border-gray-200"
                         rowSpan={employeeCount}
                       >
-                        {report.WorkDescription}
+                        <TextLink
+                          href={`/overtime/slip?id=${report._id}`}
+                          text={report.WorkDescription}
+                        />
                       </td>
                       <td
                         className="px-4 py-2 border border-gray-200"
@@ -83,7 +87,10 @@ const OtReportDaily = ({ records, date }) => {
                     </>
                   )}
                   <td className="px-4 py-2 border border-gray-200">
-                    {emp.Name}
+                    <TextLink
+                      text={emp.Name}
+                      href={`/overtime/employee?start=${date}&end=${date}&name=${emp.Name}`}
+                    />
                   </td>
                   <td className="px-4 py-2 border border-gray-200">
                     {emp.OtTime}

@@ -2,24 +2,24 @@
 import DownloadPdfButton from "./DownloadPdfButton";
 import formatMonthName from "@/utils/formatMonthName";
 import { downloadMonthlyDetailsReport } from "@/utils/pdf-download/downloadMonthlyDetailsReport";
+import TextLink from "./TextLink";
+import getMonthStartAndEnd from "@/utils/getMonthStartAndEnd";
 
 const OtReportMonthly = ({ groupedData, monthString }) => {
-  const grandTotalOt = groupedData.reduce((total, group) => {
-    return (
-      total +
-      group.records.reduce((recordTotal, record) => {
-        return (
-          recordTotal +
-          record.Employee.reduce(
-            (empTotal, emp) => empTotal + parseFloat(emp.OtHour),
-            0
-          )
-        );
-      }, 0)
-    );
-  }, 0);
+  function getMonthlyTotalOtHour(dateWiseEntries) {
+    const total = dateWiseEntries.reduce((sum, entry) => {
+      const otHour = parseFloat(entry.totalOtHours);
+      return sum + (isNaN(otHour) ? 0 : otHour);
+    }, 0);
+
+    return parseFloat(total.toFixed(1)); // round to 1 decimal place
+  }
+
+  const grandTotalOt = getMonthlyTotalOtHour(groupedData);
 
   const monthName = formatMonthName(monthString);
+
+  const { start, end } = getMonthStartAndEnd(monthString);
 
   return (
     <div className="overflow-x-auto">
@@ -66,7 +66,10 @@ const OtReportMonthly = ({ groupedData, monthString }) => {
                         rowSpan={dateRowSpan}
                         className="border border-gray-200 px-4 py-2 align-top text-center bg-gray-50 font-semibold"
                       >
-                        {group._id}
+                        <TextLink
+                          href={`/overtime/daily?date=${group._id}`}
+                          text={group._id}
+                        />
                       </td>
                     )}
                     {(() => {
@@ -99,13 +102,19 @@ const OtReportMonthly = ({ groupedData, monthString }) => {
                         rowSpan={entry.Employee.length}
                         className="border border-gray-200 px-4 py-2 align-top"
                       >
-                        {entry.WorkDescription}
+                        <TextLink
+                          href={`/overtime/slip?id=${entry._id}`}
+                          text={entry.WorkDescription}
+                        />
                       </td>
                     ) : null}
 
                     {/* Employee */}
                     <td className="border border-gray-200 px-4 py-2">
-                      {emp.Name}
+                      <TextLink
+                        href={`/overtime/employee?start=${start}&end=${end}&name=${emp.Name}`}
+                        text={emp.Name}
+                      />
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
                       {emp.OtTime}

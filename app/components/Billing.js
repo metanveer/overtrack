@@ -5,6 +5,7 @@ import React, {
   useActionState,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { createBill } from "../actions/billActions";
@@ -22,8 +23,8 @@ const Billing = ({ employees, totalOtRecords, month }) => {
         designation: emp.Designation,
         basic: Number(emp.BasicSalary),
         totalOt: ot,
-        triple: "",
-        bill: "",
+        triple: 0,
+        bill: 0,
         remarks: "",
       };
     });
@@ -31,16 +32,16 @@ const Billing = ({ employees, totalOtRecords, month }) => {
 
   const [rows, setRows] = useState(initializeRows());
   const [state, formAction, isPending] = useActionState(createBill, {});
-
   const path = usePathname();
 
   useEffect(() => {
     setRows(initializeRows());
   }, [path, initializeRows]);
 
-  const handleChange = (index, key, value) => {
+  const handleChange = (index, key, val) => {
     const updated = [...rows];
-    updated[index][key] = value;
+    updated[index][key] =
+      key === "triple" || key === "bill" ? Number(val) || 0 : val;
     setRows(updated);
   };
 
@@ -52,18 +53,28 @@ const Billing = ({ employees, totalOtRecords, month }) => {
     return (row.basic / 104) * (bill + triple / 2) || 0;
   };
 
-  const totals = rows.reduce(
-    (acc, row) => {
-      acc.totalOt += row.totalOt;
-      acc.bill += Number(row.bill) || 0;
-      acc.payment += getPayment(row);
-      return acc;
-    },
-    { totalOt: 0, bill: 0, payment: 0 }
-  );
+  const totals = useMemo(() => {
+    return rows.reduce(
+      (acc, row) => {
+        acc.totalOt += row.totalOt;
+        acc.bill += Number(row.bill) || 0;
+        acc.payment += getPayment(row);
+        return acc;
+      },
+      { totalOt: 0, bill: 0, payment: 0 }
+    );
+  }, [rows]);
 
   const handleSave = (e) => {
     e.preventDefault();
+
+    const hasInvalid = rows.some((row) => row.triple < 0 || row.bill < 0);
+
+    if (hasInvalid) {
+      alert("Triple or Bill values can't be negative.");
+      return;
+    }
+
     const result = rows.map((row) => ({
       ...row,
       double: getDouble(row),
@@ -78,26 +89,24 @@ const Billing = ({ employees, totalOtRecords, month }) => {
     };
 
     const formData = new FormData();
-
     formData.append("data", JSON.stringify(dataToSave));
-
     startTransition(() => formAction(formData));
   };
 
   return (
     <form className="py-6" onSubmit={handleSave}>
       <div className="mb-6 mt-4 text-center">
-        <div className="text-2xl font-bold  text-blue-700 ">
+        <div className="text-2xl font-bold text-blue-700">
           Prepare Bill for {formatMonthName(month)}
         </div>
-        <div className=" text-gray-500">
+        <div className="text-gray-500">
           {`(Please insert employees' monthly claimed OT hours and triple value for preparing bill.)`}
         </div>
       </div>
 
       <div className="overflow-auto rounded-lg shadow border border-gray-200">
-        <table className="min-w-full text-sm text-center bg-white ">
-          <thead className="bg-slate-100 text-slate-700 text-xs uppercase tracking-wider">
+        <table className="min-w-full text-sm text-center bg-white">
+          <thead className="bg-slate-100 text-slate-700 text-xs uppercase tracking-wider sticky top-0 z-10">
             <tr>
               <th className="p-3">#</th>
               <th className="p-3 text-left">Employee</th>
@@ -120,7 +129,7 @@ const Billing = ({ employees, totalOtRecords, month }) => {
 
               return (
                 <tr
-                  key={row.name}
+                  key={`${row.name}-${i}`}
                   className={
                     i % 2 === 0
                       ? "bg-white"
@@ -134,9 +143,11 @@ const Billing = ({ employees, totalOtRecords, month }) => {
                   <td className="p-3">
                     <input
                       type="number"
+                      step="0.5"
+                      min="0"
                       value={row.triple}
                       onChange={(e) =>
-                        handleChange(i, "triple", e.target.value)
+                        handleChange(i, "triple", e.target.valueAsNumber)
                       }
                       className="w-20 text-center border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
                     />
@@ -145,8 +156,12 @@ const Billing = ({ employees, totalOtRecords, month }) => {
                   <td className="p-3">
                     <input
                       type="number"
+                      step="0.5"
+                      min="0"
                       value={row.bill}
-                      onChange={(e) => handleChange(i, "bill", e.target.value)}
+                      onChange={(e) =>
+                        handleChange(i, "bill", e.target.valueAsNumber)
+                      }
                       className="w-20 text-center border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
                     />
                   </td>
@@ -154,8 +169,8 @@ const Billing = ({ employees, totalOtRecords, month }) => {
                   <td className="p-3">{row.basic.toLocaleString()}</td>
                   <td className="p-3">
                     {Number(payment).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 1,
+                      maximumFractionDigits: 1,
                     })}
                   </td>
                   <td className="p-3">
@@ -176,14 +191,19 @@ const Billing = ({ employees, totalOtRecords, month }) => {
               <td colSpan={5} className="p-3 text-right">
                 Total
               </td>
-              <td className="p-3">{totals.totalOt}</td>
+              <td className="p-3">
+                {Number(totals.totalOt).toLocaleString(undefined, {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                })}
+              </td>
               <td className="p-3">{totals.bill}</td>
               <td className="p-3"></td>
               <td className="p-3"></td>
               <td className="p-3">
                 {Number(totals.payment).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
                 })}
               </td>
               <td className="p-3"></td>
@@ -191,11 +211,15 @@ const Billing = ({ employees, totalOtRecords, month }) => {
           </tbody>
         </table>
       </div>
+
       {isPending ? (
-        <p>Sending data...</p>
+        <div className="text-blue-600 font-semibold mt-4">
+          Saving bill data...
+        </div>
       ) : state ? (
         <FormStatus state={state} />
       ) : null}
+
       <div className="mt-6 text-right">
         <button
           type="submit"

@@ -1,7 +1,10 @@
 "use client";
 
+import { deleteOtEntry } from "../actions/otActions";
+import DeleteBtnConfirm from "./DeleteBtnConfirm";
 import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadOtSlip } from "@/utils/pdf-download/downloadOtSlip";
+import TextLink from "./TextLink";
 
 const OtView = ({ data }) => {
   return (
@@ -63,8 +66,20 @@ const OtView = ({ data }) => {
           </div>
         )}
       </div>
-      <div className="mt-6">
+      <div className="mt-6 flex gap-6">
         <DownloadPdfButton onClick={() => downloadOtSlip(data)} />
+        {/* <Link
+                        href={`/overtime/slip/edit?id=${data._id}`}
+                        className="text-blue-500 hover:text-blue-700 transition-colors"
+                      >
+                        <FileEditIcon />
+                      </Link> */}
+        <TextLink
+          isButton
+          href={`/overtime/slip/edit?id=${data._id}`}
+          text={"Edit"}
+        />
+        <DeleteBtnConfirm currentId={data._id} deleteAction={deleteOtEntry} />
       </div>
     </div>
   );

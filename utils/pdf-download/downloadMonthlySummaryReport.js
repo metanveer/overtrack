@@ -23,10 +23,10 @@ export const downloadMonthlySummaryReport = async (data, monthName) => {
 
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-  const margin = 60;
+  const margin = 30;
 
   // 🖼️ Add logo
-  doc.addImage(logoBase64, "PNG", 250, 40, 50, 60);
+  doc.addImage(logoBase64, "PNG", 250, 20, 50, 60);
 
   // 🧾 Header
   doc.setFontSize(16);
@@ -85,8 +85,8 @@ export const downloadMonthlySummaryReport = async (data, monthName) => {
     head,
     body,
     styles: {
-      fontSize: 9,
-      cellPadding: 3,
+      fontSize: 8,
+      cellPadding: 1,
       textColor: 0,
       valign: "middle",
       lineWidth: 0.1,
@@ -120,19 +120,24 @@ export const downloadMonthlySummaryReport = async (data, monthName) => {
         data.cell.styles.fontStyle = "bold";
       }
     },
-
-    didDrawPage: function (data) {
-      const pageCount = doc.internal.getNumberOfPages();
-      const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
-      doc.setFontSize(10);
-      doc.text(
-        `Page ${pageNumber} of ${pageCount}`,
-        pageWidth - margin,
-        pageHeight - 20,
-        { align: "right" }
-      );
-    },
   });
+
+  // 🧾 Footer with correct total page count
+  const pageCount = doc.internal.getNumberOfPages();
+
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(10);
+    doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, pageHeight - 20, {
+      align: "right",
+    });
+  }
+
+  // ✍️ Signature
+  const finalY = doc.lastAutoTable.finalY + 70;
+  doc.setFont("helvetica", "normal");
+  doc.text("______________________", pageWidth - margin - 160, finalY);
+  doc.text("Manager (Instrument)", pageWidth - margin - 140, finalY + 15);
 
   doc.save(`Monthly_OT_Summary_${monthName}.pdf`);
 };

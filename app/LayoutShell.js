@@ -40,7 +40,6 @@ export default function LayoutShell({ children }) {
     { href: "/overtime/monthly", label: "Monthly" },
     { href: "/overtime/employee", label: "Employee Records" },
     { href: "/overtime/billing", label: "Billing" },
-    { href: "/overtime/entries", label: "Overtime Entries" },
     { href: "/overtime/settings", label: "Settings" },
   ];
 

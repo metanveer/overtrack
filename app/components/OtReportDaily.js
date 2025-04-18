@@ -1,4 +1,7 @@
+"use client";
+
 import DownloadPdfButton from "./DownloadPdfButton";
+import { downloadDailyReport } from "@/utils/pdf-download/downloadDailyReport";
 
 const calculateTotalOtHours = (data) => {
   return data.reduce((sum, item) => {
@@ -14,13 +17,9 @@ const OtReportDaily = ({ records, date }) => {
 
   return (
     <div>
-      {/* <button
-        onClick={() => downloadPdfDailyReport(records, date)}
-        className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
-      >
-        Download as PDF
-      </button> */}
-      <DownloadPdfButton records={records} date={date} />
+      <div className="mb-6">
+        <DownloadPdfButton onClick={() => downloadDailyReport(records, date)} />
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto border border-gray-300">
           <thead>

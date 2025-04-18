@@ -10,6 +10,7 @@ import React, {
 import { createBill } from "../actions/billActions";
 import FormStatus from "./FormStatus";
 import { usePathname } from "next/navigation";
+import formatMonthName from "@/utils/formatMonthName";
 
 const Billing = ({ employees, totalOtRecords, month }) => {
   const initializeRows = useCallback(() => {
@@ -82,19 +83,6 @@ const Billing = ({ employees, totalOtRecords, month }) => {
 
     startTransition(() => formAction(formData));
   };
-
-  function formatMonthName(monthStr) {
-    const [year, month] = monthStr.split("-").map(Number);
-
-    const date = new Date(year, month - 1); // JS months are 0-indexed
-
-    const formatted = date.toLocaleString("default", {
-      month: "long",
-      year: "numeric",
-    });
-
-    return formatted;
-  }
 
   return (
     <form className="py-6" onSubmit={handleSave}>

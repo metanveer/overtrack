@@ -1,6 +1,9 @@
-import React from "react";
+"use client";
+import DownloadPdfButton from "./DownloadPdfButton";
+import formatMonthName from "@/utils/formatMonthName";
+import { downloadMonthlyDetailsReport } from "@/utils/pdf-download/downloadMonthlyDetailsReport";
 
-const OtReportMonthly = ({ groupedData }) => {
+const OtReportMonthly = ({ groupedData, monthString }) => {
   const grandTotalOt = groupedData.reduce((total, group) => {
     return (
       total +
@@ -16,8 +19,19 @@ const OtReportMonthly = ({ groupedData }) => {
     );
   }, 0);
 
+  const monthName = formatMonthName(monthString);
+
   return (
-    <div className="overflow-x-auto text-sm">
+    <div className="overflow-x-auto">
+      <div className="mb-3">
+        <DownloadPdfButton
+          onClick={() => downloadMonthlyDetailsReport(groupedData, monthName)}
+        />
+      </div>
+      <div className="text-2xl font-bold my-3 text-center">
+        Monthly OT Details for {monthName}
+      </div>
+
       <table className="min-w-full  border-gray-200  border-gray-200-gray-300 table-auto">
         <thead className="bg-gray-100">
           <tr>
@@ -211,41 +225,5 @@ export default OtReportMonthly;
 //       },
 //     ],
 //   },
-//   {
-//     _id: "2025-04-09",
-//     records: [
-//       {
-//         Type: "Holiday",
-//         Unit: "Merox-I",
-//         WorkDescription: "Merox startup",
-//         Employee: [
-//           {
-//             Name: "MR. MD. IQBAL HOSSAIN -1",
-//             OtTime: "08.00-08.00 & 12.00-14.00",
-//             OtHour: "29",
-//           },
-//           {
-//             Name: "MR. MD. MONIRUL HOQUE",
-//             OtTime: "08.00-08.00 & 12.00-14.00",
-//             OtHour: "29",
-//           },
-//         ],
-//         Remarks: "Test",
-//       },
-//       {
-//         Type: "Holiday",
-//         Unit: "Topping",
-//         WorkDescription: "some new work",
-//         Employee: [
-//           { Name: "MR. MD. ARFAN", OtTime: "17.00-08.00", OtHour: "15" },
-//           {
-//             Name: "MR. MD. SARWAR JAHAN",
-//             OtTime: "17.00-08.00",
-//             OtHour: "15",
-//           },
-//         ],
-//         Remarks: "SOME REMARKS",
-//       },
-//     ],
-//   },
+//   {...}
 // ];

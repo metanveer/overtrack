@@ -39,11 +39,14 @@ const DeleteBtnConfirm = ({ currentId, deleteAction, isIcon }) => {
           setSelectedId(currentId);
           setStatus({});
         }}
-        className={isIcon ? "text-red-500 hover:text-red-700 transition-colors" : "bg-red-500 hover:bg-red-600 text-white font-medium px-8 py-2 my-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"}
+        className={
+          isIcon
+            ? "text-red-500 hover:text-red-700 transition-colors"
+            : "bg-red-500 hover:bg-red-600 text-white font-medium px-8 py-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
+        }
       >
-        {isIcon ?<Delete /> : "Delete"}
+        {isIcon ? <Delete /> : "Delete"}
       </button>
-   
     </>
   );
 };

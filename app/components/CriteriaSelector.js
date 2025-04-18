@@ -56,7 +56,7 @@ const CriteriaSelector = ({ employeeOptions = [] }) => {
 "
     >
       <h1 className="text-2xl font-bold mb-4 text-gray-800 text-center">
-        Filter Criteria
+        Select {mode === "month" ? "Month" : "Date Range"}
       </h1>
 
       <div className="flex justify-center gap-4 mb-6">

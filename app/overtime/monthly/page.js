@@ -32,9 +32,9 @@ const MonthlyReportPage = async ({ searchParams }) => {
     <div className="p-2">
       <MonthSelector initMonth={month} />
       {type === "summary" ? (
-        <MonthlySummary data={result} />
+        <MonthlySummary data={result} month={month} />
       ) : (
-        <OtReportMonthly groupedData={result} />
+        <OtReportMonthly groupedData={result} monthString={month} />
       )}
     </div>
   );

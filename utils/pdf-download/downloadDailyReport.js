@@ -1,7 +1,10 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { fetchLogoBase64 } from "./fetchLogo";
 
-export const downloadPdfDailyReport = (records, reportDate) => {
+export const downloadDailyReport = async (records, reportDate) => {
+  const logoBase64 = await fetchLogoBase64();
+
   const doc = new jsPDF({
     orientation: "landscape",
     unit: "pt",
@@ -11,7 +14,10 @@ export const downloadPdfDailyReport = (records, reportDate) => {
   const pageWidth = doc.internal.pageSize.getWidth();
   const margin = 60;
 
-  // Header
+  // 🖼️ Add logo at top-left
+  doc.addImage(logoBase64, "PNG", 250, 40, 50, 60); // (x, y, width, height)
+
+  // 🧾 Header Text
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
   doc.text("EASTERN REFINERY LIMITED", pageWidth / 2, margin, {
@@ -128,5 +134,5 @@ export const downloadPdfDailyReport = (records, reportDate) => {
   doc.text("______________________", pageWidth - margin - 160, finalY);
   doc.text("Manager (Instrument)", pageWidth - margin - 140, finalY + 15);
 
-  doc.save("OT_Report.pdf");
+  doc.save(`Daily_OT_Report_${reportDate}`);
 };

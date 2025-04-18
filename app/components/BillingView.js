@@ -1,7 +1,9 @@
-import React from "react";
+"use client";
 import DeleteBtnConfirm from "./DeleteBtnConfirm";
 import { deleteBill } from "../actions/billActions";
 import Link from "next/link";
+import DownloadPdfButton from "./DownloadPdfButton";
+import { downloadMonthlyBill } from "@/utils/pdf-download/downloadMonthlyBill";
 
 const BillingView = ({ data }) => {
   if (!data || !data.billData || data.billData.length === 0 || !data.billMonth)
@@ -91,13 +93,19 @@ const BillingView = ({ data }) => {
           </tbody>
         </table>
       </div>
-      <Link
-        href={`/overtime/billing?month=${data.billMonth}&mode=edit`}
-        className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-2 mr-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
-      >
-        Edit
-      </Link>
-      <DeleteBtnConfirm currentId={data.billMonth} deleteAction={deleteBill} />
+      <div className="flex gap-6 mt-6">
+        <DownloadPdfButton onClick={() => downloadMonthlyBill(data)} />
+        <Link
+          href={`/overtime/billing?month=${data.billMonth}&mode=edit`}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
+        >
+          Edit
+        </Link>
+        <DeleteBtnConfirm
+          currentId={data.billMonth}
+          deleteAction={deleteBill}
+        />
+      </div>
     </div>
   );
 };

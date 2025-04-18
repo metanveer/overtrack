@@ -1,63 +1,71 @@
-import React from "react";
+"use client";
+
+import DownloadPdfButton from "./DownloadPdfButton";
+import { downloadOtSlip } from "@/utils/pdf-download/downloadOtSlip";
 
 const OtView = ({ data }) => {
   return (
-    <div className="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 space-y-6">
-      <div className="space-y-1">
-        <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
-          Overtime Report
-        </h2>
-      </div>
+    <div className="max-w-4xl mx-auto">
+      <div className=" bg-white p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 space-y-6">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
+            Overtime Slip
+          </h2>
+        </div>
 
-      <div className="grid sm:grid-cols-2 gap-2 text-gray-700 mb-2">
-        <div>
-          <span className="font-bold text-gray-900">Date:</span> {data.Date}
+        <div className="grid sm:grid-cols-2 gap-2 text-gray-700 mb-2">
+          <div>
+            <span className="font-bold text-gray-900">Date:</span> {data.Date}
+          </div>
+          <div>
+            <span className="font-bold text-gray-900">Type:</span> {data.Type}
+          </div>
+          <div>
+            <span className="font-bold text-gray-900">Unit:</span> {data.Unit}
+          </div>
+          <div className="sm:col-span-2">
+            <span className="font-bold text-gray-900">Work Description:</span>{" "}
+            {data.WorkDescription}
+          </div>
         </div>
-        <div>
-          <span className="font-bold text-gray-900">Type:</span> {data.Type}
-        </div>
-        <div>
-          <span className="font-bold text-gray-900">Unit:</span> {data.Unit}
-        </div>
-        <div className="sm:col-span-2">
-          <span className="font-bold text-gray-900">Work Description:</span>{" "}
-          {data.WorkDescription}
-        </div>
-      </div>
-      <div className="mb-3 font-bold">Employee</div>
-      <div className="overflow-x-auto rounded-lg border border-gray-200">
-        <table className="min-w-full text-sm text-gray-700">
-          <thead className="bg-gray-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-bold text-gray-900 border-b">
-                Name
-              </th>
-              <th className="px-4 py-3 font-bold text-gray-900 border-b">
-                OT Time
-              </th>
-              <th className="px-4 py-3 font-bold text-gray-900 border-b">
-                OT Hour
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.Employee.map((emp, index) => (
-              <tr key={index} className="hover:bg-gray-50 border-b">
-                <td className="px-4 py-2">{emp.Name}</td>
-                <td className="px-4 py-2">{emp.OtTime}</td>
-                <td className="px-4 py-2">{emp.OtHour}</td>
+        <div className="mb-3 font-bold">Employee</div>
+        <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <table className="min-w-full text-sm text-gray-700">
+            <thead className="bg-gray-50 text-left">
+              <tr>
+                <th className="px-4 py-3 font-bold text-gray-900 border-b">
+                  Name
+                </th>
+                <th className="px-4 py-3 font-bold text-gray-900 border-b">
+                  OT Time
+                </th>
+                <th className="px-4 py-3 font-bold text-gray-900 border-b">
+                  OT Hour
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {data.Remarks?.trim() && (
-        <div className=" text-gray-700">
-          <span className="font-bold text-gray-900">Remarks:</span>{" "}
-          {data.Remarks}
+            </thead>
+            <tbody>
+              {data.Employee.map((emp, index) => (
+                <tr key={index} className="hover:bg-gray-50 border-b">
+                  <td className="px-4 py-2">{emp.Name}</td>
+                  <td className="px-4 py-2">{emp.OtTime}</td>
+                  <td className="px-4 py-2">{emp.OtHour}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
+
+        {data.Remarks?.trim() && (
+          <div className=" text-gray-700">
+            <span className="font-bold text-gray-900">Remarks:</span>{" "}
+            {data.Remarks}
+          </div>
+        )}
+      </div>
+      <div className="mt-6">
+        <DownloadPdfButton onClick={() => downloadOtSlip(data)} />
+      </div>
     </div>
   );
 };

@@ -77,9 +77,7 @@ const OtReport = ({ reports }) => {
                       rowSpan={employeeCount}
                     >
                       <Link
-                        href={`/overtime/view?id=${report._id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`/overtime/slip?id=${report._id}`}
                         className="text-blue-600 hover:underline font-medium"
                       >
                         {report.WorkDescription}
@@ -115,7 +113,7 @@ const OtReport = ({ reports }) => {
                   >
                     <div className="flex gap-3">
                       <Link
-                        href={`/overtime/edit?id=${report._id}`}
+                        href={`/overtime/slip/edit?id=${report._id}`}
                         className="text-blue-500 hover:text-blue-700 transition-colors"
                       >
                         <FileEditIcon />

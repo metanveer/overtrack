@@ -2,8 +2,6 @@ import OtReportDaily from "@/app/components/OtReportDaily";
 import { getOtEntriesByDate } from "@/lib/mongodb/otQueries";
 import formatDate from "@/utils/formatDate";
 
-import React from "react";
-
 import SelectDate from "@/app/components/SelectDate";
 
 const DailyReportPage = async ({ searchParams }) => {

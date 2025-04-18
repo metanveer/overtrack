@@ -11,13 +11,11 @@ const MonthlyReportPage = async ({ searchParams }) => {
 
   const result = await getEmployeeOvertimeRecords(start, end, name);
 
-  // console.log("result of employee reocrd", JSON.stringify(result, null, 2));
-
   return (
     <>
       <CriteriaSelector employeeOptions={employeeOptions} />
       {result.length > 0 ? (
-        <EmployeeOtRecords data={result} />
+        <EmployeeOtRecords data={result} start={start} end={end} />
       ) : (
         <p className="text-center text-gray-600 mt-4">No record found!</p>
       )}

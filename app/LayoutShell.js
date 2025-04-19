@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { MenuIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import Breadcrumb from "./components/Breadcrump";
+import Logo from "./components/Logo";
 
 export default function LayoutShell({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -47,7 +48,9 @@ export default function LayoutShell({ children }) {
     <div>
       {/* Top Bar */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-white shadow-md flex items-center justify-between px-6 z-50">
-        <div className="text-xl font-semibold">OT Management</div>
+        <Link href={`/`}>
+          <Logo />
+        </Link>
         <button
           className="md:hidden cursor-pointer"
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -60,7 +63,7 @@ export default function LayoutShell({ children }) {
           )}
         </button>
         <div className="hidden md:block text-base font-medium cursor-pointer">
-          Menu
+          Admin
         </div>
       </header>
 

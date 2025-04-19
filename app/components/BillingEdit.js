@@ -166,13 +166,13 @@ const BillingEdit = ({ employees, totalOtRecords, month, empMonthlyData }) => {
                     })}
                   </td>
                   <td className="p-3">
-                    <input
-                      type="text"
+                    <textarea
                       value={row.remarks}
                       onChange={(e) =>
                         handleChange(i, "remarks", e.target.value)
                       }
-                      className="w-full border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
+                      className="w-full border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300 resize-none"
+                      rows={3}
                     />
                   </td>
                 </tr>

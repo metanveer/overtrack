@@ -5,7 +5,7 @@ export default async function Page() {
   const { OtType, Unit, Employee, OtTime } = await getOtSettings();
 
   return (
-    <div className="p-6">
+    <div className="p-0">
       <h1 className="text-2xl font-bold mb-4">Overtime Form</h1>
       <OvertimeForm
         typeOptions={OtType}

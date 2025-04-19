@@ -92,7 +92,7 @@ const OtReportMonthly = ({ groupedData, monthString }) => {
                         rowSpan={entry.Employee.length}
                         className="border border-gray-200 px-4 py-2 align-top"
                       >
-                        {entry.Unit}
+                        {entry.Unit.join(", ")}
                       </td>
                     ) : null}
 

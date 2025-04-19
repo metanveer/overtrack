@@ -9,7 +9,7 @@ import TextLink from "./TextLink";
 const OtView = ({ data }) => {
   return (
     <div className="max-w-4xl mx-auto">
-      <div className=" bg-white p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 space-y-6">
+      <div className="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 space-y-6">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
             Overtime Slip
@@ -24,13 +24,15 @@ const OtView = ({ data }) => {
             <span className="font-bold text-gray-900">Type:</span> {data.Type}
           </div>
           <div>
-            <span className="font-bold text-gray-900">Unit:</span> {data.Unit}
+            <span className="font-bold text-gray-900">Unit:</span>{" "}
+            {Array.isArray(data.Unit) ? data.Unit.join(", ") : data.Unit}
           </div>
           <div className="sm:col-span-2">
             <span className="font-bold text-gray-900">Work Description:</span>{" "}
             {data.WorkDescription}
           </div>
         </div>
+
         <div className="mb-3 font-bold">Employee</div>
         <div className="overflow-x-auto rounded-lg border border-gray-200">
           <table className="min-w-full text-sm text-gray-700">
@@ -60,20 +62,15 @@ const OtView = ({ data }) => {
         </div>
 
         {data.Remarks?.trim() && (
-          <div className=" text-gray-700">
+          <div className="text-gray-700 whitespace-pre-line">
             <span className="font-bold text-gray-900">Remarks:</span>{" "}
             {data.Remarks}
           </div>
         )}
       </div>
+
       <div className="mt-6 flex gap-6">
         <DownloadPdfButton onClick={() => downloadOtSlip(data)} />
-        {/* <Link
-                        href={`/overtime/slip/edit?id=${data._id}`}
-                        className="text-blue-500 hover:text-blue-700 transition-colors"
-                      >
-                        <FileEditIcon />
-                      </Link> */}
         <TextLink
           isButton
           href={`/overtime/slip/edit?id=${data._id}`}

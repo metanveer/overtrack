@@ -19,7 +19,7 @@ export const downloadOtSlip = async (data) => {
   // 🖼️ Logo
   doc.addImage(logoBase64, "PNG", margin, currentY, 50, 60);
 
-  // Centered Title, Address & Subtitle
+  // Title & Address
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
   doc.text("EASTERN REFINERY LIMITED", pageWidth / 2, currentY + 20, {
@@ -38,7 +38,7 @@ export const downloadOtSlip = async (data) => {
 
   currentY += 80;
 
-  // 🧾 OT Info
+  // OT Info
   doc.setFont("helvetica", "normal");
   doc.setFontSize(11);
 
@@ -50,20 +50,25 @@ export const downloadOtSlip = async (data) => {
 
   bold("Date:");
   doc.text(`${data.Date}`, margin + 40, currentY);
-  doc.setFont("helvetica", "bold");
 
   doc.setFont("helvetica", "bold");
   doc.text(`Type: ${data.Type}`, pageWidth - margin, currentY, {
     align: "right",
   });
+
   currentY += 18;
 
+  // Unit as comma-separated string
+  const unitString = Array.isArray(data.Unit)
+    ? data.Unit.join(", ")
+    : data.Unit;
   doc.setFont("helvetica", "bold");
   doc.text("Unit:", margin, currentY);
   doc.setFont("helvetica", "normal");
-  doc.text(`${data.Unit}`, margin + 38, currentY);
+  doc.text(unitString, margin + 38, currentY);
   currentY += 18;
 
+  // Work Description
   doc.setFont("helvetica", "bold");
   doc.text("Work Description:", margin, currentY);
   currentY += 16;
@@ -76,7 +81,7 @@ export const downloadOtSlip = async (data) => {
   doc.text(desc, margin, currentY);
   currentY += desc.length * 14 + 10;
 
-  // 👥 Employees Table
+  // Employee Table
   doc.setFont("helvetica", "bold");
   doc.text("Employee", margin, currentY);
   currentY += 10;
@@ -98,7 +103,7 @@ export const downloadOtSlip = async (data) => {
       fillColor: [240, 240, 240],
       textColor: "#000000",
       fontStyle: "bold",
-      lineColor: "#000000", // ensure black border for head
+      lineColor: "#000000",
       lineWidth: 0.2,
     },
     columnStyles: {
@@ -108,20 +113,20 @@ export const downloadOtSlip = async (data) => {
 
   const tableEndY = doc.lastAutoTable.finalY + 20;
 
-  // 💬 Remarks & ✍️ Signature
-  const remarksText = doc.splitTextToSize(
-    data.Remarks || "",
-    pageWidth / 2 - margin
-  );
-
+  // Remarks
   if (data.Remarks?.trim()) {
+    const remarksText = doc.splitTextToSize(
+      data.Remarks,
+      pageWidth / 2 - margin
+    );
+
     doc.setFont("helvetica", "bold");
     doc.text("Remarks:", margin, tableEndY);
     doc.setFont("helvetica", "normal");
     doc.text(remarksText, margin, tableEndY + 15);
   }
 
-  // ✍️ Signature to the right
+  // Signature block
   const signatureY = tableEndY;
 
   doc.setFont("helvetica", "normal");
@@ -131,9 +136,7 @@ export const downloadOtSlip = async (data) => {
     signatureY + 10 + 18
   );
 
-  // "Manager (Instrument)" 2 lines (28pt) below
   doc.text("Manager / AGM", pageWidth - margin - 130, signatureY + 10 + 32);
 
-  // Save file
   doc.save(`Overtime_Slip_${data.Date}.pdf`);
 };

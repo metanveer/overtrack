@@ -76,7 +76,7 @@ const OtReportDaily = ({ records, date }) => {
                         className="px-4 py-2 border border-gray-200"
                         rowSpan={employeeCount}
                       >
-                        {report.Unit}
+                        {report.Unit.join(", ")}
                       </td>
                       <td
                         className="px-4 py-2 border border-gray-200"

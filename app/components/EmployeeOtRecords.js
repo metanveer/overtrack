@@ -16,8 +16,6 @@ const otTypeColors = {
 };
 
 const EmployeeOtRecords = ({ data, start, end }) => {
-  console.log("Employee OT Record Data", data);
-
   return (
     <div className="max-w-6xl mx-auto mt-5">
       <div className="space-y-10">
@@ -89,7 +87,7 @@ const EmployeeOtRecords = ({ data, start, end }) => {
                         </td>
                         <td className="px-4 py-2">{entry.OtHour}</td>
                         <td className="px-4 py-2">{entry.OtTime}</td>
-                        <td className="px-4 py-2">{entry.Unit}</td>
+                        <td className="px-4 py-2">{entry.Unit.join(", ")}</td>
                         <td className="px-4 py-2">
                           <TextLink
                             text={entry.WorkDescription}

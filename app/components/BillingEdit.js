@@ -10,8 +10,9 @@ import { editBill } from "../actions/billActions";
 import FormStatus from "./FormStatus";
 import { useRouter } from "next/navigation";
 import formatMonthName from "@/utils/formatMonthName";
+import round1 from "@/utils/round1";
 
-const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
+const BillingEdit = ({ employees, totalOtRecords, month, empMonthlyData }) => {
   const { billMonth, billData } = empMonthlyData;
 
   const initializeRows = () => {
@@ -45,17 +46,20 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
   }, [state, router, billMonth]);
 
   const handleChange = (index, key, value) => {
-    const updated = [...rows];
-    updated[index][key] = value;
+    const updated = rows.map((r, idx) =>
+      idx === index ? { ...r, [key]: value } : r
+    );
     setRows(updated);
   };
 
-  const getDouble = (row) => row.totalOt - (Number(row.triple) || 0);
-  const getDiff = (row) => (Number(row.bill) || 0) - row.totalOt;
+  const getDouble = (row) => round1(row.totalOt - (Number(row.triple) || 0));
+  const getDiff = (row) => round1((Number(row.bill) || 0) - row.totalOt);
   const getPayment = (row) => {
     const bill = Number(row.bill) || 0;
+    if (bill === 0) return 0;
     const triple = Number(row.triple) || 0;
-    return (row.basic / 104) * (bill + triple / 2) || 0;
+    if (!row.basic) return 0;
+    return round1((row.basic / 104) * (bill + triple / 2));
   };
 
   const totals = rows.reduce(
@@ -84,9 +88,7 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
     };
 
     const formData = new FormData();
-
     formData.append("data", JSON.stringify(dataToSave));
-
     startTransition(() => formAction(formData));
   };
 
@@ -97,7 +99,7 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
       </div>
 
       <div className="overflow-auto rounded-lg shadow border border-gray-200">
-        <table className="min-w-full text-sm text-center bg-white ">
+        <table className="min-w-full text-sm text-center bg-white">
           <thead className="bg-slate-100 text-slate-700 text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">#</th>
@@ -135,6 +137,8 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
                   <td className="p-3">
                     <input
                       type="number"
+                      min="0"
+                      step="0.1"
                       value={row.triple}
                       onChange={(e) =>
                         handleChange(i, "triple", e.target.value)
@@ -146,6 +150,8 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
                   <td className="p-3">
                     <input
                       type="number"
+                      min="0"
+                      step="0.1"
                       value={row.bill}
                       onChange={(e) => handleChange(i, "bill", e.target.value)}
                       className="w-20 text-center border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
@@ -177,8 +183,8 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
               <td colSpan={5} className="p-3 text-right">
                 Total
               </td>
-              <td className="p-3">{totals.totalOt}</td>
-              <td className="p-3">{totals.bill}</td>
+              <td className="p-3">{round1(totals.totalOt)}</td>
+              <td className="p-3">{round1(totals.bill)}</td>
               <td className="p-3"></td>
               <td className="p-3"></td>
               <td className="p-3">
@@ -192,21 +198,28 @@ const EditBilling = ({ employees, totalOtRecords, month, empMonthlyData }) => {
           </tbody>
         </table>
       </div>
+
       {isPending ? (
-        <p>Sending data...</p>
+        <p className="mt-4 text-blue-600">Sending data...</p>
       ) : state ? (
         <FormStatus state={state} />
       ) : null}
+
       <div className="mt-6 text-right">
         <button
           type="submit"
-          className="px-6 py-2 text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow transition"
+          disabled={isPending}
+          className={`px-6 py-2 text-sm font-medium rounded-md shadow transition ${
+            isPending
+              ? "bg-blue-300 text-white cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
         >
-          Save
+          {isPending ? "Saving..." : "Save"}
         </button>
       </div>
     </form>
   );
 };
 
-export default EditBilling;
+export default BillingEdit;

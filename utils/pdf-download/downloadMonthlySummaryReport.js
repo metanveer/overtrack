@@ -137,7 +137,7 @@ export const downloadMonthlySummaryReport = async (data, monthName) => {
   const finalY = doc.lastAutoTable.finalY + 70;
   doc.setFont("helvetica", "normal");
   doc.text("______________________", pageWidth - margin - 160, finalY);
-  doc.text("Manager (Instrument)", pageWidth - margin - 140, finalY + 15);
+  doc.text("Manager / AGM", pageWidth - margin - 140, finalY + 15);
 
   doc.save(`Monthly_OT_Summary_${monthName}.pdf`);
 };

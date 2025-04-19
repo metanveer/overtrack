@@ -4,6 +4,7 @@ import { deleteBill } from "../actions/billActions";
 import Link from "next/link";
 import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadMonthlyBill } from "@/utils/pdf-download/downloadMonthlyBill";
+import round1 from "@/utils/round1";
 
 const BillingView = ({ data }) => {
   if (!data || !data.billData || data.billData.length === 0 || !data.billMonth)
@@ -14,7 +15,7 @@ const BillingView = ({ data }) => {
     year: "numeric",
   });
 
-  const totalTotalOt = data.billData.reduce(
+  const totalMonthlyOtHour = data.billData.reduce(
     (sum, emp) => sum + (parseFloat(emp.totalOt) || 0),
     0
   );
@@ -78,7 +79,7 @@ const BillingView = ({ data }) => {
                 Totals
               </td>
               <td className="px-4 py-2"></td>
-              <td className="px-4 py-2">{totalTotalOt}</td>
+              <td className="px-4 py-2">{round1(totalMonthlyOtHour)}</td>
               <td className="px-4 py-2">{totalBill.toLocaleString()}</td>
               <td className="px-4 py-2"></td>
               <td className="px-4 py-2"></td>

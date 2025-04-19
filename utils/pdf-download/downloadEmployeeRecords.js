@@ -121,24 +121,21 @@ export const downloadEmployeeRecords = async (data, startDate, endDate) => {
         4: { halign: "left" }, // Work Description
         5: { halign: "left" }, // Remarks
       },
-      didDrawPage: function () {
-        const pageCount = doc.internal.getNumberOfPages();
-        const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
-
-        doc.setFontSize(10);
-        doc.text(
-          `Page ${pageNumber} of ${pageCount}`,
-          pageWidth - margin,
-          pageHeight - 20,
-          {
-            align: "right",
-          }
-        );
-      },
     });
 
     currentY = doc.lastAutoTable.finalY;
   });
+
+  //🧾 Footer with correct total page count
+  const pageCount = doc.internal.getNumberOfPages();
+
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(10);
+    doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, pageHeight - 20, {
+      align: "right",
+    });
+  }
 
   // 🧮 Total OT Summary
   const totalY = currentY + 30;
@@ -154,7 +151,7 @@ export const downloadEmployeeRecords = async (data, startDate, endDate) => {
   const finalY = totalY + 70;
   doc.setFont("helvetica", "normal");
   doc.text("______________________", pageWidth - margin - 160, finalY);
-  doc.text("Manager (Instrument)", pageWidth - margin - 140, finalY + 15);
+  doc.text("Manager / AGM", pageWidth - margin - 140, finalY + 15);
 
   doc.save(`Employee_OT_Record_${startDate}_to_${endDate}.pdf`);
 };

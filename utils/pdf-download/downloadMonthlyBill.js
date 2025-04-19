@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
+import round1 from "../round1";
 
 export const downloadMonthlyBill = async (data) => {
   if (!data || !data.billData || data.billData.length === 0 || !data.billMonth)
@@ -108,7 +109,7 @@ export const downloadMonthlyBill = async (data) => {
       styles: { fontStyle: "bold", halign: "right" },
     },
     "",
-    totalOt,
+    round1(totalOt),
     totalBill.toLocaleString(),
     "",
     "",
@@ -127,8 +128,8 @@ export const downloadMonthlyBill = async (data) => {
     theme: "grid",
     tableWidth: "auto",
     styles: {
-      fontSize: 9,
-      cellPadding: 4,
+      fontSize: 8,
+      cellPadding: 3,
       textColor: 0,
       valign: "middle",
       lineWidth: 0.1,
@@ -141,31 +142,54 @@ export const downloadMonthlyBill = async (data) => {
       halign: "center",
     },
     columnStyles: {
+      0: { halign: "center" }, // #
       1: { halign: "left" }, // Name
       2: { halign: "left" }, // Designation
+      3: { halign: "center" }, // Double
+      4: { halign: "center" }, // Triple
+      5: { halign: "center" }, // Total HR
+      6: { halign: "center" }, // Bill HR
+      7: { halign: "center" }, // Diff
+      8: { halign: "righ" }, // Basic TK
+      9: { halign: "right" }, // Payment TK
       10: { halign: "left" }, // Remarks
-    },
-    didDrawPage: function () {
-      const pageCount = doc.internal.getNumberOfPages();
-      const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
-
-      doc.setFontSize(10);
-      doc.text(
-        `Page ${pageNumber} of ${pageCount}`,
-        pageWidth - margin,
-        pageHeight - 20,
-        {
-          align: "right",
-        }
-      );
     },
   });
 
+  // 🧾 Footer with correct total page count
+  // const pageCount = doc.internal.getNumberOfPages();
+
+  // for (let i = 1; i <= pageCount; i++) {
+  //   doc.setPage(i);
+  //   doc.setFontSize(10);
+  //   doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, pageHeight - 20, {
+  //     align: "right",
+  //   });
+  // }
+
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  const now = new Date();
+
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = now.getFullYear();
+
+  let hours = now.getHours();
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  const formattedDate = `${day}-${month}-${year} at ${hours}:${minutes} ${ampm}`;
+
+  doc.text(`Prepared on: ${formattedDate}`, margin, pageHeight - 20);
+
   // ✍️ Signature
   const finalY = doc.lastAutoTable.finalY + 70;
-  doc.setFont("helvetica", "normal");
+  doc.setFont("helvetica", "bold");
   doc.text("______________________", pageWidth - margin - 160, finalY);
-  doc.text("Manager (Instrument)", pageWidth - margin - 140, finalY + 15);
+  doc.text("Manager / AGM", pageWidth - margin - 140, finalY + 15);
 
   doc.save(`Monthly_Billing_Summary_${data.billMonth}.pdf`);
 };

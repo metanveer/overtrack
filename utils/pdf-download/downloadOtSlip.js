@@ -132,11 +132,7 @@ export const downloadOtSlip = async (data) => {
   );
 
   // "Manager (Instrument)" 2 lines (28pt) below
-  doc.text(
-    "Manager (Instrument)",
-    pageWidth - margin - 130,
-    signatureY + 10 + 32
-  );
+  doc.text("Manager / AGM", pageWidth - margin - 130, signatureY + 10 + 32);
 
   // Save file
   doc.save(`Overtime_Slip_${data.Date}.pdf`);

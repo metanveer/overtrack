@@ -1,33 +1,34 @@
 "use client";
 
 import React, {
-  startTransition,
-  useActionState,
-  useCallback,
-  useEffect,
   useMemo,
   useState,
+  useEffect,
+  startTransition,
+  useActionState,
 } from "react";
+import { usePathname } from "next/navigation";
 import { createBill } from "../actions/billActions";
 import FormStatus from "./FormStatus";
-import { usePathname } from "next/navigation";
 import formatMonthName from "@/utils/formatMonthName";
+import round1 from "@/utils/round1";
 
-const Billing = ({ employees, totalOtRecords, month }) => {
-  const initializeRows = useCallback(() => {
-    return employees.map((emp) => {
-      const ot =
-        totalOtRecords.find((r) => r.name === emp.Name)?.totalOtHour || 0;
-      return {
-        name: emp.Name,
-        designation: emp.Designation,
-        basic: Number(emp.BasicSalary),
-        totalOt: ot,
-        triple: 0,
-        bill: 0,
-        remarks: "",
-      };
-    });
+const BillingCreate = ({ employees, totalOtRecords, month }) => {
+  const initializeRows = useMemo(() => {
+    return () =>
+      employees.map((emp) => {
+        const ot =
+          totalOtRecords.find((r) => r.name === emp.Name)?.totalOtHour || 0;
+        return {
+          name: emp.Name,
+          designation: emp.Designation,
+          basic: Number(emp.BasicSalary),
+          totalOt: round1(ot),
+          triple: 0,
+          bill: 0,
+          remarks: "",
+        };
+      });
   }, [employees, totalOtRecords]);
 
   const [rows, setRows] = useState(initializeRows());
@@ -41,23 +42,32 @@ const Billing = ({ employees, totalOtRecords, month }) => {
   const handleChange = (index, key, val) => {
     const updated = [...rows];
     updated[index][key] =
-      key === "triple" || key === "bill" ? Number(val) || 0 : val;
+      key === "triple" || key === "bill" ? round1(val) || 0 : val;
     setRows(updated);
   };
 
-  const getDouble = (row) => row.totalOt - (Number(row.triple) || 0);
-  const getDiff = (row) => (Number(row.bill) || 0) - row.totalOt;
+  const getDouble = (row) => {
+    return round1(row.totalOt - (Number(row.triple) || 0));
+  };
+
+  const getDiff = (row) => {
+    return round1((Number(row.bill) || 0) - row.totalOt);
+  };
+
   const getPayment = (row) => {
     const bill = Number(row.bill) || 0;
+    if (bill === 0) return 0;
     const triple = Number(row.triple) || 0;
-    return (row.basic / 104) * (bill + triple / 2) || 0;
+    const base = row.basic / 104;
+    const total = bill + triple / 2;
+    return round1(base * total);
   };
 
   const totals = useMemo(() => {
     return rows.reduce(
       (acc, row) => {
         acc.totalOt += row.totalOt;
-        acc.bill += Number(row.bill) || 0;
+        acc.bill += row.bill || 0;
         acc.payment += getPayment(row);
         return acc;
       },
@@ -69,7 +79,6 @@ const Billing = ({ employees, totalOtRecords, month }) => {
     e.preventDefault();
 
     const hasInvalid = rows.some((row) => row.triple < 0 || row.bill < 0);
-
     if (hasInvalid) {
       alert("Triple or Bill values can't be negative.");
       return;
@@ -80,7 +89,7 @@ const Billing = ({ employees, totalOtRecords, month }) => {
       double: getDouble(row),
       difference: getDiff(row),
       payment: getPayment(row),
-      month: month,
+      month,
     }));
 
     const dataToSave = {
@@ -100,7 +109,8 @@ const Billing = ({ employees, totalOtRecords, month }) => {
           Prepare Bill for {formatMonthName(month)}
         </div>
         <div className="text-gray-500">
-          {`(Please insert employees' monthly claimed OT hours and triple value for preparing bill.)`}
+          {`(Please insert employees' monthly claimed OT hours and triple value
+          for preparing bill.)`}
         </div>
       </div>
 
@@ -143,7 +153,7 @@ const Billing = ({ employees, totalOtRecords, month }) => {
                   <td className="p-3">
                     <input
                       type="number"
-                      step="0.5"
+                      step="0.1"
                       min="0"
                       value={row.triple}
                       onChange={(e) =>
@@ -156,7 +166,7 @@ const Billing = ({ employees, totalOtRecords, month }) => {
                   <td className="p-3">
                     <input
                       type="number"
-                      step="0.5"
+                      step="0.1"
                       min="0"
                       value={row.bill}
                       onChange={(e) =>
@@ -168,7 +178,7 @@ const Billing = ({ employees, totalOtRecords, month }) => {
                   <td className="p-3">{diff}</td>
                   <td className="p-3">{row.basic.toLocaleString()}</td>
                   <td className="p-3">
-                    {Number(payment).toLocaleString(undefined, {
+                    {payment.toLocaleString(undefined, {
                       minimumFractionDigits: 1,
                       maximumFractionDigits: 1,
                     })}
@@ -192,16 +202,21 @@ const Billing = ({ employees, totalOtRecords, month }) => {
                 Total
               </td>
               <td className="p-3">
-                {Number(totals.totalOt).toLocaleString(undefined, {
+                {round1(totals.totalOt).toLocaleString(undefined, {
                   minimumFractionDigits: 1,
                   maximumFractionDigits: 1,
                 })}
               </td>
-              <td className="p-3">{totals.bill}</td>
+              <td className="p-3">
+                {round1(totals.bill).toLocaleString(undefined, {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                })}
+              </td>
               <td className="p-3"></td>
               <td className="p-3"></td>
               <td className="p-3">
-                {Number(totals.payment).toLocaleString(undefined, {
+                {round1(totals.payment).toLocaleString(undefined, {
                   minimumFractionDigits: 1,
                   maximumFractionDigits: 1,
                 })}
@@ -232,4 +247,4 @@ const Billing = ({ employees, totalOtRecords, month }) => {
   );
 };
 
-export default Billing;
+export default BillingCreate;

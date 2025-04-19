@@ -1,11 +1,13 @@
-import Billing from "@/app/components/Billing";
+import BillingCreate from "@/app/components/BillingCreate";
+
 import BillingMonthSelector from "@/app/components/BillingMonthSelector";
 import BillingView from "@/app/components/BillingView";
-import EditBilling from "@/app/components/EditBilling";
+
 import { getBillByMonth } from "@/lib/mongodb/billQueries";
 import { getEmployeesOtHours } from "@/lib/mongodb/otQueries";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import getMonthStartAndEnd from "@/utils/getMonthStartAndEnd";
+import BillingEdit from "@/app/components/BillingEdit";
 
 function isValidMonth(input) {
   const regex = /^\d{4}-(0[1-9]|1[0-2])$/;
@@ -29,7 +31,7 @@ const BillingPage = async ({ searchParams }) => {
         return (
           <div>
             <BillingMonthSelector initMonth={month} />
-            <EditBilling
+            <BillingEdit
               empMonthlyData={bill}
               employees={Employee}
               totalOtRecords={res}
@@ -67,7 +69,11 @@ const BillingPage = async ({ searchParams }) => {
     return (
       <div>
         <BillingMonthSelector initMonth={month} />
-        <Billing employees={Employee} totalOtRecords={empHours} month={month} />
+        <BillingCreate
+          employees={Employee}
+          totalOtRecords={empHours}
+          month={month}
+        />
       </div>
     );
   }

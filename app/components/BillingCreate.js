@@ -12,6 +12,7 @@ import { createBill } from "../actions/billActions";
 import FormStatus from "./FormStatus";
 import formatMonthName from "@/utils/formatMonthName";
 import round1 from "@/utils/round1";
+import TextLink from "./TextLink";
 
 const BillingCreate = ({ employees, totalOtRecords, month }) => {
   const initializeRows = useMemo(() => {
@@ -235,13 +236,25 @@ const BillingCreate = ({ employees, totalOtRecords, month }) => {
         <FormStatus state={state} />
       ) : null}
 
-      <div className="mt-6 text-right">
+      <div className="mt-6 flex gap-6">
         <button
           type="submit"
-          className="px-6 py-2 text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow transition"
+          disabled={isPending}
+          className={`px-6 py-2  font-medium rounded-md shadow transition ${
+            isPending
+              ? "bg-blue-300 text-white cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
         >
-          Save
+          {isPending ? "Saving..." : "Save"}
         </button>
+        <TextLink
+          isButton
+          btnClassName="px-6 py-2.5  font-medium rounded-md shadow transition
+             bg-red-600 hover:bg-red-700 text-white"
+          text="Close Editor"
+          href={`/overtime/billing`}
+        />
       </div>
     </form>
   );

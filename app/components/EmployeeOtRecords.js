@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import React from "react";
 import DownloadPdfButton from "./DownloadPdfButton";
 
 import { downloadEmployeeRecords } from "@/utils/pdf-download/downloadEmployeeRecords";
+import TextLink from "./TextLink";
 
 const otTypeColors = {
   Holiday: "bg-red-100 text-red-700 border-red-300",
@@ -16,6 +16,8 @@ const otTypeColors = {
 };
 
 const EmployeeOtRecords = ({ data, start, end }) => {
+  console.log("Employee OT Record Data", data);
+
   return (
     <div className="max-w-6xl mx-auto mt-5">
       <div className="space-y-10">
@@ -80,17 +82,20 @@ const EmployeeOtRecords = ({ data, start, end }) => {
                         }`}
                       >
                         <td className="px-4 py-2 flex items-center gap-2 whitespace-nowrap">
-                          <Link
-                            href={`/overtime/slip?id=${entry._id}`}
-                            className="text-blue-600 hover:underline hover:text-blue-800"
-                          >
-                            {entry.Date}
-                          </Link>
+                          <TextLink
+                            text={entry.Date}
+                            href={`/overtime/daily?date=${entry.Date}`}
+                          />
                         </td>
                         <td className="px-4 py-2">{entry.OtHour}</td>
                         <td className="px-4 py-2">{entry.OtTime}</td>
                         <td className="px-4 py-2">{entry.Unit}</td>
-                        <td className="px-4 py-2">{entry.WorkDescription}</td>
+                        <td className="px-4 py-2">
+                          <TextLink
+                            text={entry.WorkDescription}
+                            href={`/overtime/slip?id=${entry._id}`}
+                          />
+                        </td>
                         <td className="px-4 py-2">{entry.Remarks}</td>
                         <td
                           className={`px-4 py-2 font-medium border-l ${rowColor}`}

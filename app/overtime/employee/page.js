@@ -13,7 +13,12 @@ const MonthlyReportPage = async ({ searchParams }) => {
 
   return (
     <>
-      <CriteriaSelector employeeOptions={employeeOptions} />
+      <CriteriaSelector
+        employeeOptions={employeeOptions}
+        start={start}
+        end={end}
+        name={name}
+      />
       {result.length > 0 ? (
         <EmployeeOtRecords data={result} start={start} end={end} />
       ) : (

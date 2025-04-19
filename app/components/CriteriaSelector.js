@@ -2,17 +2,24 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-const CriteriaSelector = ({ employeeOptions = [] }) => {
+const CriteriaSelector = ({ employeeOptions = [], start, end, name }) => {
   const currentDate = new Date();
   const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
   const currentYear = currentDate.getFullYear();
 
-  const [mode, setMode] = useState("month"); // "month" or "range"
+  function getInitMode() {
+    if (start && end && name) {
+      return "range";
+    }
+    return "month";
+  }
+
+  const [mode, setMode] = useState(getInitMode()); // "month" or "range"
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [employeeName, setEmployeeName] = useState("");
+  const [startDate, setStartDate] = useState(start || "");
+  const [endDate, setEndDate] = useState(end || "");
+  const [employeeName, setEmployeeName] = useState(name || "");
 
   const monthOptions = [
     { value: "01", label: "January" },

@@ -3,6 +3,7 @@
 import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadDailyReport } from "@/utils/pdf-download/downloadDailyReport";
 import TextLink from "./TextLink";
+import round1 from "@/utils/round1";
 
 const calculateTotalOtHours = (data) => {
   return data.reduce((sum, item) => {
@@ -118,7 +119,7 @@ const OtReportDaily = ({ records, date }) => {
                 Total OT Hours
               </td>
               <td className="px-4 py-2 border border-gray-300">
-                {totalOtHours}
+                {round1(totalOtHours)}
               </td>
               <td className="px-4 py-2 border border-gray-300"></td>
             </tr>

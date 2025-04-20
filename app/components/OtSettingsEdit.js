@@ -21,6 +21,7 @@ const OtSettingsEdit = ({ dataFromDb }) => {
   const initData = dataFromDb ? dataFromDb : emptyData;
 
   const [data, setData] = useState(initData);
+  const [flashingIndex, setFlashingIndex] = useState(null);
 
   const [state, formAction, isPending] = useActionState(createOtSettings, {});
   const router = useRouter();
@@ -84,18 +85,38 @@ const OtSettingsEdit = ({ dataFromDb }) => {
     setData({ ...data, [key]: [...data[key], newItem] });
   };
 
+  const handleMove = (key, index, direction) => {
+    const newArray = [...data[key]];
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+
+    if (newIndex < 0 || newIndex >= newArray.length) return;
+
+    // Swap items
+    [newArray[index], newArray[newIndex]] = [
+      newArray[newIndex],
+      newArray[index],
+    ];
+
+    setData({ ...data, [key]: newArray });
+    setFlashingIndex(newIndex); // Set the new index to flash
+
+    // Clear the flash after 1 second
+    setTimeout(() => setFlashingIndex(null), 1000);
+  };
+
   const getLabel = (key) => {
     if (key === "OtType") return "OT Type";
     if (key === "OtTime") return "OT Time";
     return key;
   };
 
-  const getPlaceholder = (keyOrField) => {
-    if (keyOrField === "OtType") return "OT Type";
-    if (keyOrField === "BasicSalary") return "Basic Salary";
-    if (keyOrField === "OtTime") return "OT Time";
-    return keyOrField;
+  const placeholders = {
+    OtType: "OT Type",
+    BasicSalary: "Basic Salary",
+    OtTime: "OT Time",
   };
+
+  const getPlaceholder = (keyOrField) => placeholders[keyOrField] || keyOrField;
 
   const renderInput = (key, item, index) => {
     if (typeof item === "object") {
@@ -155,14 +176,43 @@ const OtSettingsEdit = ({ dataFromDb }) => {
             {value.map((item, index) => (
               <div
                 key={index}
-                className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-gray-50 p-4 rounded-lg shadow-sm"
+                className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-gray-50 p-4 rounded-lg shadow-sm transition ${
+                  key === "Employee" && index === flashingIndex
+                    ? "bg-yellow-100"
+                    : ""
+                }`}
               >
+                {/* Index number */}
                 <div className="text-gray-500 font-medium min-w-[1.5rem]">
                   {index + 1}.
                 </div>
+
+                {/* Input fields */}
                 <div className="flex-1 w-full">
                   {renderInput(key, item, index)}
                 </div>
+
+                {/* Reordering buttons (only for Employee) */}
+                {key === "Employee" && (
+                  <div className="flex flex-col gap-1">
+                    <button
+                      type="button"
+                      className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 text-xs"
+                      onClick={() => handleMove("Employee", index, "up")}
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 text-xs"
+                      onClick={() => handleMove("Employee", index, "down")}
+                    >
+                      ↓
+                    </button>
+                  </div>
+                )}
+
+                {/* Delete button */}
                 <button
                   type="button"
                   onClick={() => handleDelete(key, index)}
@@ -196,7 +246,8 @@ const OtSettingsEdit = ({ dataFromDb }) => {
       <div className="pt-4">
         <button
           type="submit"
-          className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md"
+          className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md disabled:opacity-50"
+          disabled={isPending}
         >
           Submit
         </button>

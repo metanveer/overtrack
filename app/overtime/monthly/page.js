@@ -1,4 +1,4 @@
-import { getDateWiseOtEntries } from "@/lib/mongodb/otQueries";
+import { getMonthlyOvertimes } from "@/lib/mongodb/otQueries";
 
 import OtReportMonthly from "@/app/components/OtReportMonthly";
 import MonthSelector from "@/app/components/MonthSelector";
@@ -15,7 +15,7 @@ const MonthlyReportPage = async ({ searchParams }) => {
     );
   }
 
-  const result = await getDateWiseOtEntries(month);
+  const result = await getMonthlyOvertimes(month);
 
   if (result.length === 0) {
     return (

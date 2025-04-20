@@ -1,5 +1,5 @@
 import OtReportDaily from "@/app/components/OtReportDaily";
-import { getOtEntriesByDate } from "@/lib/mongodb/otQueries";
+import { getDailyOvertimes } from "@/lib/mongodb/otQueries";
 import formatDate from "@/utils/formatDate";
 
 import SelectDate from "@/app/components/SelectDate";
@@ -15,7 +15,7 @@ const DailyReportPage = async ({ searchParams }) => {
     );
   }
 
-  const records = await getOtEntriesByDate(date);
+  const records = await getDailyOvertimes(date);
 
   return (
     <div className="p-2">

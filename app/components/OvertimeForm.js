@@ -6,6 +6,7 @@ import FormStatus from "./FormStatus";
 import getHourFromTimeData from "@/utils/getHourFromTimeData";
 
 import Select from "react-select";
+import Link from "next/link";
 
 export default function OvertimeForm({
   typeOptions,
@@ -324,7 +325,16 @@ export default function OvertimeForm({
 
           {isPending ? "Submitting..." : null}
 
-          <div className="text-right">
+          <div className="flex gap-6 justify-between">
+            <Link
+              href={
+                isEditing ? `/overtime/slip?id=${overtimeDoc._id}` : "/overtime"
+              }
+              className="mt-6 inline-block px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded transition"
+            >
+              Close Editor
+            </Link>
+
             <button
               type="submit"
               className="mt-6 inline-block px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"

@@ -19,7 +19,7 @@ const DailyReportPage = async ({ searchParams }) => {
 
   return (
     <div className="p-2">
-      <SelectDate />
+      <SelectDate queryDate={date} />
 
       {records.length === 0 ? (
         <div className="text-center text-xl py-12">No daily records found!</div>

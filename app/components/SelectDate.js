@@ -1,12 +1,16 @@
 "use client";
+import isValidDate from "@/utils/isValidDate";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const SelectDate = () => {
-  const [dateSelected, setDateSelected] = useState(() => {
+const SelectDate = ({ queryDate }) => {
+  const initDate = () => {
+    if (queryDate && isValidDate(queryDate)) return queryDate;
     const today = new Date();
     return today.toISOString().split("T")[0]; // returns YYYY-MM-DD
-  });
+  };
+
+  const [dateSelected, setDateSelected] = useState(initDate);
 
   return (
     <div className="p-4 max-w-md mx-auto bg-white rounded-2xl shadow-md border border-[#eee]">

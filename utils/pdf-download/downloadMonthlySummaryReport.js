@@ -3,7 +3,11 @@ import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
 import { transformOTMonthlySummary } from "../transformOtMonthlySummary";
 
-export const downloadMonthlySummaryReport = async (data, monthName) => {
+export const downloadMonthlySummaryReport = async (
+  data,
+  employeeOrder,
+  monthName
+) => {
   const {
     allDates,
     employeeList,
@@ -11,7 +15,7 @@ export const downloadMonthlySummaryReport = async (data, monthName) => {
     dayTotals,
     grandTotal,
     topThree,
-  } = transformOTMonthlySummary(data);
+  } = transformOTMonthlySummary(data, employeeOrder);
 
   const logoBase64 = await fetchLogoBase64();
 

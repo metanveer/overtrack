@@ -17,8 +17,6 @@ const getAllDatesInMonth = (data) => {
 const roundForDisplay = (num) => num.toFixed(1); // Display rounding to 1 decimal
 
 export const transformOTMonthlySummary = (data, preferredOrder = []) => {
-  console.log("data to transform", JSON.stringify(data, null, 2));
-
   const employeeSet = new Set();
   const employeeMap = {};
 

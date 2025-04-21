@@ -21,7 +21,7 @@ export default function Logo() {
       {/* Brand Text */}
       <div className="flex flex-col leading-tight">
         <span className="text-lg font-semibold tracking-tight text-indigo-700 font-sans">
-          Insta<span className="text-indigo-500 font-bold">Track</span>
+          Instru<span className="text-indigo-500 font-bold">Track</span>
         </span>
         <span className="hidden md:block text-xs text-gray-500 font-medium font-sans tracking-wide">
           ERL Instrument Data Tracking and Management

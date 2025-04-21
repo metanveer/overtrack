@@ -10,6 +10,7 @@ const Settings = () => {
         <CustomLink href={`/overtime/daily`} label={"Daily Overtime"} />
         <CustomLink href={`/overtime/monthly`} label={"Monthly Overtime"} />
         <CustomLink href={`/overtime/employee`} label={"Employee Records"} />
+        <CustomLink href={`/overtime/unit`} label={"Unit Records"} />
         <CustomLink href={`/overtime/billing`} label={"Billing"} />
       </div>
     </>

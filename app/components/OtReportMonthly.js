@@ -1,11 +1,12 @@
 "use client";
 import DownloadPdfButton from "./DownloadPdfButton";
-import formatMonthName from "@/utils/formatMonthName";
+import { formatMonthNameFromRange } from "@/utils/formatMonthName";
 import { downloadMonthlyDetailsReport } from "@/utils/pdf-download/downloadMonthlyDetailsReport";
 import TextLink from "./TextLink";
-import getMonthStartAndEnd from "@/utils/getMonthStartAndEnd";
+import formatDate from "@/utils/formatDate";
+import Link from "next/link";
 
-const OtReportMonthly = ({ groupedData, monthString }) => {
+const OtReportMonthly = ({ unitName, groupedData, start, end }) => {
   function getMonthlyTotalOtHour(dateWiseEntries) {
     const total = dateWiseEntries.reduce((sum, entry) => {
       const otHour = parseFloat(entry.totalOtHours);
@@ -17,19 +18,31 @@ const OtReportMonthly = ({ groupedData, monthString }) => {
 
   const grandTotalOt = getMonthlyTotalOtHour(groupedData);
 
-  const monthName = formatMonthName(monthString);
+  const monthName = formatMonthNameFromRange(start, end);
 
-  const { start, end } = getMonthStartAndEnd(monthString);
+  const unitConfig = unitName
+    ? {
+        unitName,
+        start,
+        end,
+      }
+    : null;
 
   return (
     <div className="overflow-x-auto">
-      <div className="mb-3">
-        <DownloadPdfButton
-          onClick={() => downloadMonthlyDetailsReport(groupedData, monthName)}
-        />
+      <div className="text-2xl font-bold my-2 mt-4 text-center">
+        {unitName
+          ? `Overtime Log for ${unitName} from ${formatDate(
+              start
+            )} to ${formatDate(end)}`
+          : `Monthly Overtime Details for ${monthName}`}
       </div>
-      <div className="text-2xl font-bold my-3 text-center">
-        Monthly OT Details for {monthName}
+      <div className="my-2">
+        <DownloadPdfButton
+          onClick={() =>
+            downloadMonthlyDetailsReport(groupedData, monthName, unitConfig)
+          }
+        />
       </div>
 
       <table className="min-w-full  border-gray-200  border-gray-200-gray-300 table-auto">
@@ -37,7 +50,9 @@ const OtReportMonthly = ({ groupedData, monthString }) => {
           <tr>
             <th className="border border-gray-200 px-4 py-2">Date</th>
             <th className="border border-gray-200 px-4 py-2">Type</th>
-            <th className="border border-gray-200 px-4 py-2">Unit</th>
+            {unitName ? null : (
+              <th className="border border-gray-200 px-4 py-2">Unit</th>
+            )}
             <th className="border border-gray-200 px-4 py-2">
               Work Description
             </th>
@@ -88,12 +103,24 @@ const OtReportMonthly = ({ groupedData, monthString }) => {
 
                     {/* Unit */}
                     {empIdx === 0 ? (
-                      <td
-                        rowSpan={entry.Employee.length}
-                        className="border border-gray-200 px-4 py-2 align-top"
-                      >
-                        {entry.Unit.join(", ")}
-                      </td>
+                      unitName ? null : (
+                        <td
+                          rowSpan={entry.Employee.length}
+                          className="border border-gray-200 px-4 py-2 align-top"
+                        >
+                          {entry.Unit.map((item, index) => (
+                            <TextLink
+                              text={
+                                index < entry.Unit.length - 1
+                                  ? `${item}, `
+                                  : item
+                              }
+                              key={index}
+                              href={`/overtime/unit?start=${start}&end=${end}&name=${item}`}
+                            />
+                          ))}
+                        </td>
+                      )
                     ) : null}
 
                     {/* Work Description */}
@@ -141,7 +168,7 @@ const OtReportMonthly = ({ groupedData, monthString }) => {
           {/* Final row for grand total */}
           <tr className="bg-gray-100 font-semibold">
             <td
-              colSpan={6}
+              colSpan={unitName ? 5 : 6}
               className="border border-gray-200 px-4 py-2 text-right"
             >
               Total OT Hours
@@ -158,81 +185,3 @@ const OtReportMonthly = ({ groupedData, monthString }) => {
 };
 
 export default OtReportMonthly;
-
-// const groupedData = [
-//   {
-//     _id: "2025-04-10",
-//     records: [
-//       {
-//         Type: "Regular",
-//         Unit: "Topping",
-//         WorkDescription: "Topping startup",
-//         Employee: [
-//           { Name: "MR. MD. ABU NAYEEM", OtTime: "08.00-16.00", OtHour: "8" },
-//           {
-//             Name: "MR. MD. ABDUL MOMEN",
-//             OtTime: "17.00-22.00 & 12.00-14.00",
-//             OtHour: "10",
-//           },
-//         ],
-//         Remarks: "Test",
-//       },
-//       {
-//         Type: "Regular",
-//         Unit: "Reforming",
-//         WorkDescription: "Reforming startup",
-//         Employee: [
-//           { Name: "MR. MD. ABU TAHER", OtTime: "17.00-08.00", OtHour: "15" },
-//           {
-//             Name: "MR. MD. SARWAR JAHAN",
-//             OtTime: "17.00-08.00",
-//             OtHour: "15",
-//           },
-//         ],
-//         Remarks: "Test",
-//       },
-//       {
-//         Type: "Weekend",
-//         Unit: "Merox-III",
-//         WorkDescription: "Error eum animi ame",
-//         Employee: [
-//           {
-//             Name: "MR. MD. ABU NAYEEM",
-//             OtTime: "08.00-02.00 & 12.00-14.00",
-//             OtHour: "23",
-//           },
-//         ],
-//         Remarks: "Quisquam sint odit",
-//       },
-//       {
-//         Type: "Weekend",
-//         Unit: "Merox-II",
-//         WorkDescription: "Atque lorem ipsa et",
-//         Employee: [
-//           {
-//             Name: "MR. MD. ABU NAYEEM",
-//             OtTime: "14.50-06.00",
-//             OtHour: "15.166667",
-//           },
-//           {
-//             Name: "MR. S M KAMRUL HASAN",
-//             OtTime: "14.50-06.00",
-//             OtHour: "15.166667",
-//           },
-//           {
-//             Name: "MR. MD. ABU TAHER",
-//             OtTime: "14.50-06.00",
-//             OtHour: "15.166667",
-//           },
-//           {
-//             Name: "MR. MD. ABDUL MOMEN",
-//             OtTime: "14.50-06.00",
-//             OtHour: "15.166667",
-//           },
-//         ],
-//         Remarks: "Odio quos aute nostr",
-//       },
-//     ],
-//   },
-//   {...}
-// ];

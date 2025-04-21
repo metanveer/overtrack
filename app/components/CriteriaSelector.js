@@ -2,7 +2,13 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-const CriteriaSelector = ({ employeeOptions = [], start, end, name }) => {
+const CriteriaSelector = ({
+  employeeOptions = [],
+  start,
+  end,
+  name,
+  isUnit,
+}) => {
   const currentDate = new Date();
   const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
   const currentYear = currentDate.getFullYear();
@@ -47,11 +53,15 @@ const CriteriaSelector = ({ employeeOptions = [], start, end, name }) => {
         endDateObj.getDate()
       ).padStart(2, "0")}`;
 
-      return `/overtime/employee?start=${start}&end=${end}&name=${employeeName}`;
+      return `/overtime/${
+        isUnit ? "unit" : "employee"
+      }?start=${start}&end=${end}&name=${employeeName}`;
     }
 
     if (mode === "range" && isRangeFormValid) {
-      return `/overtime/employee?start=${startDate}&end=${endDate}&name=${employeeName}`;
+      return `/overtime/${
+        isUnit ? "unit" : "employee"
+      }?start=${startDate}&end=${endDate}&name=${employeeName}`;
     }
 
     return "#";
@@ -157,14 +167,16 @@ const CriteriaSelector = ({ employeeOptions = [], start, end, name }) => {
 
         <div className="flex-1 min-w-[200px]">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Employee Name
+            {isUnit ? "Unit Name" : "Employee Name"}
           </label>
           <select
             value={employeeName}
             onChange={(e) => setEmployeeName(e.target.value)}
             className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">Select employee</option>
+            <option value="">
+              {isUnit ? "Select unit" : "Select employee"}
+            </option>
             {employeeOptions.map((name) => (
               <option key={name} value={name}>
                 {name}

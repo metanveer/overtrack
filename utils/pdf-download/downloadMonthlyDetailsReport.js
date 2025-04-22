@@ -101,7 +101,9 @@ export const downloadMonthlyDetailsReport = async (
 
         if (empIndex === 0) {
           row.push({ content: record.Type, rowSpan: empLen });
-          row.push({ content: record.Unit, rowSpan: empLen });
+          if (!unitConfig) {
+            row.push({ content: record.Unit, rowSpan: empLen });
+          }
           row.push({
             content: record.WorkDescription,
             rowSpan: empLen,
@@ -141,10 +143,12 @@ export const downloadMonthlyDetailsReport = async (
   });
 
   // Monthly grand total row
+  const finalColSpan = unitConfig ? 5 : 6;
+
   body.push([
     {
       content: "Total OT Hours (Monthly)",
-      colSpan: 6,
+      colSpan: finalColSpan,
       styles: { fontStyle: "bold", halign: "right" },
     },
     {
@@ -154,12 +158,17 @@ export const downloadMonthlyDetailsReport = async (
     "",
   ]);
 
-  // 📄 Render table
-  autoTable(doc, {
-    startY: margin + 58,
-    margin: { left: margin, right: margin },
-    head: [
-      [
+  const headRow = unitConfig
+    ? [
+        "Date",
+        "Type",
+        "Work Description",
+        "Employee",
+        "OT Time",
+        "OT Hour",
+        "Remarks",
+      ]
+    : [
         "Date",
         "Type",
         "Unit",
@@ -168,8 +177,13 @@ export const downloadMonthlyDetailsReport = async (
         "OT Time",
         "OT Hour",
         "Remarks",
-      ],
-    ],
+      ];
+
+  // 📄 Render table
+  autoTable(doc, {
+    startY: margin + 58,
+    margin: { left: margin, right: margin },
+    head: [headRow],
     body,
     styles: {
       fontSize: 10,

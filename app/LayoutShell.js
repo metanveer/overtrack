@@ -6,6 +6,7 @@ import { MenuIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import Breadcrumb from "./components/Breadcrump";
 import Logo from "./components/Logo";
+import Footer from "./components/Footer";
 
 export default function LayoutShell({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -46,7 +47,7 @@ export default function LayoutShell({ children }) {
   ];
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       {/* Top Bar */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-white shadow-md flex items-center justify-between px-6 z-50">
         <Link href={`/`}>
@@ -102,11 +103,16 @@ export default function LayoutShell({ children }) {
         </nav>
       </aside>
 
-      {/* Main Content */}
-      <main className="pt-18 md:ml-52 p-4 transition-all duration-300">
+      {/* Main Content + Footer Wrapper */}
+      <div className="pt-18 md:ml-52 p-4 flex-grow">
         <Breadcrumb />
         {children}
-      </main>
+      </div>
+
+      {/* Footer always at bottom */}
+      <div className="md:ml-52">
+        <Footer />
+      </div>
     </div>
   );
 }

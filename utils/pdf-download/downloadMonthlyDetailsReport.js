@@ -125,13 +125,16 @@ export const downloadMonthlyDetailsReport = async (
     });
 
     // Push daily total row
+
+    const dailyTotalColSpan = unitConfig ? 5 : 6;
+
     const dailyTotalRounded = Math.round(dailyTotalOt * 10) / 10;
     grandTotalOt += dailyTotalRounded;
 
     body.push([
       {
         content: `Total OT Hours for ${date}`,
-        colSpan: 6,
+        colSpan: dailyTotalColSpan,
         styles: { fontStyle: "bold", halign: "right" },
       },
       {
@@ -147,7 +150,7 @@ export const downloadMonthlyDetailsReport = async (
 
   body.push([
     {
-      content: "Total OT Hours (Monthly)",
+      content: "Grand Total",
       colSpan: finalColSpan,
       styles: { fontStyle: "bold", halign: "right" },
     },
@@ -198,6 +201,9 @@ export const downloadMonthlyDetailsReport = async (
       textColor: 0,
       fontStyle: "bold",
       halign: "center",
+    },
+    columnStyles: {
+      5: { halign: "center" },
     },
     theme: "grid",
     tableWidth: "auto",

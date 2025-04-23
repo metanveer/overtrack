@@ -39,13 +39,6 @@ const Settings = async () => {
           .map((item) => (
             <CustomLink key={item.href} href={item.href} label={item.label} />
           ))}
-        {/* <CustomLink href={`/overtime/settings`} label={"Settings"} />
-        <CustomLink href={`/overtime/entry-form`} label={"Entry Form"} />
-        <CustomLink href={`/overtime/daily`} label={"Daily Overtime"} />
-        <CustomLink href={`/overtime/monthly`} label={"Monthly Overtime"} />
-        <CustomLink href={`/overtime/employee`} label={"Employee Records"} />
-        <CustomLink href={`/overtime/unit`} label={"Unit Records"} />
-        <CustomLink href={`/overtime/billing`} label={"Billing"} /> */}
       </div>
     </>
   );

@@ -19,14 +19,17 @@ const MonthlySummary = ({ data, employeeOrder, month }) => {
 
   return (
     <div>
-      <DownloadPdfButton
-        onClick={() =>
-          downloadMonthlySummaryReport(data, employeeOrder, monthName)
-        }
-      />
       <div className="text-2xl font-bold my-3 text-center">
         Monthly OT Summary for {monthName}
       </div>
+      <div className="mb-2">
+        <DownloadPdfButton
+          onClick={() =>
+            downloadMonthlySummaryReport(data, employeeOrder, monthName)
+          }
+        />
+      </div>
+
       <div className="overflow-auto">
         <table className="min-w-full border-collapse border border-gray-300 text-sm text-center">
           <thead className="bg-gray-100">

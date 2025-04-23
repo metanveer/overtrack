@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import LayoutShell from "./LayoutShell"; // client layout
+import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -12,11 +13,12 @@ export const metadata = {
   description: "Manage overtime efficiently",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const { Employee } = await getOtSettings();
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased text-black-900`}>
-        <LayoutShell>{children}</LayoutShell>
+        <LayoutShell employees={Employee}>{children}</LayoutShell>
       </body>
     </html>
   );

@@ -7,8 +7,17 @@ import Link from "next/link";
 import Breadcrumb from "./components/Breadcrump";
 import Logo from "./components/Logo";
 import Footer from "./components/Footer";
+import getMonthStartAndEnd from "@/utils/getMonthStartAndEnd";
 
-export default function LayoutShell({ children }) {
+export default function LayoutShell({ children, employees }) {
+  const today = new Date();
+  const selectedDate = today.toISOString().split("T")[0]; // returns YYYY-MM-DD
+  const yearMonth = today.toISOString().slice(0, 7);
+
+  const { start, end } = getMonthStartAndEnd(selectedDate);
+
+  const firstEmp = employees[0].Name;
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const pathname = usePathname();
@@ -38,11 +47,17 @@ export default function LayoutShell({ children }) {
   const navLinks = [
     { href: "/overtime/entry-form", label: "Entry Form" },
     { href: "/overtime", label: "Overtime" },
-    { href: "/overtime/daily", label: "Daily" },
-    { href: "/overtime/monthly", label: "Monthly" },
-    { href: "/overtime/employee", label: "Employee Records" },
-    { href: "/overtime/unit", label: "Unit Records" },
-    { href: "/overtime/billing", label: "Billing" },
+    { href: `/overtime/daily?date=${selectedDate}`, label: "Daily" },
+    { href: `/overtime/monthly?month=${yearMonth}`, label: "Monthly" },
+    {
+      href: `/overtime/employee?start=${start}&end=${end}&name=${firstEmp}`,
+      label: "Employee Records",
+    },
+    {
+      href: `/overtime/unit?start=${start}&end=${end}&name=Topping`,
+      label: "Unit Records",
+    },
+    { href: `/overtime/billing?month=${yearMonth}`, label: "Billing" },
     { href: "/overtime/settings", label: "Settings" },
   ];
 

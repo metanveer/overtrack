@@ -14,11 +14,13 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const { Employee } = await getOtSettings();
+  const { Employee, Unit } = await getOtSettings();
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased text-black-900`}>
-        <LayoutShell employees={Employee}>{children}</LayoutShell>
+        <LayoutShell units={Unit} employees={Employee}>
+          {children}
+        </LayoutShell>
       </body>
     </html>
   );

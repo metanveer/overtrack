@@ -1,31 +1,44 @@
 import getMonthStartAndEnd from "./getMonthStartAndEnd";
 
-export default function getNavLinks(employees, units) {
+export default function getNavLinks(employees, units, otTypes, otHours, dept) {
   const today = new Date();
   const selectedDate = today.toISOString().split("T")[0]; // returns YYYY-MM-DD
   const yearMonth = today.toISOString().slice(0, 7);
 
   const { start, end } = getMonthStartAndEnd(selectedDate);
 
-  const firstEmp = employees[0].Name;
-  const firstUnit = units[0];
+  console.log("employees in getNavLinks", employees);
+  console.log("units", units);
+  console.log("otTypes", otTypes);
+  console.log("otHours", otHours);
+  console.log("dept", dept);
 
-  const navLinks = [
-    { href: "/overtime/entry-form", label: "Entry Form" },
-    { href: "/overtime", label: "Overtime" },
-    { href: `/overtime/daily?date=${selectedDate}`, label: "Daily" },
-    { href: `/overtime/monthly?month=${yearMonth}`, label: "Monthly" },
+  if (
+    !employees?.length ||
+    !units?.length ||
+    !otTypes?.length ||
+    !otHours?.length
+  ) {
+    return [{ href: `/${dept}/overtime/settings`, label: "Settings" }];
+  }
+
+  const firstEmp = employees ? employees[0].Name : "";
+  const firstUnit = units ? units[0] : "";
+
+  return [
+    { href: `/${dept}/overtime/entry-form`, label: "Entry Form" },
+    { href: `/${dept}/overtime`, label: "Overtime" },
+    { href: `/${dept}/overtime/daily?date=${selectedDate}`, label: "Daily" },
+    { href: `/${dept}/overtime/monthly?month=${yearMonth}`, label: "Monthly" },
     {
-      href: `/overtime/employee?start=${start}&end=${end}&name=${firstEmp}`,
+      href: `/${dept}/overtime/employee?start=${start}&end=${end}&name=${firstEmp}`,
       label: "Employee Records",
     },
     {
-      href: `/overtime/unit?start=${start}&end=${end}&name=${firstUnit}`,
+      href: `/${dept}/overtime/unit?start=${start}&end=${end}&name=${firstUnit}`,
       label: "Unit Records",
     },
-    { href: `/overtime/billing?month=${yearMonth}`, label: "Billing" },
-    { href: "/overtime/settings", label: "Settings" },
+    { href: `/${dept}/overtime/billing?month=${yearMonth}`, label: "Billing" },
+    { href: `/${dept}/overtime/settings`, label: "Settings" },
   ];
-
-  return navLinks;
 }

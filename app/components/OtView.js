@@ -6,7 +6,7 @@ import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadOtSlip } from "@/utils/pdf-download/downloadOtSlip";
 import TextLink from "./TextLink";
 
-const OtView = ({ data }) => {
+const OtView = ({ dept, data }) => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 space-y-6">
@@ -73,10 +73,14 @@ const OtView = ({ data }) => {
         <DownloadPdfButton onClick={() => downloadOtSlip(data)} />
         <TextLink
           isButton
-          href={`/overtime/slip/edit?id=${data._id}`}
+          href={`/${dept}/overtime/slip/edit?id=${data._id}`}
           text={"Edit"}
         />
-        <DeleteBtnConfirm currentId={data._id} deleteAction={deleteOtEntry} />
+        <DeleteBtnConfirm
+          dept={dept}
+          currentId={data._id}
+          deleteAction={deleteOtEntry}
+        />
       </div>
     </div>
   );

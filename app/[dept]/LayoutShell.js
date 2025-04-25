@@ -4,13 +4,20 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { MenuIcon, XIcon } from "lucide-react";
 import Link from "next/link";
-import Breadcrumb from "./components/Breadcrump";
-import Logo from "./components/Logo";
-import Footer from "./components/Footer";
+import Breadcrumb from "../components/Breadcrump";
+import Logo from "../components/Logo";
+import Footer from "../components/Footer";
 
 import getNavLinks from "@/utils/getNavLinks";
 
-export default function LayoutShell({ children, employees, units }) {
+export default function LayoutShell({
+  children,
+  employees,
+  units,
+  otTypes,
+  otHours,
+  dept,
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const pathname = usePathname();
@@ -37,7 +44,7 @@ export default function LayoutShell({ children, employees, units }) {
     }
   };
 
-  const navLinks = getNavLinks(employees, units);
+  const navLinks = getNavLinks(employees, units, otTypes, otHours, dept);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -58,7 +65,7 @@ export default function LayoutShell({ children, employees, units }) {
           )}
         </button>
         <div className="hidden md:block text-base font-medium cursor-pointer">
-          Admin
+          <Link href={`/admin`}>Admin</Link>
         </div>
       </header>
 
@@ -99,6 +106,7 @@ export default function LayoutShell({ children, employees, units }) {
       {/* Main Content + Footer Wrapper */}
       <div className="pt-18 md:ml-52 p-4 flex-grow">
         <Breadcrumb />
+
         {children}
       </div>
 

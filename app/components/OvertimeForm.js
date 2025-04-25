@@ -15,10 +15,12 @@ export default function OvertimeForm({
   otTimeOptions,
   isEditing,
   overtimeDoc,
+  deptName,
 }) {
   const [loading, setLoading] = useState(true); // Loading state for form data
   const emptyData = {
     Date: "",
+    Dept: deptName,
     Type: "",
     Unit: [],
     WorkDescription: "",
@@ -328,7 +330,9 @@ export default function OvertimeForm({
           <div className="flex gap-6 justify-between">
             <Link
               href={
-                isEditing ? `/overtime/slip?id=${overtimeDoc._id}` : "/overtime"
+                isEditing
+                  ? `/${deptName}/overtime/slip?id=${overtimeDoc._id}`
+                  : `/${deptName}/overtime`
               }
               className="mt-6 inline-block px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded transition"
             >

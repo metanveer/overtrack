@@ -4,9 +4,8 @@ import { formatMonthNameFromRange } from "@/utils/formatMonthName";
 import { downloadMonthlyDetailsReport } from "@/utils/pdf-download/downloadMonthlyDetailsReport";
 import TextLink from "./TextLink";
 import formatDate from "@/utils/formatDate";
-import Link from "next/link";
 
-const OtReportMonthly = ({ unitName, groupedData, start, end }) => {
+const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
   function getMonthlyTotalOtHour(dateWiseEntries) {
     const total = dateWiseEntries.reduce((sum, entry) => {
       const otHour = parseFloat(entry.totalOtHours);
@@ -82,7 +81,7 @@ const OtReportMonthly = ({ unitName, groupedData, start, end }) => {
                           className="border border-gray-200 px-4 py-2 align-top text-center bg-gray-50 font-semibold"
                         >
                           <TextLink
-                            href={`/overtime/daily?date=${group._id}`}
+                            href={`/${dept}/overtime/daily?date=${group._id}`}
                             text={group._id}
                           />
                         </td>
@@ -116,7 +115,7 @@ const OtReportMonthly = ({ unitName, groupedData, start, end }) => {
                                     : item
                                 }
                                 key={index}
-                                href={`/overtime/unit?start=${start}&end=${end}&name=${item}`}
+                                href={`/${dept}/overtime/unit?start=${start}&end=${end}&name=${item}`}
                               />
                             ))}
                           </td>
@@ -130,7 +129,7 @@ const OtReportMonthly = ({ unitName, groupedData, start, end }) => {
                           className="border border-gray-200 px-4 py-2 align-top"
                         >
                           <TextLink
-                            href={`/overtime/slip?id=${entry._id}`}
+                            href={`/${dept}/overtime/slip?id=${entry._id}`}
                             text={entry.WorkDescription}
                           />
                         </td>
@@ -139,7 +138,7 @@ const OtReportMonthly = ({ unitName, groupedData, start, end }) => {
                       {/* Employee */}
                       <td className="border border-gray-200 px-4 py-2">
                         <TextLink
-                          href={`/overtime/employee?start=${start}&end=${end}&name=${emp.Name}`}
+                          href={`/${dept}/overtime/employee?start=${start}&end=${end}&name=${emp.Name}`}
                           text={emp.Name}
                         />
                       </td>

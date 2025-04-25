@@ -3,8 +3,9 @@ import { getOtById } from "@/lib/mongodb/otQueries";
 import { notFound } from "next/navigation";
 import React from "react";
 
-const OtViewPage = async ({ searchParams }) => {
+const OtViewPage = async ({ searchParams, params }) => {
   const { id } = await searchParams;
+  const { dept } = await params;
 
   const data = await getOtById(id);
 
@@ -12,7 +13,7 @@ const OtViewPage = async ({ searchParams }) => {
 
   return (
     <div>
-      <OtView data={data} />
+      <OtView dept={dept} data={data} />
     </div>
   );
 };

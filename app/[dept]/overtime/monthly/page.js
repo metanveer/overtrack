@@ -6,23 +6,24 @@ import MonthlySummary from "@/app/components/MonthlySummary";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import getMonthStartAndEnd from "@/utils/getMonthStartAndEnd";
 
-const MonthlyReportPage = async ({ searchParams }) => {
+const MonthlyReportPage = async ({ searchParams, params }) => {
   const { month, type } = await searchParams;
+  const { dept } = await params;
 
   if (!month) {
     return (
       <div className="p-0">
-        <MonthSelector initMonth={month} />
+        <MonthSelector dept={dept} initMonth={month} />
       </div>
     );
   }
 
-  const result = await getMonthlyOvertimes(month);
+  const result = await getMonthlyOvertimes(month, dept);
 
   if (result.length === 0) {
     return (
       <div className="p-0">
-        <MonthSelector initMonth={month} />
+        <MonthSelector dept={dept} initMonth={month} />
         <div className="text-center py-8 text-xl">
           No overtime data available!
         </div>
@@ -30,7 +31,7 @@ const MonthlyReportPage = async ({ searchParams }) => {
     );
   }
 
-  const { Employee } = await getOtSettings();
+  const { Employee } = await getOtSettings(dept);
 
   const employeeOrder = Employee.map((item) => item.Name);
 
@@ -38,7 +39,7 @@ const MonthlyReportPage = async ({ searchParams }) => {
 
   return (
     <div className="p-0">
-      <MonthSelector initMonth={month} />
+      <MonthSelector dept={dept} initMonth={month} />
       {type === "summary" ? (
         <MonthlySummary
           data={result}
@@ -46,7 +47,12 @@ const MonthlyReportPage = async ({ searchParams }) => {
           employeeOrder={employeeOrder}
         />
       ) : (
-        <OtReportMonthly start={start} end={end} groupedData={result} />
+        <OtReportMonthly
+          dept={dept}
+          start={start}
+          end={end}
+          groupedData={result}
+        />
       )}
     </div>
   );

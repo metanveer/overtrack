@@ -4,8 +4,9 @@ import formatDate from "@/utils/formatDate";
 
 import SelectDate from "@/app/components/SelectDate";
 
-const DailyReportPage = async ({ searchParams }) => {
+const DailyReportPage = async ({ searchParams, params }) => {
   const { date } = await searchParams;
+  const { dept } = await params;
 
   if (!date) {
     return (
@@ -15,11 +16,11 @@ const DailyReportPage = async ({ searchParams }) => {
     );
   }
 
-  const records = await getDailyOvertimes(date);
+  const records = await getDailyOvertimes(date, dept);
 
   return (
     <div className="p-2">
-      <SelectDate queryDate={date} />
+      <SelectDate dept={dept} queryDate={date} />
 
       {records.length === 0 ? (
         <div className="text-center text-xl py-12">No daily records found!</div>
@@ -28,7 +29,7 @@ const DailyReportPage = async ({ searchParams }) => {
           <h1 className="flex items-center text-xl font-bold mb-4 mt-6 space-x-2 text-gray-800">
             <span>{`Report dated ${formatDate(date)}`}</span>
           </h1>
-          <OtReportDaily records={records} date={date} />
+          <OtReportDaily dept={dept} records={records} date={date} />
         </>
       )}
     </div>

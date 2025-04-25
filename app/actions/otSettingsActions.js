@@ -92,16 +92,25 @@ export async function createOtSettings(prevState, formData) {
 
     const cleanedData = trimObjectValues(parsedData);
 
-    const result = await saveOtSettingsToDb(cleanedData);
+    const { _id } = cleanedData;
 
-    if (result.modifiedCount) {
-      revalidatePath("/overtime");
-      revalidatePath("/overtime/entry-form");
-      revalidatePath("/overtime/settings/edit");
+    const res = await saveOtSettingsToDb(cleanedData);
 
-      return { success: true, message: "Data saved successfully!" };
+    if (res.acknowledged && res.modifiedCount > 0) {
+      revalidatePath(`/${_id}/overtime`);
+      revalidatePath(`/${_id}/overtime/entry-form`);
+      revalidatePath(`/${_id}/overtime/settings/edit`);
+
+      return { success: true, message: "Settings updated successfully!" };
     }
-    return { success: false, message: "Nothing changed!" };
+    if (res.acknowledged && res.upsertedCount > 0) {
+      revalidatePath(`/${_id}/overtime`);
+      revalidatePath(`/${_id}/overtime/entry-form`);
+      revalidatePath(`/${_id}/overtime/settings/edit`);
+
+      return { success: true, message: "Settings created successfully" };
+    }
+    return { success: false, message: "Nothing to save!" };
   } catch (error) {
     console.error("Error saving data:", error);
     return { success: false, message: `Error saving data: ${error.message}` };

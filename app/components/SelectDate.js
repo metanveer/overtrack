@@ -3,7 +3,7 @@ import isValidDate from "@/utils/isValidDate";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const SelectDate = ({ queryDate }) => {
+const SelectDate = ({ queryDate, dept }) => {
   const initDate = () => {
     if (queryDate && isValidDate(queryDate)) return queryDate;
     const today = new Date();
@@ -30,7 +30,7 @@ const SelectDate = ({ queryDate }) => {
           />
         </div>
         <Link
-          href={`/overtime/daily?date=${dateSelected}`}
+          href={`/${dept}/overtime/daily?date=${dateSelected}`}
           className=" px-12 py-2 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition text-center"
         >
           Submit

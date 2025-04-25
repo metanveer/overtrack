@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-const BillingMonthSelector = ({ initMonth }) => {
+const BillingMonthSelector = ({ dept, initMonth }) => {
   const currentDate = new Date();
 
   const year = initMonth?.split("-")[0] || currentDate.getFullYear();
@@ -70,7 +70,7 @@ const BillingMonthSelector = ({ initMonth }) => {
         </div>
         <div className="w-full lg:w-fit whitespace-nowrap flex gap-4">
           <Link
-            href={`/overtime/billing?month=${monthSelected}`}
+            href={`/${dept}/overtime/billing?month=${monthSelected}`}
             className="w-full text-center px-12 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Get Bill

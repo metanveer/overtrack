@@ -8,6 +8,7 @@ const CriteriaSelector = ({
   end,
   name,
   isUnit,
+  dept,
 }) => {
   const currentDate = new Date();
   const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -53,13 +54,13 @@ const CriteriaSelector = ({
         endDateObj.getDate()
       ).padStart(2, "0")}`;
 
-      return `/overtime/${
+      return `/${dept}/overtime/${
         isUnit ? "unit" : "employee"
       }?start=${start}&end=${end}&name=${employeeName}`;
     }
 
     if (mode === "range" && isRangeFormValid) {
-      return `/overtime/${
+      return `/${dept}/overtime/${
         isUnit ? "unit" : "employee"
       }?start=${startDate}&end=${endDate}&name=${employeeName}`;
     }

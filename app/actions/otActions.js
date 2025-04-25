@@ -18,8 +18,9 @@ export async function createOtEntry(prevData, formData) {
       return { success: false, message: "No data provided." };
     }
 
-    const { Date, Type, Unit, WorkDescription, Employee, Remarks } = parsedData;
-    if (!Date || !Type || !Unit || !WorkDescription || !Employee) {
+    const { Date, Type, Unit, WorkDescription, Employee, Remarks, Dept } =
+      parsedData;
+    if (!Date || !Type || !Unit || !WorkDescription || !Employee || !Dept) {
       return { success: false, message: "All fields are required." };
     }
 
@@ -40,8 +41,8 @@ export async function createOtEntry(prevData, formData) {
     const newOtEntry = await insertOt(parsedData);
 
     if (newOtEntry.acknowledged) {
-      revalidatePath("/overtime/daily");
-      revalidatePath("/overtime/monthly");
+      revalidatePath(`/${Dept}/overtime/daily`);
+      revalidatePath(`/${Dept}/overtime/monthly`);
 
       return { success: true, message: "OT entry saved successfully." };
     }
@@ -60,8 +61,9 @@ export async function editOtEntry(prevData, formData) {
       return { success: false, message: "No data provided." };
     }
 
-    const { Date, Type, Unit, WorkDescription, Employee, Remarks } = parsedData;
-    if (!Date || !Type || !Unit || !WorkDescription || !Employee) {
+    const { Date, Type, Unit, WorkDescription, Employee, Remarks, Dept } =
+      parsedData;
+    if (!Date || !Type || !Unit || !WorkDescription || !Employee || !Dept) {
       return { success: false, message: "All fields are required." };
     }
 
@@ -76,9 +78,9 @@ export async function editOtEntry(prevData, formData) {
     const result = await updateOtById(parsedData);
 
     if (result.modifiedCount > 0) {
-      revalidatePath(`/overtime`);
-      revalidatePath(`/overtime/daily`);
-      revalidatePath(`/overtime/monthly`);
+      revalidatePath(`/${Dept}/overtime`);
+      revalidatePath(`/${Dept}/overtime/daily`);
+      revalidatePath(`/${Dept}/overtime/monthly`);
       return { success: true, message: "Data updated successfully" };
     }
 
@@ -89,7 +91,7 @@ export async function editOtEntry(prevData, formData) {
   }
 }
 
-export async function deleteOtEntry(id) {
+export async function deleteOtEntry(id, dept) {
   try {
     if (!id) return { success: false, message: "Missing ID" };
     if (!ObjectId.isValid(id)) {
@@ -103,9 +105,9 @@ export async function deleteOtEntry(id) {
     if (result.deletedCount === 0) {
       return { success: false, message: "Document not found!" };
     }
-    revalidatePath(`/overtime`);
-    revalidatePath(`/overtime/daily`);
-    revalidatePath(`/overtime/monthly`);
+    revalidatePath(`/${dept}/overtime`);
+    revalidatePath(`/${dept}/overtime/daily`);
+    revalidatePath(`/${dept}/overtime/monthly`);
 
     return { success: true, message: "Deleted successfully!" };
   } catch (error) {

@@ -13,7 +13,13 @@ import formatMonthName from "@/utils/formatMonthName";
 import round1 from "@/utils/round1";
 import TextLink from "./TextLink";
 
-const BillingEdit = ({ employees, totalOtRecords, month, empMonthlyData }) => {
+const BillingEdit = ({
+  employees,
+  totalOtRecords,
+  month,
+  empMonthlyData,
+  dept,
+}) => {
   const { billMonth, billData } = empMonthlyData;
 
   const initializeRows = () => {
@@ -42,9 +48,9 @@ const BillingEdit = ({ employees, totalOtRecords, month, empMonthlyData }) => {
 
   useEffect(() => {
     if (state?.success) {
-      router.push(`/overtime/billing?month=${billMonth}`);
+      router.push(`/${dept}/overtime/billing?month=${billMonth}`);
     }
-  }, [state, router, billMonth]);
+  }, [state, router, billMonth, dept]);
 
   const handleChange = (index, key, value) => {
     const updated = rows.map((r, idx) =>
@@ -84,6 +90,7 @@ const BillingEdit = ({ employees, totalOtRecords, month, empMonthlyData }) => {
     }));
 
     const dataToSave = {
+      dept: dept,
       billMonth: month,
       billData: result,
     };
@@ -223,7 +230,7 @@ const BillingEdit = ({ employees, totalOtRecords, month, empMonthlyData }) => {
           btnClassName="px-6 py-2.5  font-medium rounded-md shadow transition
              bg-red-600 hover:bg-red-700 text-white"
           text="Close Editor"
-          href={`/overtime/billing?month=${month}`}
+          href={`/${dept}/overtime/billing?month=${month}`}
         />
       </div>
     </form>

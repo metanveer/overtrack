@@ -17,13 +17,16 @@ export async function createBill(prevData, formData) {
       return { success: false, message: "No data provided." };
     }
 
-    const { billMonth, billData } = parsedData;
+    const { billMonth, billData, dept } = parsedData;
 
     if (!billMonth || billMonth === "") {
       return { success: false, message: "Bill month is missing!" };
     }
     if (!billData) {
       return { success: false, message: "Bill data is missing!" };
+    }
+    if (!dept) {
+      return { success: false, message: "Dept is missing!" };
     }
     if (billData.length === 0) {
       return { success: false, message: "No bill data was provided!" };
@@ -40,7 +43,7 @@ export async function createBill(prevData, formData) {
       };
     }
 
-    const hasDuplicateEntry = await getBillByMonth(billMonth);
+    const hasDuplicateEntry = await getBillByMonth(billMonth, dept);
 
     if (hasDuplicateEntry) {
       return {
@@ -49,11 +52,10 @@ export async function createBill(prevData, formData) {
       };
     }
 
-    const newBill = await insertBill({ billMonth, billData });
+    const newBill = await insertBill({ billMonth, billData, dept });
 
     if (newBill.acknowledged) {
-      revalidatePath("/overtime/billing");
-      revalidatePath("/overtime/billing");
+      revalidatePath(`/${dept}/overtime/billing`);
 
       return { success: true, message: "Bill data saved successfully." };
     }
@@ -72,13 +74,16 @@ export async function editBill(prevData, formData) {
       return { success: false, message: "No data provided." };
     }
 
-    const { billMonth, billData } = parsedData;
+    const { billMonth, billData, dept } = parsedData;
 
     if (!billMonth || billMonth === "") {
       return { success: false, message: "Bill month is missing!" };
     }
     if (!billData) {
       return { success: false, message: "Bill data is missing!" };
+    }
+    if (!dept) {
+      return { success: false, message: "Dept is missing!" };
     }
     if (billData.length === 0) {
       return { success: false, message: "No bill data was provided!" };
@@ -95,11 +100,10 @@ export async function editBill(prevData, formData) {
       };
     }
 
-    const updatedBill = await updateBill(billMonth, billData);
+    const updatedBill = await updateBill(billMonth, billData, dept);
 
     if (updatedBill.modifiedCount > 0) {
-      revalidatePath("/overtime/billing");
-      revalidatePath("/overtime/billing");
+      revalidatePath(`/${dept}/overtime/billing`);
 
       return { success: true, message: "Data updated successfully" };
     }
@@ -111,18 +115,20 @@ export async function editBill(prevData, formData) {
   }
 }
 
-export async function deleteBill(month) {
+export async function deleteBill(month, dept) {
   try {
     if (!month) return { success: false, message: "Missing month!" };
+    if (!dept) return { success: false, message: "Missing department!" };
 
     const result = await BILL_COLLECTION.deleteOne({
       billMonth: month,
+      dept: dept,
     });
 
     if (result.deletedCount === 0) {
       return { success: false, message: "Document not found!" };
     }
-    revalidatePath(`/overtime/billing`);
+    revalidatePath(`/${dept}/overtime/billing`);
 
     return { success: true, message: "Deleted successfully!" };
   } catch (error) {

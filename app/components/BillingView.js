@@ -6,7 +6,7 @@ import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadMonthlyBill } from "@/utils/pdf-download/downloadMonthlyBill";
 import round1 from "@/utils/round1";
 
-const BillingView = ({ data }) => {
+const BillingView = ({ data, dept }) => {
   if (!data || !data.billData || data.billData.length === 0 || !data.billMonth)
     return <div>No data available</div>;
 
@@ -97,13 +97,14 @@ const BillingView = ({ data }) => {
       <div className="flex gap-6 mt-6">
         <DownloadPdfButton onClick={() => downloadMonthlyBill(data)} />
         <Link
-          href={`/overtime/billing?month=${data.billMonth}&mode=edit`}
+          href={`/${dept}/overtime/billing?month=${data.billMonth}&mode=edit`}
           className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
         >
           Edit
         </Link>
         <DeleteBtnConfirm
           currentId={data.billMonth}
+          dept={dept}
           deleteAction={deleteBill}
         />
       </div>

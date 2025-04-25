@@ -14,7 +14,7 @@ const calculateTotalOtHours = (data) => {
   }, 0);
 };
 
-const OtReportDaily = ({ records, date }) => {
+const OtReportDaily = ({ records, date, dept }) => {
   const totalOtHours = calculateTotalOtHours(records);
 
   return (
@@ -69,7 +69,7 @@ const OtReportDaily = ({ records, date }) => {
                         rowSpan={employeeCount}
                       >
                         <TextLink
-                          href={`/overtime/slip?id=${report._id}`}
+                          href={`/${dept}/overtime/slip?id=${report._id}`}
                           text={report.WorkDescription}
                         />
                       </td>
@@ -90,7 +90,7 @@ const OtReportDaily = ({ records, date }) => {
                   <td className="px-4 py-2 border border-gray-200">
                     <TextLink
                       text={emp.Name}
-                      href={`/overtime/employee?start=${date}&end=${date}&name=${emp.Name}`}
+                      href={`/${dept}/overtime/employee?start=${date}&end=${date}&name=${emp.Name}`}
                     />
                   </td>
                   <td className="px-4 py-2 border border-gray-200">

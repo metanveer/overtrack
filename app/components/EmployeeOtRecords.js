@@ -15,7 +15,7 @@ const otTypeColors = {
   Default: "bg-gray-100 text-gray-700 border-gray-300",
 };
 
-const EmployeeOtRecords = ({ data, start, end }) => {
+const EmployeeOtRecords = ({ data, start, end, dept }) => {
   return (
     <div className="max-w-6xl mx-auto mt-5">
       <div className="space-y-10">
@@ -82,7 +82,7 @@ const EmployeeOtRecords = ({ data, start, end }) => {
                         <td className="px-4 py-2 flex items-center gap-2 whitespace-nowrap">
                           <TextLink
                             text={entry.Date}
-                            href={`/overtime/daily?date=${entry.Date}`}
+                            href={`/${dept}/overtime/daily?date=${entry.Date}`}
                           />
                         </td>
                         <td className="px-4 py-2">{entry.OtHour}</td>
@@ -91,7 +91,7 @@ const EmployeeOtRecords = ({ data, start, end }) => {
                         <td className="px-4 py-2">
                           <TextLink
                             text={entry.WorkDescription}
-                            href={`/overtime/slip?id=${entry._id}`}
+                            href={`/${dept}/overtime/slip?id=${entry._id}`}
                           />
                         </td>
                         <td className="px-4 py-2">{entry.Remarks}</td>

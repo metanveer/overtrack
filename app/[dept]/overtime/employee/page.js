@@ -4,12 +4,13 @@ import CriteriaSelector from "@/app/components/CriteriaSelector";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import EmployeeOtRecords from "@/app/components/EmployeeOtRecords";
 
-const MonthlyReportPage = async ({ searchParams }) => {
+const MonthlyReportPage = async ({ searchParams, params }) => {
   const { start, end, name } = await searchParams;
-  const { Employee } = await getOtSettings();
+  const { dept } = await params;
+  const { Employee } = await getOtSettings(dept);
   const employeeOptions = Employee.map((item) => item.Name);
 
-  const result = await getEmployeeOvertimeRecords(start, end, name);
+  const result = await getEmployeeOvertimeRecords(start, end, name, dept);
 
   return (
     <>
@@ -18,9 +19,10 @@ const MonthlyReportPage = async ({ searchParams }) => {
         start={start}
         end={end}
         name={name}
+        dept={dept}
       />
       {result.length > 0 ? (
-        <EmployeeOtRecords data={result} start={start} end={end} />
+        <EmployeeOtRecords data={result} start={start} end={end} dept={dept} />
       ) : (
         <p className="text-center text-gray-600 mt-4">No record found!</p>
       )}

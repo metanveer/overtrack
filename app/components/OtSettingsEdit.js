@@ -10,15 +10,17 @@ import { createOtSettings } from "@/app/actions/otSettingsActions";
 import FormStatus from "@/app/components/FormStatus";
 import { useRouter } from "next/navigation";
 
-const OtSettingsEdit = ({ dataFromDb }) => {
+const OtSettingsEdit = ({ deptName, dataFromDb }) => {
   const emptyData = {
+    _id: deptName,
     OtType: [""],
     Unit: [""],
     Employee: [{ Name: "", Designation: "", BasicSalary: "" }],
     OtTime: [{ Time: "", Hour: "" }],
   };
 
-  const initData = dataFromDb ? dataFromDb : emptyData;
+  const initData =
+    dataFromDb && Object.keys(dataFromDb).length > 0 ? dataFromDb : emptyData;
 
   const [data, setData] = useState(initData);
   const [flashingIndex, setFlashingIndex] = useState(null);
@@ -37,9 +39,9 @@ const OtSettingsEdit = ({ dataFromDb }) => {
 
   useEffect(() => {
     if (state && state.success) {
-      router.push("/overtime/settings");
+      router.push(`/${deptName}/overtime/settings`);
     }
-  }, [state, router]);
+  }, [state, router, deptName]);
 
   const handleChange = (key, index, field, value) => {
     const newArray = [...data[key]];
@@ -104,59 +106,6 @@ const OtSettingsEdit = ({ dataFromDb }) => {
     setTimeout(() => setFlashingIndex(null), 1000);
   };
 
-  const getLabel = (key) => {
-    if (key === "OtType") return "OT Type";
-    if (key === "OtTime") return "OT Time";
-    return key;
-  };
-
-  const placeholders = {
-    OtType: "OT Type",
-    BasicSalary: "Basic Salary",
-    OtTime: "OT Time",
-  };
-
-  const getPlaceholder = (keyOrField) => placeholders[keyOrField] || keyOrField;
-
-  const renderInput = (key, item, index) => {
-    if (typeof item === "object") {
-      const fields = Object.keys(item);
-      const isEmployee = key === "Employee";
-
-      return (
-        <div
-          className={
-            isEmployee
-              ? "grid grid-cols-1 sm:flex sm:items-center gap-2 w-full"
-              : "grid grid-cols-1 sm:grid-cols-2 gap-2 w-full"
-          }
-        >
-          {fields.map((field) => (
-            <input
-              key={field}
-              type={field === "Hour" ? "text" : "text"}
-              inputMode={field === "Hour" ? "decimal" : "text"}
-              className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={data[key][index][field] || ""}
-              placeholder={getPlaceholder(field)}
-              onChange={(e) => handleChange(key, index, field, e.target.value)}
-            />
-          ))}
-        </div>
-      );
-    } else {
-      return (
-        <input
-          type="text"
-          className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={item || ""}
-          placeholder={getPlaceholder(key)}
-          onChange={(e) => handleChange(key, index, null, e.target.value)}
-        />
-      );
-    }
-  };
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -166,75 +115,243 @@ const OtSettingsEdit = ({ dataFromDb }) => {
         Dropdown Settings
       </h1>
 
-      {Object.entries(data).map(([key, value]) => (
-        <div key={key} className="space-y-4">
-          <h2 className="text-xl font-semibold capitalize text-gray-700">
-            {getLabel(key)}
-          </h2>
-
-          <div className="space-y-3">
-            {value.map((item, index) => (
-              <div
-                key={index}
-                className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-gray-50 p-4 rounded-lg shadow-sm transition ${
-                  key === "Employee" && index === flashingIndex
-                    ? "bg-yellow-100"
-                    : ""
-                }`}
+      {/* OT Type Section */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-700">Overtime Type</h2>
+        <div className="space-y-3">
+          {data.OtType.map((item, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-3 bg-gray-50 p-4 rounded-lg shadow-sm"
+            >
+              <div className="text-gray-500 font-medium min-w-[1.5rem]">
+                {index + 1}.
+              </div>
+              <div className="flex-1 w-full">
+                <input
+                  type="text"
+                  className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={data.OtType[index]}
+                  placeholder="Overtime Type"
+                  onChange={(e) =>
+                    handleChange("OtType", index, null, e.target.value)
+                  }
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => handleDelete("OtType", index)}
+                className="text-red-500 hover:text-red-700 transition"
               >
-                {/* Index number */}
-                <div className="text-gray-500 font-medium min-w-[1.5rem]">
-                  {index + 1}.
+                <Trash2 size={18} />
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="pt-2">
+          <button
+            type="button"
+            onClick={() => handleAdd("OtType")}
+            className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 transition"
+          >
+            <Plus size={16} /> Add Overtime Type
+          </button>
+        </div>
+      </div>
+
+      {/* Unit Section */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-700">
+          Unit or Work Location
+        </h2>
+        <div className="space-y-3">
+          {data.Unit.map((item, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-3 bg-gray-50 p-4 rounded-lg shadow-sm"
+            >
+              <div className="text-gray-500 font-medium min-w-[1.5rem]">
+                {index + 1}.
+              </div>
+              <div className="flex-1 w-full">
+                <input
+                  type="text"
+                  className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={data.Unit[index]}
+                  placeholder="Unit"
+                  onChange={(e) =>
+                    handleChange("Unit", index, null, e.target.value)
+                  }
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => handleDelete("Unit", index)}
+                className="text-red-500 hover:text-red-700 transition"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="pt-2">
+          <button
+            type="button"
+            onClick={() => handleAdd("Unit")}
+            className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 transition"
+          >
+            <Plus size={16} /> Add Unit
+          </button>
+        </div>
+      </div>
+
+      {/* Employee Section */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-700">Employee</h2>
+        <div className="space-y-3">
+          {data.Employee.map((item, index) => (
+            <div
+              key={index}
+              className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-gray-50 p-4 rounded-lg shadow-sm transition ${
+                index === flashingIndex ? "bg-yellow-100" : ""
+              }`}
+            >
+              <div className="text-gray-500 font-medium min-w-[1.5rem]">
+                {index + 1}.
+              </div>
+              <div className="flex-1 w-full">
+                <div className="grid grid-cols-1 sm:flex sm:items-center gap-2 w-full">
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Name"
+                    value={data.Employee[index].Name}
+                    onChange={(e) =>
+                      handleChange("Employee", index, "Name", e.target.value)
+                    }
+                  />
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Designation"
+                    value={data.Employee[index].Designation}
+                    onChange={(e) =>
+                      handleChange(
+                        "Employee",
+                        index,
+                        "Designation",
+                        e.target.value
+                      )
+                    }
+                  />
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Basic Salary"
+                    value={data.Employee[index].BasicSalary}
+                    onChange={(e) =>
+                      handleChange(
+                        "Employee",
+                        index,
+                        "BasicSalary",
+                        e.target.value
+                      )
+                    }
+                  />
                 </div>
-
-                {/* Input fields */}
-                <div className="flex-1 w-full">
-                  {renderInput(key, item, index)}
-                </div>
-
-                {/* Reordering buttons (only for Employee) */}
-                {key === "Employee" && (
-                  <div className="flex flex-col gap-1">
-                    <button
-                      type="button"
-                      className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 text-xs"
-                      onClick={() => handleMove("Employee", index, "up")}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 text-xs"
-                      onClick={() => handleMove("Employee", index, "down")}
-                    >
-                      ↓
-                    </button>
-                  </div>
-                )}
-
-                {/* Delete button */}
+              </div>
+              <div className="flex flex-col gap-1">
                 <button
                   type="button"
-                  onClick={() => handleDelete(key, index)}
-                  className="text-red-500 hover:text-red-700 transition"
+                  className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 text-xs"
+                  onClick={() => handleMove("Employee", index, "up")}
                 >
-                  <Trash2 size={18} />
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 text-xs"
+                  onClick={() => handleMove("Employee", index, "down")}
+                >
+                  ↓
                 </button>
               </div>
-            ))}
-          </div>
-
-          <div className="pt-2">
-            <button
-              type="button"
-              onClick={() => handleAdd(key)}
-              className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 transition"
-            >
-              <Plus size={16} /> Add {getLabel(key)}
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={() => handleDelete("Employee", index)}
+                className="text-red-500 hover:text-red-700 transition"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+        <div className="pt-2">
+          <button
+            type="button"
+            onClick={() => handleAdd("Employee")}
+            className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 transition"
+          >
+            <Plus size={16} /> Add Employee
+          </button>
+        </div>
+      </div>
+
+      {/* OT Time Section */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-700">Overtime Hours</h2>
+        <div className="space-y-3">
+          {data.OtTime.map((item, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-3 bg-gray-50 p-4 rounded-lg shadow-sm"
+            >
+              <div className="text-gray-500 font-medium min-w-[1.5rem]">
+                {index + 1}.
+              </div>
+              <div className="flex-1 w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Time"
+                    value={data.OtTime[index].Time}
+                    onChange={(e) =>
+                      handleChange("OtTime", index, "Time", e.target.value)
+                    }
+                  />
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Hour"
+                    value={data.OtTime[index].Hour}
+                    onChange={(e) =>
+                      handleChange("OtTime", index, "Hour", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleDelete("OtTime", index)}
+                className="text-red-500 hover:text-red-700 transition"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="pt-2">
+          <button
+            type="button"
+            onClick={() => handleAdd("OtTime")}
+            className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 transition"
+          >
+            <Plus size={16} /> Add OT Hour
+          </button>
+        </div>
+      </div>
 
       <FormStatus state={state} />
       {isPending && (

@@ -1,4 +1,4 @@
-import TableSkeletonRow from "../components/skeleton/TableSkeletonRow";
+import TableSkeletonRow from "@/app/components/skeleton/TableSkeletonRow";
 
 export default function Loading() {
   return (

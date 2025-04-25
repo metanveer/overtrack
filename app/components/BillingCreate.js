@@ -14,7 +14,7 @@ import formatMonthName from "@/utils/formatMonthName";
 import round1 from "@/utils/round1";
 import TextLink from "./TextLink";
 
-const BillingCreate = ({ employees, totalOtRecords, month }) => {
+const BillingCreate = ({ employees, totalOtRecords, month, dept }) => {
   const initializeRows = useMemo(() => {
     return () =>
       employees.map((emp) => {
@@ -94,6 +94,7 @@ const BillingCreate = ({ employees, totalOtRecords, month }) => {
     }));
 
     const dataToSave = {
+      dept: dept,
       billMonth: month,
       billData: result,
     };
@@ -253,7 +254,7 @@ const BillingCreate = ({ employees, totalOtRecords, month }) => {
           btnClassName="px-6 py-2.5  font-medium rounded-md shadow transition
              bg-red-600 hover:bg-red-700 text-white"
           text="Close Editor"
-          href={`/overtime/billing`}
+          href={`/${dept}/overtime/billing`}
         />
       </div>
     </form>

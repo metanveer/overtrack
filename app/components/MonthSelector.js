@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-const MonthSelector = ({ initMonth }) => {
+const MonthSelector = ({ initMonth, dept }) => {
   const currentDate = new Date();
 
   const year = initMonth?.split("-")[0] || currentDate.getFullYear();
@@ -70,13 +70,13 @@ const MonthSelector = ({ initMonth }) => {
         </div>
         <div className="w-full flex gap-4">
           <Link
-            href={`/overtime/monthly?month=${monthSelected}`}
+            href={`/${dept}/overtime/monthly?month=${monthSelected}`}
             className="w-full text-center px-6 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Detailed Report
           </Link>
           <Link
-            href={`/overtime/monthly?month=${monthSelected}&type=summary`}
+            href={`/${dept}/overtime/monthly?month=${monthSelected}&type=summary`}
             className="w-full text-center px-6 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Summary Report

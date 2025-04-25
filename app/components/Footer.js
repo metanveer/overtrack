@@ -10,7 +10,7 @@ export default function Footer() {
           <p className="text-sm text-blue-700">
             © {currentYear}{" "}
             <span className="font-semibold tracking-tight text-indigo-700 font-sans">
-              Instru<span className="text-indigo-500 font-bold">Track</span>
+              Over<span className="text-indigo-500 font-bold">Track</span>
             </span>
             . All rights reserved.
           </p>

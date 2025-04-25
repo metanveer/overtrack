@@ -5,12 +5,13 @@ import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 
 import OtReportMonthly from "@/app/components/OtReportMonthly";
 
-const UnitOtPage = async ({ searchParams }) => {
+const UnitOtPage = async ({ searchParams, params }) => {
   const { start, end, name } = await searchParams;
-  const { Unit } = await getOtSettings();
+  const { dept } = await params;
+  const { Unit } = await getOtSettings(dept);
   const unitOptions = Unit.map((item) => item);
 
-  const result = await getFilteredOtByUnitAndDateRange(start, end, name);
+  const result = await getFilteredOtByUnitAndDateRange(start, end, name, dept);
 
   return (
     <>

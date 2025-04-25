@@ -14,28 +14,30 @@ function isValidMonth(input) {
   return regex.test(input);
 }
 
-const BillingPage = async ({ searchParams }) => {
+const BillingPage = async ({ searchParams, params }) => {
   const { month, mode } = await searchParams;
+  const { dept } = await params;
 
   if (month && isValidMonth(month)) {
-    const bill = await getBillByMonth(month);
+    const bill = await getBillByMonth(month, dept);
 
     if (bill) {
       if (mode && mode === "edit") {
         const date = getMonthStartAndEnd(month);
 
-        const res = await getEmployeesOtHours(date.start, date.end);
+        const res = await getEmployeesOtHours(date.start, date.end, dept);
 
-        const { Employee } = await getOtSettings();
+        const { Employee } = await getOtSettings(dept);
 
         return (
           <div>
-            <BillingMonthSelector initMonth={month} />
+            <BillingMonthSelector dept={dept} initMonth={month} />
             <BillingEdit
               empMonthlyData={bill}
               employees={Employee}
               totalOtRecords={res}
               month={month}
+              dept={dept}
             />
           </div>
         );
@@ -43,20 +45,20 @@ const BillingPage = async ({ searchParams }) => {
 
       return (
         <div>
-          <BillingMonthSelector initMonth={month} />
-          <BillingView data={bill} />
+          <BillingMonthSelector dept={dept} initMonth={month} />
+          <BillingView data={bill} dept={dept} />
         </div>
       );
     }
 
     const date = getMonthStartAndEnd(month);
 
-    const empHours = await getEmployeesOtHours(date.start, date.end);
+    const empHours = await getEmployeesOtHours(date.start, date.end, dept);
 
     if (empHours.length === 0) {
       return (
         <div>
-          <BillingMonthSelector initMonth={month} />
+          <BillingMonthSelector dept={dept} initMonth={month} />
           <p className="text-center my-8 text-xl">
             No OT records available for this month!
           </p>
@@ -64,15 +66,16 @@ const BillingPage = async ({ searchParams }) => {
       );
     }
 
-    const { Employee } = await getOtSettings();
+    const { Employee } = await getOtSettings(dept);
 
     return (
       <div>
-        <BillingMonthSelector initMonth={month} />
+        <BillingMonthSelector dept={dept} initMonth={month} />
         <BillingCreate
           employees={Employee}
           totalOtRecords={empHours}
           month={month}
+          dept={dept}
         />
       </div>
     );
@@ -80,7 +83,7 @@ const BillingPage = async ({ searchParams }) => {
 
   return (
     <div>
-      <BillingMonthSelector initMonth={month} />
+      <BillingMonthSelector dept={dept} initMonth={month} />
     </div>
   );
 };

@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import FormStatus from "./FormStatus";
 
-const DeleteBtnConfirm = ({ currentId, deleteAction, isIcon }) => {
+const DeleteBtnConfirm = ({ currentId, deleteAction, isIcon, dept }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [status, setStatus] = useState({});
   const router = useRouter();
 
   async function handleDelete() {
     setStatus({ success: true, message: "Deleting entry..." });
-    const res = await deleteAction(currentId);
+    const res = await deleteAction(currentId, dept);
     if (res.success) {
       setStatus({ success: true, message: "Deleted successfully" });
       router.refresh();

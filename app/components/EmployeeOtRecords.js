@@ -5,6 +5,8 @@ import DownloadPdfButton from "./DownloadPdfButton";
 
 import { downloadEmployeeRecords } from "@/utils/pdf-download/downloadEmployeeRecords";
 import TextLink from "./TextLink";
+import round1 from "@/utils/round1";
+import formatDate from "@/utils/formatDate";
 
 const otTypeColors = {
   Holiday: "bg-red-100 text-red-700 border-red-300",
@@ -50,7 +52,7 @@ const EmployeeOtRecords = ({ data, start, end, dept }) => {
 
             {/* Total OT Full-Width Row */}
             <div className="rounded-xl bg-green-100 text-green-800 border border-green-300 text-center py-4 font-bold text-xl shadow-sm">
-              Total Overtime: {record.TotalOtHour} hrs
+              Total Overtime: {round1(record.TotalOtHour)} hrs
             </div>
 
             {/* OT Details Table */}
@@ -81,7 +83,7 @@ const EmployeeOtRecords = ({ data, start, end, dept }) => {
                       >
                         <td className="px-4 py-2 flex items-center gap-2 whitespace-nowrap">
                           <TextLink
-                            text={entry.Date}
+                            text={formatDate(entry.Date)}
                             href={`/${dept}/overtime/daily?date=${entry.Date}`}
                           />
                         </td>
@@ -111,7 +113,7 @@ const EmployeeOtRecords = ({ data, start, end, dept }) => {
       </div>
       <div className="my-6">
         <DownloadPdfButton
-          onClick={() => downloadEmployeeRecords(data, start, end)}
+          onClick={() => downloadEmployeeRecords(data, start, end, dept)}
         />
       </div>
     </div>

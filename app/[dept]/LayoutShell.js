@@ -92,7 +92,7 @@ export default function LayoutShell({
               href={href}
               onClick={handleLinkClick}
               className={`px-2 py-1 rounded-md transition-colors duration-200 ${
-                pathname === href
+                pathname === href?.split("?")[0]
                   ? "text-blue-600 font-semibold bg-blue-100"
                   : "text-black hover:text-blue-600"
               }`}

@@ -1,8 +1,9 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
+import formatDate from "../formatDate";
 
-export const downloadDailyReport = async (records, reportDate) => {
+export const downloadDailyReport = async (records, reportDate, dept) => {
   const logoBase64 = await fetchLogoBase64();
 
   const doc = new jsPDF({
@@ -32,12 +33,17 @@ export const downloadDailyReport = async (records, reportDate) => {
 
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
-  doc.text("Daily Overtime Report", pageWidth / 2, margin + 38, {
+  doc.text(`${dept} Department`, pageWidth / 2, margin + 38, {
+    align: "center",
+  });
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("Daily Overtime Report", pageWidth / 2, margin + 58, {
     align: "center",
   });
 
   doc.setFont("helvetica", "normal");
-  doc.text(`Date: ${reportDate}`, pageWidth - margin, margin + 38, {
+  doc.text(`Date: ${formatDate(reportDate)}`, pageWidth - margin, margin + 58, {
     align: "right",
   });
 
@@ -94,7 +100,7 @@ export const downloadDailyReport = async (records, reportDate) => {
   ]);
 
   autoTable(doc, {
-    startY: margin + 58,
+    startY: margin + 75,
     margin: { left: margin, right: margin },
     head: [
       [

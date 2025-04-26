@@ -20,7 +20,9 @@ const OtReportDaily = ({ records, date, dept }) => {
   return (
     <div>
       <div className="mb-6">
-        <DownloadPdfButton onClick={() => downloadDailyReport(records, date)} />
+        <DownloadPdfButton
+          onClick={() => downloadDailyReport(records, date, dept)}
+        />
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto border border-gray-300">

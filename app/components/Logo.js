@@ -24,7 +24,7 @@ export default function Logo() {
           Over<span className="text-indigo-500 font-bold">Track</span>
         </span>
         <span className="hidden md:block text-xs text-gray-500 font-medium font-sans tracking-wide">
-          Overtime Data Tracking and Management
+          Overtime Tracking and Management
         </span>
       </div>
     </div>

@@ -86,7 +86,7 @@ export default function DeptCard({ id, deptName, href }) {
           <div className="text-2xl font-bold text-red-600">
             Are you sure you want to delete?
           </div>
-          <div className="text-red-800">
+          <div className="text-red-800  border border-amber-100 bg-amber-100 rounded-2xl py-4 px-4 text-center my-2 text-sm">
             This action will permanently delete all the overtime data associated
             with this department and cannot be reverted.
           </div>

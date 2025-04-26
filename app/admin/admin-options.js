@@ -1,6 +1,7 @@
 export const adminOptions = [
   { href: "/admin/depts", label: "Departments" },
   { href: "/admin/users", label: "Users" },
+  { href: "/admin/roles", label: "Roles" },
 ];
 
 export const depts = [

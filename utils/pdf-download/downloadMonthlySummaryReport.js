@@ -6,7 +6,8 @@ import { transformOTMonthlySummary } from "../transformOtMonthlySummary";
 export const downloadMonthlySummaryReport = async (
   data,
   employeeOrder,
-  monthName
+  monthName,
+  dept
 ) => {
   const {
     allDates,
@@ -47,7 +48,12 @@ export const downloadMonthlySummaryReport = async (
 
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
-  doc.text("Monthly OT Summary", pageWidth / 2, margin + 38, {
+  doc.text(`${dept} Department`, pageWidth / 2, margin + 38, {
+    align: "center",
+  });
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("Monthly OT Summary", pageWidth / 2, margin + 58, {
     align: "center",
   });
 
@@ -84,7 +90,7 @@ export const downloadMonthlySummaryReport = async (
   body.push(totalsRow);
 
   autoTable(doc, {
-    startY: margin + 58,
+    startY: margin + 78,
     margin: { left: margin, right: margin },
     head,
     body,

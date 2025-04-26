@@ -1,4 +1,3 @@
-import CustomLink from "@/app/components/CustomLink";
 import React from "react";
 
 import AddDeptBtn from "@/app/components/dept/AddDeptBtn";

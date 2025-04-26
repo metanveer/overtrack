@@ -4,9 +4,11 @@ import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import DashboardStats from "../components/DashboardStats";
 
 export default async function DeptHomePage({ params }) {
-  const totalOtEntries = await OVERTIME_COLLECTION.countDocuments();
-  const totalBills = await BILL_COLLECTION.countDocuments();
   const { dept } = await params;
+  const totalOtEntries = await OVERTIME_COLLECTION.countDocuments({
+    Dept: dept,
+  });
+  const totalBills = await BILL_COLLECTION.countDocuments({ dept: dept });
   const { Employee } = await getOtSettings(dept);
   return (
     <div>

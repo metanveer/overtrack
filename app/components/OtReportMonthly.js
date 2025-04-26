@@ -39,7 +39,12 @@ const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
       <div className="my-2">
         <DownloadPdfButton
           onClick={() =>
-            downloadMonthlyDetailsReport(groupedData, monthName, unitConfig)
+            downloadMonthlyDetailsReport(
+              groupedData,
+              monthName,
+              unitConfig,
+              dept
+            )
           }
         />
       </div>
@@ -82,7 +87,7 @@ const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
                         >
                           <TextLink
                             href={`/${dept}/overtime/daily?date=${group._id}`}
-                            text={group._id}
+                            text={formatDate(group._id)}
                           />
                         </td>
                       )}

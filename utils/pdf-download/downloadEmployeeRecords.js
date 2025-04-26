@@ -1,8 +1,15 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
+import formatDate from "../formatDate";
+import round1 from "../round1";
 
-export const downloadEmployeeRecords = async (data, startDate, endDate) => {
+export const downloadEmployeeRecords = async (
+  data,
+  startDate,
+  endDate,
+  dept
+) => {
   if (!data || data.length === 0) return;
 
   const dataObject = data[0];
@@ -41,16 +48,22 @@ export const downloadEmployeeRecords = async (data, startDate, endDate) => {
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
-    doc.text("Employee Overtime Record", pageWidth / 2, 98, {
+    doc.text(`${dept} Department`, pageWidth / 2, 98, {
+      align: "center",
+    });
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("Employee Overtime Record", pageWidth / 2, 128, {
       align: "center",
     });
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
-    doc.text(`Start: ${startDate}`, pageWidth - margin, 120, {
+    doc.text(`Start: ${formatDate(startDate)}`, pageWidth - margin, 120, {
       align: "right",
     });
-    doc.text(`End: ${endDate}`, pageWidth - margin, 138, {
+    doc.text(`End: ${formatDate(endDate)}`, pageWidth - margin, 138, {
       align: "right",
     });
   };
@@ -101,7 +114,7 @@ export const downloadEmployeeRecords = async (data, startDate, endDate) => {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
   doc.text(
-    `Total Overtime: ${dataObject.TotalOtHour} hrs`,
+    `Total Overtime: ${round1(dataObject.TotalOtHour)} hrs`,
     pageWidth - margin,
     currentY + 20,
     {
@@ -153,7 +166,7 @@ export const downloadEmployeeRecords = async (data, startDate, endDate) => {
   // 🧮 OT Details Table
   const record = dataObject.OT;
   const body = record.map((entry) => [
-    entry.Date,
+    formatDate(entry.Date),
     entry.OtHour,
     entry.OtTime,
     entry.Unit,

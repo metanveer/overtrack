@@ -5,6 +5,7 @@ import Link from "next/link";
 import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadMonthlyBill } from "@/utils/pdf-download/downloadMonthlyBill";
 import round1 from "@/utils/round1";
+import { Pencil } from "lucide-react";
 
 const BillingView = ({ data, dept }) => {
   if (!data || !data.billData || data.billData.length === 0 || !data.billMonth)
@@ -95,11 +96,12 @@ const BillingView = ({ data, dept }) => {
         </table>
       </div>
       <div className="flex gap-6 mt-6">
-        <DownloadPdfButton onClick={() => downloadMonthlyBill(data)} />
+        <DownloadPdfButton onClick={() => downloadMonthlyBill(data, dept)} />
         <Link
           href={`/${dept}/overtime/billing?month=${data.billMonth}&mode=edit`}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
+          className="flex items-center gap-1 text-sm text-white bg-blue-500 hover:bg-blue-600 px-4 py-1.5 rounded-xl shadow"
         >
+          <Pencil size={16} />
           Edit
         </Link>
         <DeleteBtnConfirm

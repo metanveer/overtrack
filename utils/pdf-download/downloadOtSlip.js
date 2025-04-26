@@ -1,8 +1,9 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
+import formatDate from "../formatDate";
 
-export const downloadOtSlip = async (data) => {
+export const downloadOtSlip = async (data, dept) => {
   if (!data) return;
 
   const logoBase64 = await fetchLogoBase64();
@@ -34,9 +35,14 @@ export const downloadOtSlip = async (data) => {
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(13);
-  doc.text("Overtime Slip", pageWidth / 2, currentY + 58, { align: "center" });
+  doc.text(`${dept} Department`, pageWidth / 2, currentY + 58, {
+    align: "center",
+  });
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(13);
+  doc.text("Overtime Slip", pageWidth / 2, currentY + 78, { align: "center" });
 
-  currentY += 80;
+  currentY += 98;
 
   // OT Info
   doc.setFont("helvetica", "normal");
@@ -49,7 +55,7 @@ export const downloadOtSlip = async (data) => {
   };
 
   bold("Date:");
-  doc.text(`${data.Date}`, margin + 40, currentY);
+  doc.text(`${formatDate(data.Date)}`, margin + 40, currentY);
 
   doc.setFont("helvetica", "bold");
   doc.text(`Type: ${data.Type}`, pageWidth - margin, currentY, {

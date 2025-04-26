@@ -45,6 +45,7 @@ const MonthlyReportPage = async ({ searchParams, params }) => {
           data={result}
           month={month}
           employeeOrder={employeeOrder}
+          dept={dept}
         />
       ) : (
         <OtReportMonthly

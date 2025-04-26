@@ -7,12 +7,6 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
 
   const { start, end } = getMonthStartAndEnd(selectedDate);
 
-  console.log("employees in getNavLinks", employees);
-  console.log("units", units);
-  console.log("otTypes", otTypes);
-  console.log("otHours", otHours);
-  console.log("dept", dept);
-
   if (
     !employees?.length ||
     !units?.length ||

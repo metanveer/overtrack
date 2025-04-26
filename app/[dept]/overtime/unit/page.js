@@ -21,6 +21,7 @@ const UnitOtPage = async ({ searchParams, params }) => {
         end={end}
         name={name}
         isUnit
+        dept={dept}
       />
       {result.length > 0 ? (
         <OtReportMonthly
@@ -28,6 +29,7 @@ const UnitOtPage = async ({ searchParams, params }) => {
           start={start}
           end={end}
           groupedData={result}
+          dept={dept}
         />
       ) : (
         <p className="text-center text-gray-600 mt-4">No record found!</p>

@@ -5,7 +5,7 @@ import formatMonthName from "@/utils/formatMonthName";
 import { transformOTMonthlySummary } from "@/utils/transformOtMonthlySummary";
 import { downloadMonthlySummaryReport } from "@/utils/pdf-download/downloadMonthlySummaryReport";
 
-const MonthlySummary = ({ data, employeeOrder, month }) => {
+const MonthlySummary = ({ data, employeeOrder, month, dept }) => {
   const {
     allDates,
     employeeList,
@@ -25,7 +25,7 @@ const MonthlySummary = ({ data, employeeOrder, month }) => {
       <div className="mb-2">
         <DownloadPdfButton
           onClick={() =>
-            downloadMonthlySummaryReport(data, employeeOrder, monthName)
+            downloadMonthlySummaryReport(data, employeeOrder, monthName, dept)
           }
         />
       </div>

@@ -5,6 +5,7 @@ import DeleteBtnConfirm from "./DeleteBtnConfirm";
 import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadOtSlip } from "@/utils/pdf-download/downloadOtSlip";
 import TextLink from "./TextLink";
+import formatDate from "@/utils/formatDate";
 
 const OtView = ({ dept, data }) => {
   return (
@@ -18,7 +19,8 @@ const OtView = ({ dept, data }) => {
 
         <div className="grid sm:grid-cols-2 gap-2 text-gray-700 mb-2">
           <div>
-            <span className="font-bold text-gray-900">Date:</span> {data.Date}
+            <span className="font-bold text-gray-900">Date:</span>{" "}
+            {formatDate(data.Date)}
           </div>
           <div>
             <span className="font-bold text-gray-900">Type:</span> {data.Type}
@@ -70,7 +72,7 @@ const OtView = ({ dept, data }) => {
       </div>
 
       <div className="mt-6 flex gap-6">
-        <DownloadPdfButton onClick={() => downloadOtSlip(data)} />
+        <DownloadPdfButton onClick={() => downloadOtSlip(data, dept)} />
         <TextLink
           isButton
           href={`/${dept}/overtime/slip/edit?id=${data._id}`}

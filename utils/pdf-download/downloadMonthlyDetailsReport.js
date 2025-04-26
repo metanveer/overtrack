@@ -1,11 +1,13 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
+import formatDate from "../formatDate";
 
 export const downloadMonthlyDetailsReport = async (
   groupedData,
   monthName,
-  unitConfig
+  unitConfig,
+  dept
 ) => {
   const logoBase64 = await fetchLogoBase64();
 
@@ -37,6 +39,11 @@ export const downloadMonthlyDetailsReport = async (
 
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
+  doc.text(`${dept} Department`, pageWidth / 2, margin + 38, {
+    align: "center",
+  });
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
   doc.text(
     `${
       unitConfig
@@ -44,7 +51,7 @@ export const downloadMonthlyDetailsReport = async (
         : "Monthly Overtime Report"
     }`,
     pageWidth / 2,
-    margin + 38,
+    margin + 58,
     {
       align: "center",
     }
@@ -95,7 +102,7 @@ export const downloadMonthlyDetailsReport = async (
         const roundedOt = Math.round(otHour * 10) / 10;
 
         if (!datePrinted) {
-          row.push({ content: date, rowSpan: dateRowSpan });
+          row.push({ content: formatDate(date), rowSpan: dateRowSpan });
           datePrinted = true;
         }
 
@@ -133,7 +140,7 @@ export const downloadMonthlyDetailsReport = async (
 
     body.push([
       {
-        content: `Total OT Hours for ${date}`,
+        content: `Total OT Hours for ${formatDate(date)}`,
         colSpan: dailyTotalColSpan,
         styles: { fontStyle: "bold", halign: "right" },
       },
@@ -184,7 +191,7 @@ export const downloadMonthlyDetailsReport = async (
 
   // 📄 Render table
   autoTable(doc, {
-    startY: margin + 58,
+    startY: margin + 78,
     margin: { left: margin, right: margin },
     head: [headRow],
     body,

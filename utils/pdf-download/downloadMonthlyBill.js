@@ -3,7 +3,7 @@ import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
 import round1 from "../round1";
 
-export const downloadMonthlyBill = async (data) => {
+export const downloadMonthlyBill = async (data, dept) => {
   if (!data || !data.billData || data.billData.length === 0 || !data.billMonth)
     return;
 
@@ -42,7 +42,12 @@ export const downloadMonthlyBill = async (data) => {
 
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
-  doc.text("Monthly Overtime Billing Summary", pageWidth / 2, margin + 38, {
+  doc.text(`${dept} Department`, pageWidth / 2, margin + 38, {
+    align: "center",
+  });
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("Monthly Overtime Billing Summary", pageWidth / 2, margin + 58, {
     align: "center",
   });
 
@@ -121,7 +126,7 @@ export const downloadMonthlyBill = async (data) => {
   ]);
 
   autoTable(doc, {
-    startY: margin + 58,
+    startY: margin + 78,
     margin: { left: margin, right: margin },
     head,
     body,

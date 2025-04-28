@@ -94,7 +94,7 @@ export default function DeptCard({ id, deptName, href }) {
           <FormStatus state={status} />
         </Modal>
       )}
-      <div className="border border-blue-100 bg-white-100 rounded-2xl shadow-md p-6 flex justify-between items-center hover:shadow-lg transition-shadow">
+      <div className="border border-white bg-white rounded-2xl shadow-md p-6 flex justify-between items-center hover:shadow-lg transition-shadow">
         <Link
           href={href}
           className="text-xl font-bold not-last:text-blue-600 hover:text-blue-800"

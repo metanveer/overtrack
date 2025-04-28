@@ -12,6 +12,8 @@ export default async function Page({ searchParams, params }) {
 
   const overtimeDoc = await getOtById(id);
 
+  if (!overtimeDoc) return notFound();
+
   const { OtType, Unit, Employee, OtTime } = await getOtSettings(dept);
 
   return (

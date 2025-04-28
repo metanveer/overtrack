@@ -1,9 +1,17 @@
 "use server";
 import { saveOtSettingsToDb } from "@/lib/mongodb/oTSettingsQueries";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 import { revalidatePath } from "next/cache";
 
 export async function createOtSettings(prevState, formData) {
   try {
+    const authCheck = await checkAuthPermission(perm.SETTINGS_EDIT);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     const dataString = formData.get("data");
     const parsedData = JSON.parse(dataString);
 

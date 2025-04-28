@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-// import Message from "../Message";
 import { permissionsData } from "@/utils/permissions";
 import { updateRolePermissions } from "@/app/actions/roleActions";
+import FormStatus from "../FormStatus";
 
 export default function PermissionsManager({ initRole }) {
   const [role, setRole] = useState(initRole);
@@ -26,7 +26,7 @@ export default function PermissionsManager({ initRole }) {
       permissions: newPermissions,
     }));
 
-    const res = await updateRolePermissions(role.slug, newPermissions);
+    const res = await updateRolePermissions(role.roleName, newPermissions);
     setFormState(res);
     setIsSaving(false);
   };
@@ -46,7 +46,7 @@ export default function PermissionsManager({ initRole }) {
       permissions: newPermissions,
     }));
 
-    const res = await updateRolePermissions(role.slug, newPermissions);
+    const res = await updateRolePermissions(role.roleName, newPermissions);
     setFormState(res);
     setIsSaving(false);
   };
@@ -101,24 +101,48 @@ export default function PermissionsManager({ initRole }) {
           </div>
 
           {/* Permission Sections */}
-          {renderPermissionSection("Permissions Related to Reports", (item) =>
-            item.includes("report")
-          )}
-
-          {renderPermissionSection("WPS Related", (item) =>
-            item.includes("WPS")
+          {renderPermissionSection(
+            "Permissions Related to Overtime Entry",
+            (item) => item.includes("OT__"),
+            (permission) => permission.replace("OT__", "")
           )}
 
           {renderPermissionSection(
-            "Equipment or Pipeline Related",
-            (item) => item.includes("equipment"),
-            (permission) => permission.replace("equipment ", "")
+            "Report Related",
+            (item) => item.includes("REPORT__"),
+            (permission) => permission.replace("REPORT__", "")
+          )}
+          {renderPermissionSection(
+            "Billing Related",
+            (item) => item.includes("BILLING__"),
+            (permission) => permission.replace("BILLING__", "")
+          )}
+
+          {renderPermissionSection(
+            "Settings Related",
+            (item) => item.includes("SETTINGS__"),
+            (permission) => permission.replace("SETTINGS__", "")
           )}
 
           {renderPermissionSection(
             "Administrative",
-            (item) => item.includes("__admin__"),
-            (permission) => permission.replace("__admin__", "")
+            (item) => item.includes("ADMIN__"),
+            (permission) => permission.replace("ADMIN__", "")
+          )}
+          {renderPermissionSection(
+            "Departments Related",
+            (item) => item.includes("DEPTS__"),
+            (permission) => permission.replace("DEPTS__", "")
+          )}
+          {renderPermissionSection(
+            "Users Related",
+            (item) => item.includes("USERS__"),
+            (permission) => permission.replace("USERS__", "")
+          )}
+          {renderPermissionSection(
+            "User Roles Related",
+            (item) => item.includes("ROLES__"),
+            (permission) => permission.replace("ROLES__", "")
           )}
         </div>
       </div>
@@ -129,11 +153,8 @@ export default function PermissionsManager({ initRole }) {
           Saving changes...
         </div>
       )}
-      {/* {formState.success ? (
-        <Message text={formState.message} />
-      ) : formState.error ? (
-        <Message error={formState.error} />
-      ) : null} */}
+
+      <FormStatus state={formState} />
     </>
   );
 }

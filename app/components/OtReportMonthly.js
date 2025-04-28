@@ -48,9 +48,9 @@ const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
           }
         />
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full  border-gray-200  border-gray-200-gray-300 table-auto">
-          <thead className="bg-gray-100">
+      <div className="overflow-x-auto bg-white rounded-xl border-gray-400 shadow-md">
+        <table className="min-w-full  border-gray-200  border-gray-200-gray-300 table-auto bg-white">
+          <thead className="bg-white">
             <tr>
               <th className="border border-gray-200 px-4 py-2">Date</th>
               <th className="border border-gray-200 px-4 py-2">Type</th>

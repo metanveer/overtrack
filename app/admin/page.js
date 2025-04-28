@@ -1,5 +1,6 @@
 import CustomLink from "@/app/components/CustomLink";
 import { adminOptions } from "./admin-options";
+import AccessDenied from "../components/auth/AccessDenied";
 
 const AdminPage = async () => {
   return (
@@ -8,6 +9,7 @@ const AdminPage = async () => {
         {adminOptions.map((item) => (
           <CustomLink key={item.href} href={item.href} label={item.label} />
         ))}
+        <AccessDenied />
       </div>
     </>
   );

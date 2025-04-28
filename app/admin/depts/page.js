@@ -3,8 +3,17 @@ import React from "react";
 import AddDeptBtn from "@/app/components/dept/AddDeptBtn";
 import { getAllDepts } from "@/lib/mongodb/deptQueries";
 import DeptCard from "@/app/components/dept/DeptCard";
+import { perm } from "@/utils/permissions";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import AccessDenied from "@/app/components/auth/AccessDenied";
 
 async function DeptsPage() {
+  const authCheck = await checkAuthPermission(perm.VIEW_DEPTS_PAGE);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
+
   const depts = await getAllDepts();
 
   return (

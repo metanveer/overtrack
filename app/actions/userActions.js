@@ -1,9 +1,7 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-// import { ObjectId } from "mongodb";
-// import { getRoles } from "./roleActions";
-// import checkAuthPermission from "@/utils/checkAuthPermission";
+
 import {
   deleteUserById,
   getUserByEmail,
@@ -12,17 +10,16 @@ import {
   updateUserById,
 } from "@/lib/mongodb/userQueries";
 import { revalidatePath } from "next/cache";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 
 export async function createUser(formData) {
   try {
-    // const authCheck = await checkAuthPermission(perm.addUser);
+    const authCheck = await checkAuthPermission(perm.USERS_ADD);
 
-    // if (authCheck.error) {
-    //   return authCheck;
-    // }
-
-    // const dataString = formData.get("data");
-    // const parsedData = JSON.parse(dataString);
+    if (!authCheck.success) {
+      return authCheck;
+    }
 
     const { name, email, password, role, dept } = formData;
 
@@ -67,14 +64,12 @@ export async function createUser(formData) {
 
 export async function updateUser(formData) {
   try {
-    // const authCheck = await checkAuthPermission(perm.editUser);
+    const authCheck = await checkAuthPermission(perm.USERS_EDIT);
 
-    // if (authCheck.error) {
-    //   return authCheck;
-    // }
+    if (!authCheck.success) {
+      return authCheck;
+    }
 
-    // const dataString = formData.get("data");
-    // const parsedData = JSON.parse(dataString);
     const { _id, name, email, password, role, dept } = formData;
 
     if (!_id) return { success: false, message: "User ID is required!" };
@@ -124,15 +119,11 @@ export async function updateUser(formData) {
 
 export async function deleteUser(userId) {
   try {
-    // const authCheck = await checkAuthPermission(perm.deleteUser);
+    const authCheck = await checkAuthPermission(perm.USERS_DELETE);
 
-    // if (authCheck.error) {
-    //   return authCheck;
-    // }
-
-    // const dataString = formData.get("data");
-    // const parsedData = JSON.parse(dataString);
-    // const { _id: userId } = parsedData;
+    if (!authCheck.success) {
+      return authCheck;
+    }
 
     if (!userId) {
       return {

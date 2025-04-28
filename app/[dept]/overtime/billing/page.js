@@ -8,6 +8,9 @@ import { getEmployeesOtHours } from "@/lib/mongodb/otQueries";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import getMonthStartAndEnd from "@/utils/getMonthStartAndEnd";
 import BillingEdit from "@/app/components/BillingEdit";
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import { perm } from "@/utils/permissions";
+import checkAuthPermission from "@/utils/checkAuthPermission";
 
 function isValidMonth(input) {
   const regex = /^\d{4}-(0[1-9]|1[0-2])$/;
@@ -15,6 +18,12 @@ function isValidMonth(input) {
 }
 
 const BillingPage = async ({ searchParams, params }) => {
+  const authCheck = await checkAuthPermission(perm.BILLING_VIEW);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
+
   const { month, mode } = await searchParams;
   const { dept } = await params;
 

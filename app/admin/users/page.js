@@ -1,11 +1,20 @@
+import AccessDenied from "@/app/components/auth/AccessDenied";
 import UserBtn from "@/app/components/user/UserBtn";
 import UserCard from "@/app/components/user/UserCard";
 import { getAllDepts } from "@/lib/mongodb/deptQueries";
 import { getAllRoles } from "@/lib/mongodb/roleQueries";
 import { getAllUsers } from "@/lib/mongodb/userQueries";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 import React from "react";
 
 const UsersPage = async () => {
+  const authCheck = await checkAuthPermission(perm.VIEW_USERS_PAGE);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
+
   const depts = await getAllDepts();
   const roles = await getAllRoles();
   const users = await getAllUsers();

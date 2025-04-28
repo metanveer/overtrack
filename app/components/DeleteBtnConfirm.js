@@ -18,7 +18,7 @@ const DeleteBtnConfirm = ({ currentId, deleteAction, dept }) => {
       router.refresh();
       setSelectedId(null);
     } else {
-      setStatus({ success: false, message: "Failed to delete!" });
+      setStatus(res);
     }
   }
 

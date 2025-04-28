@@ -3,8 +3,17 @@ import React from "react";
 import { getAllRoles } from "@/lib/mongodb/roleQueries";
 import RoleCard from "@/app/components/role/RoleCard";
 import AddRoleBtn from "@/app/components/role/AddRoleBtn";
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 
 async function RolesPage() {
+  const authCheck = await checkAuthPermission(perm.VIEW_ROLES_PAGE);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
+
   const roles = await getAllRoles();
 
   return (

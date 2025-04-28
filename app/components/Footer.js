@@ -1,6 +1,6 @@
 import { Facebook, Linkedin, Github, Mail, ArrowUp } from "lucide-react";
 
-export default function Footer() {
+export default function Footer({ isLoginPage }) {
   const currentYear = new Date().getFullYear();
 
   return (

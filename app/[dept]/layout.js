@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import LayoutShell from "./LayoutShell"; // client layout
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 
@@ -11,6 +12,8 @@ export default async function RootLayout({ children, params }) {
 
   const { Employee, Unit, OtType, OtTime } = await getOtSettings(dept);
 
+  const session = await auth();
+
   return (
     <LayoutShell
       otTypes={OtType}
@@ -18,6 +21,7 @@ export default async function RootLayout({ children, params }) {
       units={Unit}
       employees={Employee}
       dept={dept}
+      session={session}
     >
       {children}
     </LayoutShell>

@@ -6,11 +6,19 @@ import {
   insertOt,
   updateOtById,
 } from "@/lib/mongodb/otQueries";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 
 export async function createOtEntry(prevData, formData) {
   try {
+    const authCheck = await checkAuthPermission(perm.OT_ADD);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     const dataString = formData.get("data");
     const parsedData = JSON.parse(dataString);
 
@@ -54,6 +62,12 @@ export async function createOtEntry(prevData, formData) {
 }
 export async function editOtEntry(prevData, formData) {
   try {
+    const authCheck = await checkAuthPermission(perm.OT_SLIP_EDIT);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     const dataString = formData.get("data");
     const parsedData = JSON.parse(dataString);
 
@@ -93,6 +107,12 @@ export async function editOtEntry(prevData, formData) {
 
 export async function deleteOtEntry(id, dept) {
   try {
+    const authCheck = await checkAuthPermission(perm.OT_SLIP_DELETE);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     if (!id) return { success: false, message: "Missing ID" };
     if (!ObjectId.isValid(id)) {
       return { success: false, message: "Invalid ID format" };

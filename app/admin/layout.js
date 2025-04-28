@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import AdminLayoutShell from "./AdminLayoutShell";
 
 export const metadata = {
@@ -6,5 +7,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  return <AdminLayoutShell>{children}</AdminLayoutShell>;
+  const session = await auth();
+  console.log("SESSION IN DEPT LAYOUT", session);
+  return <AdminLayoutShell session={session}>{children}</AdminLayoutShell>;
 }

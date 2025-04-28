@@ -1,10 +1,10 @@
 "use server";
 
 import { auth } from "@/auth";
-import { rolesCollection } from "@/db/mongodb";
+import { getRoleByName } from "@/lib/mongodb/roleQueries";
 
-async function checkPermission(role, perm) {
-  const roleData = await rolesCollection.findOne({ slug: role });
+async function checkRolePermission(role, perm) {
+  const roleData = await getRoleByName(role);
 
   if (!roleData) return false;
 
@@ -14,15 +14,19 @@ async function checkPermission(role, perm) {
 export default async function checkAuthPermission(action) {
   const session = await auth();
 
-  if (!session || !session.user || !session.user.role) {
-    return { error: "Access denied!" };
+  if (!session || !session.user || !session.user.role || !session.user.dept) {
+    return { success: false, message: "Access denied!" };
   }
 
-  const hasPermission = await checkPermission(session.user.role, action);
+  if (!action) {
+    return { success: true, user: session.user, session: session };
+  }
+
+  const hasPermission = await checkRolePermission(session.user.role, action);
 
   if (!hasPermission) {
-    return { error: "Sorry! You don't have the required permission!" };
+    return { success: false, message: "Permission denied!" };
   }
 
-  return { success: true, user: session.user };
+  return { success: true, user: session.user, session: session };
 }

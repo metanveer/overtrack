@@ -24,10 +24,10 @@ const OtReportDaily = ({ records, date, dept }) => {
           onClick={() => downloadDailyReport(records, date, dept)}
         />
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border border-gray-300">
-          <thead>
-            <tr className="bg-gray-100">
+      <div className="overflow-x-auto bg-white">
+        <table className="min-w-full table-auto border bg-white rounded shadow border-gray-300">
+          <thead className="rounded">
+            <tr className="bg-white">
               <th className="px-4 py-2 border border-gray-300" rowSpan="2">
                 Sl
               </th>
@@ -47,7 +47,7 @@ const OtReportDaily = ({ records, date, dept }) => {
                 Remarks
               </th>
             </tr>
-            <tr className="bg-gray-100">
+            <tr className="bg-white">
               <th className="px-4 py-2 border border-gray-300">Name</th>
               <th className="px-4 py-2 border border-gray-300">OT Time</th>
               <th className="px-4 py-2 border border-gray-300">OT Hour</th>
@@ -113,7 +113,7 @@ const OtReportDaily = ({ records, date, dept }) => {
               ));
             })}
 
-            <tr className="bg-gray-100 font-semibold">
+            <tr className="bg-white font-semibold">
               <td
                 className="px-4 py-2 border border-gray-300 text-right"
                 colSpan={6}

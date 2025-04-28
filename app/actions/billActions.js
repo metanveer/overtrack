@@ -6,10 +6,18 @@ import {
   updateBill,
 } from "@/lib/mongodb/billQueries";
 import { BILL_COLLECTION } from "@/lib/mongodb/db";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 import { revalidatePath } from "next/cache";
 
 export async function createBill(prevData, formData) {
   try {
+    const authCheck = await checkAuthPermission(perm.BILLING_CREATE);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     const dataString = formData.get("data");
     const parsedData = JSON.parse(dataString);
 
@@ -67,6 +75,12 @@ export async function createBill(prevData, formData) {
 }
 export async function editBill(prevData, formData) {
   try {
+    const authCheck = await checkAuthPermission(perm.BILLING_EDIT);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     const dataString = formData.get("data");
     const parsedData = JSON.parse(dataString);
 
@@ -117,6 +131,12 @@ export async function editBill(prevData, formData) {
 
 export async function deleteBill(month, dept) {
   try {
+    const authCheck = await checkAuthPermission(perm.BILLING_DELETE);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     if (!month) return { success: false, message: "Missing month!" };
     if (!dept) return { success: false, message: "Missing department!" };
 

@@ -29,68 +29,74 @@ const MonthlySummary = ({ data, employeeOrder, month, dept }) => {
           }
         />
       </div>
-
-      <div className="overflow-auto">
-        <table className="min-w-full border-collapse border border-gray-300 text-sm text-center">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border border-gray-300 px-2 py-1">#</th>
-              <th className="border border-gray-300 px-2 py-1 whitespace-nowrap">
-                Employee Name
-              </th>
-              {allDates.map((date) => (
-                <th key={date} className="border border-gray-300 px-2 py-1">
-                  {`${date.slice(8)}`}
+      <div className="rounded-lg overflow-hidden bg-white shadow-xl">
+        <div className="overflow-auto bg-white p-2 rounded-2xl shadow-2xl">
+          <table className="min-w-full border-collapse border border-gray-300 text-sm text-center">
+            <thead className="bg-white">
+              <tr>
+                <th className="border border-gray-300 px-2 py-1">#</th>
+                <th className="border border-gray-300 px-2 py-1 whitespace-nowrap">
+                  Employee Name
                 </th>
-              ))}
-              <th className="border border-gray-300 px-2 py-1 font-semibold">
-                Total
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {employeeList.map((name, index) => {
-              const isTop = topThree.has(name);
-              return (
-                <tr
-                  key={name}
-                  className={isTop ? "bg-yellow-100 font-medium" : ""}
-                >
-                  <td className="border border-gray-300 px-2 py-1">
-                    {index + 1}
-                  </td>
-                  <td className="border border-gray-300 px-2 py-1 whitespace-nowrap">
-                    {name}
-                  </td>
-                  {allDates.map((date) => (
-                    <td key={date} className="border border-gray-300 px-2 py-1">
-                      {employeeMap[name][date] || ""}
-                    </td>
-                  ))}
-                  <td
-                    className={`border border-gray-300 px-2 py-1 ${
-                      isTop ? "bg-yellow-300 font-semibold" : ""
-                    }`}
+                {allDates.map((date) => (
+                  <th key={date} className="border border-gray-300 px-2 py-1">
+                    {`${date.slice(8)}`}
+                  </th>
+                ))}
+                <th className="border border-gray-300 px-2 py-1 font-semibold">
+                  Total
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {employeeList.map((name, index) => {
+                const isTop = topThree.has(name);
+                return (
+                  <tr
+                    key={name}
+                    className={isTop ? "bg-yellow-100 font-medium" : ""}
                   >
-                    {employeeMap[name].total}
-                  </td>
-                </tr>
-              );
-            })}
-            <tr className="bg-gray-200 font-semibold">
-              <td className="border border-gray-300 px-2 py-1"></td>
-              <td className="border border-gray-300 px-2 py-1">
-                Total Per Day
-              </td>
-              {allDates.map((date) => (
-                <td key={date} className="border border-gray-300 px-2 py-1">
-                  {dayTotals[date]}
+                    <td className="border border-gray-300 px-2 py-1">
+                      {index + 1}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1 whitespace-nowrap">
+                      {name}
+                    </td>
+                    {allDates.map((date) => (
+                      <td
+                        key={date}
+                        className="border border-gray-300 px-2 py-1"
+                      >
+                        {employeeMap[name][date] || ""}
+                      </td>
+                    ))}
+                    <td
+                      className={`border border-gray-300 px-2 py-1 ${
+                        isTop ? "bg-yellow-300 font-semibold" : ""
+                      }`}
+                    >
+                      {employeeMap[name].total}
+                    </td>
+                  </tr>
+                );
+              })}
+              <tr className="bg-gray-200 font-semibold">
+                <td className="border border-gray-300 px-2 py-1"></td>
+                <td className="border border-gray-300 px-2 py-1">
+                  Total Per Day
                 </td>
-              ))}
-              <td className="border border-gray-300 px-2 py-1">{grandTotal}</td>
-            </tr>
-          </tbody>
-        </table>
+                {allDates.map((date) => (
+                  <td key={date} className="border border-gray-300 px-2 py-1">
+                    {dayTotals[date]}
+                  </td>
+                ))}
+                <td className="border border-gray-300 px-2 py-1">
+                  {grandTotal}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

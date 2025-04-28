@@ -1,29 +1,25 @@
 "use server";
 
-// import checkAuthPermission from "@/utils/checkAuthPermission";
-
-// import { ObjectId } from "mongodb";
-// import { perm } from "../data/permissionsData";
-// import { auth } from "@/auth";
 import {
   deleteRoleByName,
   getRoleByName,
   insertRole,
+  renameRoleById,
+  updatePermByRoleName,
 } from "@/lib/mongodb/roleQueries";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import genRandomNum from "@/utils/genRandomNum";
+import { perm } from "@/utils/permissions";
+
 import { revalidatePath } from "next/cache";
 
 export async function createRole(roleName) {
   try {
-    // const authCheck = await checkAuthPermission(perm.addRole);
+    const authCheck = await checkAuthPermission(perm.ROLE_ADD);
 
-    // if (authCheck.error) {
-    //   return authCheck;
-    // }
-
-    // const dataString = formData.get("data");
-    // const parsedData = JSON.parse(dataString);
-
-    // const { roleName } = parsedData;
+    if (!authCheck.success) {
+      return authCheck;
+    }
 
     if (!roleName) {
       return {
@@ -70,18 +66,99 @@ export async function createRole(roleName) {
     };
   }
 }
+export async function duplicateRole(roleName) {
+  try {
+    const authCheck = await checkAuthPermission(perm.ROLE_ADD);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
+    if (!roleName) {
+      return {
+        success: false,
+        message: "Role name is required!",
+      };
+    }
+
+    if (roleName.trim() === "") {
+      return {
+        success: false,
+        message: `Empty name is not allowed!`,
+      };
+    }
+
+    const existingRole = await getRoleByName(roleName);
+
+    const newRole = {
+      roleName: `${existingRole.roleName}_${genRandomNum()}`,
+
+      permissions: existingRole.permissions,
+    };
+
+    const res = await insertRole(newRole);
+
+    if (res.acknowledged) {
+      revalidatePath("/admin/roles");
+
+      return { success: true, message: "Role copied successfully." };
+    }
+    return { success: false, message: "Failed to create duplicate role." };
+  } catch (error) {
+    console.error("Error adding role:", error);
+    return {
+      success: false,
+      message: `Error adding role: ${error.message}`,
+    };
+  }
+}
+
+export async function renameRole(_id, roleName) {
+  try {
+    const authCheck = await checkAuthPermission(perm.ROLE_RENAME);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
+    if (!_id || !roleName) {
+      return { success: false, message: "Id or name is missing" };
+    }
+    if (roleName.trim() === "") {
+      return { success: false, message: "Empty name is not allowed!" };
+    }
+
+    // Check if the email already exists
+    const existingRole = await getRoleByName(roleName);
+    if (existingRole) {
+      return {
+        success: false,
+        message: "Role with the chosen name already exists!",
+      };
+    }
+
+    const res = await renameRoleById(_id, roleName);
+
+    if (res.modifiedCount > 0) {
+      revalidatePath("/admin/roles");
+
+      return { success: true, message: "Data updated successfully" };
+    }
+
+    return { success: false, message: "Failed to save or no change made!" };
+  } catch (error) {
+    console.error("Error updating bill:", error);
+    return { success: false, message: `Error updating bill: ${error.message}` };
+  }
+}
 
 export async function deleteRole(roleName) {
   try {
-    // const authCheck = await checkAuthPermission(perm.deleteRole);
+    const authCheck = await checkAuthPermission(perm.ROLE_DELETE);
 
-    // if (authCheck.error) {
-    //   return authCheck;
-    // }
-
-    // const dataString = formData.get("data");
-    // const parsedData = JSON.parse(dataString);
-    // const { roleName } = parsedData;
+    if (!authCheck.success) {
+      return authCheck;
+    }
 
     if (!roleName) {
       return { success: false, message: "Role name is required!" };
@@ -114,32 +191,37 @@ export async function deleteRole(roleName) {
   }
 }
 
-export async function updateRolePermissions(roleSlug, permissions) {
+export async function updateRolePermissions(roleName, permissions) {
   try {
-    const session = await auth();
+    const authCheck = await checkAuthPermission();
 
-    if (!session || !session.user || !session.user.role) {
-      return { error: "Access denied!" };
+    if (!authCheck.success) {
+      return authCheck;
     }
 
-    const hasPermission = session.user.role === "admin";
+    const hasPermission = authCheck.user.role === "Admin";
 
     if (!hasPermission) {
-      return { error: "Sorry! You don't have the required permission!" };
+      return {
+        success: false,
+        message: "Only 'Admin' user is allowed to modify role permissions",
+      };
     }
 
-    const res = await rolesCollection.updateOne(
-      { slug: roleSlug },
-      { $set: { permissions } }
-    );
+    const res = await updatePermByRoleName(roleName, permissions);
+
+    console.log("res in update perm", res);
 
     if (res.modifiedCount > 0) {
       return { success: true, message: "Permissions updated successfully" };
     }
 
-    return { error: "Failed to update permission!" };
+    return { success: false, message: "Failed to update permission!" };
   } catch (error) {
     console.log("Error updating permissions:", error);
-    return { error: "Error updating permissions" };
+    return {
+      success: false,
+      message: `Error updating permissions: ${error.message}`,
+    };
   }
 }

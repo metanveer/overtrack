@@ -13,7 +13,7 @@ const Modal = ({ title, onClose, onConfirm, children }) => {
 
   const handleBackdropClick = (e) => {
     if (e.target.id === "modal-backdrop") {
-      onClose();
+      // onClose();
     }
   };
 

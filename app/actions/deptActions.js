@@ -5,11 +5,19 @@ import {
   insertDept,
   updateDept,
 } from "@/lib/mongodb/deptQueries";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 
 export async function addDept(label) {
   try {
+    const authCheck = await checkAuthPermission(perm.DEPTS_ADD);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     if (!label) {
       return {
         success: false,
@@ -57,6 +65,12 @@ export async function addDept(label) {
 
 export async function editDept(_id, deptName) {
   try {
+    const authCheck = await checkAuthPermission(perm.DEPTS_RENAME);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     if (!_id || !deptName) {
       return { success: false, message: "Id or name is missing" };
     }
@@ -86,6 +100,12 @@ export async function editDept(_id, deptName) {
 
 export async function deleteDept(id) {
   try {
+    const authCheck = await checkAuthPermission(perm.DEPTS_DELETE);
+
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
     if (!id) return { success: false, message: "Missing month!" };
 
     const _id = new ObjectId(id);

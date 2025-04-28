@@ -6,11 +6,18 @@ import Modal from "../Modal";
 import { useRouter } from "next/navigation";
 import FormStatus from "../FormStatus";
 import { useEffect, useRef, useState } from "react";
-import { deleteRole } from "@/app/actions/roleActions";
+import {
+  deleteRole,
+  duplicateRole,
+  renameRole,
+} from "@/app/actions/roleActions";
 
 export default function RoleCard({ id, roleName }) {
   const [activeCard, setActiveCard] = useState(null);
   const [status, setStatus] = useState({});
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [role, setRole] = useState(roleName);
 
   const router = useRouter();
   const inputRef = useRef(null); // Create a ref for the input field
@@ -35,14 +42,60 @@ export default function RoleCard({ id, roleName }) {
     setStatus(res);
   }
 
+  async function handleCopyRole(roleName) {
+    const res = await duplicateRole(roleName);
+    if (res.success) {
+      setStatus(res);
+      router.refresh();
+
+      return;
+    }
+    setStatus(res);
+  }
+
+  async function handleEdit() {
+    const res = await renameRole(id, role);
+    if (res.success) {
+      setStatus(res);
+      router.refresh();
+      setIsEditing(false);
+
+      setActiveCard(null);
+
+      return;
+    }
+    setStatus(res);
+  }
+
   return (
     <>
-      {activeCard === id && (
+      {activeCard === id && isEditing && (
+        <Modal
+          title={"Rename Role"}
+          onClose={() => {
+            setActiveCard(null);
+            setIsEditing(false);
+            setStatus({});
+          }}
+          onConfirm={handleEdit}
+        >
+          <input
+            type="text"
+            ref={inputRef} // Attach the ref here
+            className="border-2 border-blue-300 p-2 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={role}
+            placeholder={`Role name`}
+            onChange={(e) => setRole(e.target.value)}
+          />
+          <FormStatus state={status} />
+        </Modal>
+      )}
+      {activeCard === id && isDeleting && (
         <Modal
           title={"Delete Role"}
           onClose={() => {
             setActiveCard(null);
-
+            setIsDeleting(false);
             setStatus({});
           }}
           onConfirm={handleDelete}
@@ -63,18 +116,37 @@ export default function RoleCard({ id, roleName }) {
           Role
         </h2>
         <div className="text-2xl font-bold text-gray-800 mb-6">{roleName}</div>
-        <div className="flex gap-4">
+        <FormStatus state={status} />
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => {
+              setActiveCard(id);
+              setIsEditing(true);
+            }}
+            className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-xl transition"
+          >
+            Rename
+          </button>
           <Link
             href={`/admin/roles/permissions?role=${roleName}`}
             className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-xl transition"
           >
-            Edit Permission
+            Permissions
           </Link>
           <button
             onClick={() => {
-              setActiveCard(id);
+              handleCopyRole(roleName);
             }}
-            className="flex-1 px-4 py-2 text-sm font-semibold text-blue-500 border border-blue-500 hover:bg-blue-50 rounded-xl transition"
+            className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-xl transition"
+          >
+            Copy
+          </button>
+          <button
+            onClick={() => {
+              setActiveCard(id);
+              setIsDeleting(true);
+            }}
+            className="flex-1 px-4 py-1 text-sm font-semibold text-blue-500 border border-blue-500 hover:bg-blue-50 rounded-xl transition"
           >
             Delete
           </button>

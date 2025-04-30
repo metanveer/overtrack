@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 
-import { permissionsData } from "@/utils/permissions";
 import { updateRolePermissions } from "@/app/actions/roleActions";
 import FormStatus from "../FormStatus";
 
-export default function PermissionsManager({ initRole }) {
+export default function PermissionsManager({ initRole, permissionsData }) {
   const [role, setRole] = useState(initRole);
   const [formState, setFormState] = useState({});
   const [isSaving, setIsSaving] = useState(false);
@@ -133,6 +132,11 @@ export default function PermissionsManager({ initRole }) {
             "Departments Related",
             (item) => item.includes("DEPTS__"),
             (permission) => permission.replace("DEPTS__", "")
+          )}
+          {renderPermissionSection(
+            "Departments Access Related",
+            (item) => item.includes("DEPARTMENT__"),
+            (permission) => permission.replace("DEPARTMENT__", "")
           )}
           {renderPermissionSection(
             "Users Related",

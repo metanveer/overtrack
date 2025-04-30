@@ -38,22 +38,22 @@ const LoginForm = () => {
       const response = await fetch("/api/auth/session");
       const session = await response.json();
 
-      if (!session || !session.user) {
-        router.push("/");
-        return;
-      }
+      // if (!session || !session.user) {
+      //   router.push("/");
+      //   return;
+      // }
 
-      if (session.user.role === "Admin") {
+      if (session?.user?.role === "Admin") {
         router.push("/admin");
         return;
       }
 
-      if (session.user.dept) {
-        router.push(`/${session.user.dept}`);
-        return;
-      }
+      // if (session.user.dept) {
+      //   router.push(`/${session.user.dept}`);
+      //   return;
+      // }
 
-      router.push("/user");
+      router.push("/");
     } catch (error) {
       console.error("Error in login:", error);
       setStatus({

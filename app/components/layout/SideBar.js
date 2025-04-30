@@ -25,18 +25,18 @@ const SideBar = ({
 
       <aside
         ref={sidebarRef}
-        className={`fixed top-16 left-0 bg-white shadow-md w-52 h-[calc(100vh-4rem)] transition-transform duration-300 z-40
+        className={`fixed top-16 left-0 bg-white shadow-md w-60 h-[calc(100vh-4rem)] transition-transform duration-300 z-40
       ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0 md:block`}
       >
-        <nav className="flex flex-col">
+        <nav className="flex flex-col mt-3">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               onClick={handleLinkClick}
-              className={`px-4 py-2 transition-colors duration-200 ${
+              className={`pr-2 pl-6 py-2 transition-colors duration-200 ${
                 pathname === href?.split("?")[0]
                   ? "text-blue-600 font-semibold bg-blue-100"
                   : "text-black hover:text-blue-600"

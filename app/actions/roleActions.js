@@ -204,7 +204,7 @@ export async function updateRolePermissions(roleName, permissions) {
     if (!hasPermission) {
       return {
         success: false,
-        message: "Only 'Admin' user is allowed to modify role permissions",
+        message: "Admin only permission!",
       };
     }
 

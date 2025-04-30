@@ -1,24 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Breadcrumb from "../Breadcrump";
+import Footer from "../Footer";
+import TopBar from "./TopBar";
+import SideBar from "./SideBar";
 
-import Breadcrumb from "../components/Breadcrump";
-
-import Footer from "../components/Footer";
-
-import getNavLinks from "@/utils/getNavLinks";
-import TopBar from "../components/layout/TopBar";
-import SideBar from "../components/layout/SideBar";
-
-export default function LayoutShell({
-  children,
-  employees,
-  units,
-  otTypes,
-  otHours,
-  dept,
-  session,
-}) {
+export default function LayoutShell({ children, session, navLinks }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
 
@@ -44,8 +32,6 @@ export default function LayoutShell({
     }
   };
 
-  const navLinks = getNavLinks(employees, units, otTypes, otHours, dept);
-
   return (
     <div className="min-h-screen flex flex-col">
       {/* Top Bar */}
@@ -68,14 +54,14 @@ export default function LayoutShell({
       />
 
       {/* Main Content + Footer Wrapper */}
-      <div className="pt-18 md:ml-52 p-4 flex-grow bg-gray-100">
+      <div className="pt-18 md:ml-60 p-4 flex-grow bg-gray-100">
         <Breadcrumb />
 
         {children}
       </div>
 
       {/* Footer always at bottom */}
-      <div className="md:ml-52">
+      <div className="md:ml-60">
         <Footer />
       </div>
     </div>

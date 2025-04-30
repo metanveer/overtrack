@@ -43,7 +43,7 @@ export async function addDept(label) {
 
     const dept = {
       deptName: label,
-      href: `/${label}/overtime`,
+      href: `/${label}`,
     };
 
     const newDept = await insertDept(dept);
@@ -80,7 +80,7 @@ export async function editDept(_id, deptName) {
 
     const dept = {
       deptName: deptName,
-      href: `/${deptName}/overtime`,
+      href: `/${deptName}`,
     };
 
     const updatedDept = await updateDept(_id, dept);

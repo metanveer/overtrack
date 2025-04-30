@@ -54,7 +54,10 @@ const AddDeptBtn = () => {
         </Modal>
       ) : null}
       <button
-        onClick={() => setModalShown(true)}
+        onClick={() => {
+          setModalShown(true);
+          setStatus({});
+        }}
         className="px-4 py-2 mb-10  bg-blue-600 text-white rounded hover:bg-blue-700 transition"
       >
         Add Department

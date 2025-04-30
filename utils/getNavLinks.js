@@ -21,9 +21,15 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
 
   return [
     { href: `/${dept}/overtime/entry-form`, label: "Entry Form" },
-    { href: `/${dept}/overtime`, label: "Overtime" },
-    { href: `/${dept}/overtime/daily?date=${selectedDate}`, label: "Daily" },
-    { href: `/${dept}/overtime/monthly?month=${yearMonth}`, label: "Monthly" },
+    { href: `/${dept}/overtime`, label: "Menu" },
+    {
+      href: `/${dept}/overtime/daily?date=${selectedDate}`,
+      label: "Daily Report",
+    },
+    {
+      href: `/${dept}/overtime/monthly?month=${yearMonth}`,
+      label: "Monthly Report",
+    },
     {
       href: `/${dept}/overtime/employee?start=${start}&end=${end}&name=${firstEmp}`,
       label: "Employee Records",

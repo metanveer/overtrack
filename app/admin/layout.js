@@ -1,5 +1,8 @@
-import { auth } from "@/auth";
-import AdminLayoutShell from "./AdminLayoutShell";
+import { perm } from "@/utils/permissions";
+import LayoutShell from "../components/layout/LayoutShell";
+import { adminOptions } from "./admin-options";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Overtime Track | Admin Page",
@@ -7,7 +10,13 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const session = await auth();
-  console.log("SESSION IN DEPT LAYOUT", session);
-  return <AdminLayoutShell session={session}>{children}</AdminLayoutShell>;
+  const { success, session } = await checkAuthPermission(perm.VIEW_ADMIN_PAGE);
+
+  if (!success) redirect("/");
+
+  return (
+    <LayoutShell navLinks={adminOptions} session={session}>
+      {children}
+    </LayoutShell>
+  );
 }

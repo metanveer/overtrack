@@ -15,6 +15,8 @@ const Settings = async ({ params }) => {
 
   const data = await getOtSettings(dept);
 
+  const hasSattings = Object.keys(data).length !== 0;
+
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -23,7 +25,7 @@ const Settings = async ({ params }) => {
           label={"Edit Dropdown Options"}
         />
       </div>
-      <SettingsView settingsData={data} />
+      {hasSattings && <SettingsView settingsData={data} />}
     </div>
   );
 };

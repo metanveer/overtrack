@@ -6,14 +6,6 @@ import { transformOTMonthlySummary } from "@/utils/transformOtMonthlySummary";
 import { downloadMonthlySummaryReport } from "@/utils/pdf-download/downloadMonthlySummaryReport";
 
 const MonthlySummary = ({ data, employeeOrder, month, dept, isDashboard }) => {
-  if (!data || data.length === 0) {
-    return (
-      <div className="text-center py-8 text-xl">
-        {"No overtime data available for the current month."}
-      </div>
-    );
-  }
-
   const {
     allDates,
     employeeList,
@@ -27,7 +19,7 @@ const MonthlySummary = ({ data, employeeOrder, month, dept, isDashboard }) => {
 
   return (
     <div>
-      <div className="text-2xl font-bold my-3 text-center">
+      <div className="text-2xl font-bold my-3 text-center text-gray-700">
         {isDashboard
           ? "Current Month Overtime Hours"
           : `Monthly OT Summary for ${monthName}`}

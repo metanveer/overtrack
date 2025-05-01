@@ -16,13 +16,14 @@ export default async function DeptHomePage({ params }) {
   const currentDate = new Date();
   const yearMonth = currentDate.toISOString().slice(0, 7);
 
-  console.log("uear month", yearMonth);
-
   const month = yearMonth;
 
   const result = await getMonthlyOvertimes(month, dept);
 
-  const employeeOrder = Employee.map((item) => item.Name);
+  const hasOT = result.length > 0;
+  const hasSettings = Employee && Employee.length > 0;
+
+  const employeeOrder = Employee?.map((item) => item.Name);
 
   return (
     <div>
@@ -35,13 +36,19 @@ export default async function DeptHomePage({ params }) {
         totalEmployees={Employee?.length || 0}
       />
 
-      <MonthlySummary
-        isDashboard
-        data={result}
-        month={month}
-        employeeOrder={employeeOrder}
-        dept={dept}
-      />
+      {hasOT && hasSettings ? (
+        <MonthlySummary
+          isDashboard
+          data={result}
+          month={month}
+          employeeOrder={employeeOrder}
+          dept={dept}
+        />
+      ) : (
+        <div className="text-lg font-bold my-3 text-center text-gray-500">
+          No Overtime Data Available for this Month
+        </div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,7 @@ const CriteriaSelector = ({
   end,
   name,
   isUnit,
+  isOtType,
   dept,
 }) => {
   const currentDate = new Date();
@@ -55,13 +56,13 @@ const CriteriaSelector = ({
       ).padStart(2, "0")}`;
 
       return `/${dept}/overtime/${
-        isUnit ? "unit" : "employee"
+        isUnit ? "unit" : isOtType ? "ot-type" : "employee"
       }?start=${start}&end=${end}&name=${employeeName}`;
     }
 
     if (mode === "range" && isRangeFormValid) {
       return `/${dept}/overtime/${
-        isUnit ? "unit" : "employee"
+        isUnit ? "unit" : isOtType ? "ot-type" : "employee"
       }?start=${startDate}&end=${endDate}&name=${employeeName}`;
     }
 
@@ -168,7 +169,11 @@ const CriteriaSelector = ({
 
         <div className="flex-1 min-w-[200px]">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {isUnit ? "Unit Name" : "Employee Name"}
+            {isUnit
+              ? "Unit Name"
+              : isOtType
+              ? "Overtime Type"
+              : "Employee Name"}
           </label>
           <select
             value={employeeName}
@@ -176,7 +181,11 @@ const CriteriaSelector = ({
             className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">
-              {isUnit ? "Select unit" : "Select employee"}
+              {isUnit
+                ? "Select unit"
+                : isOtType
+                ? "Select OT Type"
+                : "Select employee"}
             </option>
             {employeeOptions.map((name) => (
               <option key={name} value={name}>

@@ -18,6 +18,7 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
 
   const firstEmp = employees ? employees[0].Name : "";
   const firstUnit = units ? units[0] : "";
+  const firstOtType = otTypes ? otTypes[0] : "";
 
   return [
     { href: `/${dept}/overtime/entry-form`, label: "Entry Form" },
@@ -37,6 +38,10 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
     {
       href: `/${dept}/overtime/unit?start=${start}&end=${end}&name=${firstUnit}`,
       label: "Unit Records",
+    },
+    {
+      href: `/${dept}/overtime/ot-type?start=${start}&end=${end}&name=${firstOtType}`,
+      label: "OT Type Records",
     },
     { href: `/${dept}/overtime/billing?month=${yearMonth}`, label: "Billing" },
     { href: `/${dept}/overtime/settings`, label: "Settings" },

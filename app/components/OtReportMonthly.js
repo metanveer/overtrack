@@ -5,7 +5,14 @@ import { downloadMonthlyDetailsReport } from "@/utils/pdf-download/downloadMonth
 import TextLink from "./TextLink";
 import formatDate from "@/utils/formatDate";
 
-const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
+const OtReportMonthly = ({
+  unitName,
+  otType,
+  groupedData,
+  start,
+  end,
+  dept,
+}) => {
   function getMonthlyTotalOtHour(dateWiseEntries) {
     const total = dateWiseEntries.reduce((sum, entry) => {
       const otHour = parseFloat(entry.totalOtHours);
@@ -19,9 +26,15 @@ const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
 
   const monthName = formatMonthNameFromRange(start, end);
 
-  const unitConfig = unitName
+  const pdfConfig = unitName
     ? {
         unitName,
+        start,
+        end,
+      }
+    : otType
+    ? {
+        otType,
         start,
         end,
       }
@@ -34,6 +47,8 @@ const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
           ? `Overtime Log for ${unitName} from ${formatDate(
               start
             )} to ${formatDate(end)}`
+          : otType
+          ? `${otType} Overtime from ${formatDate(start)} to ${formatDate(end)}`
           : `Monthly Overtime Details for ${monthName}`}
       </div>
       <div className="my-2">
@@ -42,7 +57,7 @@ const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
             downloadMonthlyDetailsReport(
               groupedData,
               monthName,
-              unitConfig,
+              pdfConfig,
               dept
             )
           }
@@ -53,7 +68,9 @@ const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
           <thead className="bg-white">
             <tr>
               <th className="border border-gray-200 px-4 py-2">Date</th>
-              <th className="border border-gray-200 px-4 py-2">Type</th>
+              {otType ? null : (
+                <th className="border border-gray-200 px-4 py-2">Type</th>
+              )}
               {unitName ? null : (
                 <th className="border border-gray-200 px-4 py-2">Unit</th>
               )}
@@ -97,12 +114,14 @@ const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
 
                       {/* Type */}
                       {empIdx === 0 ? (
-                        <td
-                          rowSpan={entry.Employee.length}
-                          className="border border-gray-200 px-4 py-2 align-top"
-                        >
-                          {entry.Type}
-                        </td>
+                        otType ? null : (
+                          <td
+                            rowSpan={entry.Employee.length}
+                            className="border border-gray-200 px-4 py-2 align-top"
+                          >
+                            {entry.Type}
+                          </td>
+                        )
                       ) : null}
 
                       {/* Unit */}
@@ -172,7 +191,7 @@ const OtReportMonthly = ({ unitName, groupedData, start, end, dept }) => {
             {/* Final row for grand total */}
             <tr className="bg-gray-100 font-semibold">
               <td
-                colSpan={unitName ? 5 : 6}
+                colSpan={unitName || otType ? 5 : 6}
                 className="border border-gray-200 px-4 py-2 text-right"
               >
                 Total OT Hours

@@ -6,7 +6,7 @@ import formatDate from "../formatDate";
 export const downloadMonthlyDetailsReport = async (
   groupedData,
   monthName,
-  unitConfig,
+  textConfig,
   dept
 ) => {
   const logoBase64 = await fetchLogoBase64();
@@ -46,8 +46,10 @@ export const downloadMonthlyDetailsReport = async (
   doc.setFont("helvetica", "bold");
   doc.text(
     `${
-      unitConfig
-        ? `Overtime Log for ${unitConfig.unitName}`
+      textConfig
+        ? textConfig.otType
+          ? `Monthly ${textConfig.otType} Overtime Report`
+          : `Overtime Log for ${textConfig.unitName}`
         : "Monthly Overtime Report"
     }`,
     pageWidth / 2,
@@ -61,7 +63,7 @@ export const downloadMonthlyDetailsReport = async (
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
   doc.text(
-    `${unitConfig ? `Start date: ${unitConfig.start}` : ``}`,
+    `${textConfig ? `Start date: ${textConfig.start}` : ``}`,
     pageWidth - margin,
     margin + 20,
     {
@@ -72,7 +74,7 @@ export const downloadMonthlyDetailsReport = async (
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
   doc.text(
-    `${unitConfig ? `End date: ${unitConfig.end}` : `Month: ${monthName}`}`,
+    `${textConfig ? `End date: ${textConfig.end}` : `Month: ${monthName}`}`,
     pageWidth - margin,
     margin + 38,
     {
@@ -107,8 +109,10 @@ export const downloadMonthlyDetailsReport = async (
         }
 
         if (empIndex === 0) {
-          row.push({ content: record.Type, rowSpan: empLen });
-          if (!unitConfig) {
+          if (!textConfig.otType) {
+            row.push({ content: record.Type, rowSpan: empLen });
+          }
+          if (!textConfig.unitName) {
             row.push({ content: record.Unit, rowSpan: empLen });
           }
           row.push({
@@ -133,14 +137,14 @@ export const downloadMonthlyDetailsReport = async (
 
     // Push daily total row
 
-    const dailyTotalColSpan = unitConfig ? 5 : 6;
+    const dailyTotalColSpan = textConfig ? 5 : 6;
 
     const dailyTotalRounded = Math.round(dailyTotalOt * 10) / 10;
     grandTotalOt += dailyTotalRounded;
 
     body.push([
       {
-        content: `Total OT Hours for ${formatDate(date)}`,
+        content: `Total Hrs for ${formatDate(date)}`,
         colSpan: dailyTotalColSpan,
         styles: { fontStyle: "bold", halign: "right" },
       },
@@ -153,7 +157,7 @@ export const downloadMonthlyDetailsReport = async (
   });
 
   // Monthly grand total row
-  const finalColSpan = unitConfig ? 5 : 6;
+  const finalColSpan = textConfig ? 5 : 6;
 
   body.push([
     {
@@ -168,10 +172,21 @@ export const downloadMonthlyDetailsReport = async (
     "",
   ]);
 
-  const headRow = unitConfig
+  const headRow = textConfig.unitName
     ? [
         "Date",
         "Type",
+        "Work Description",
+        "Employee",
+        "OT Time",
+        "OT Hour",
+        "Remarks",
+      ]
+    : textConfig.otType
+    ? [
+        "Date",
+
+        "Unit",
         "Work Description",
         "Employee",
         "OT Time",

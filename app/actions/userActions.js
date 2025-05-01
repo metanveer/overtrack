@@ -61,6 +61,48 @@ export async function createUser(formData) {
     return { success: false, message: `Error creating user: ${error.message}` };
   }
 }
+export async function registerUser(formData) {
+  try {
+    const { name, email, password, role, dept } = formData;
+
+    if (!name || !email || !password || !role || !dept) {
+      return { success: false, message: "All fields are required!" };
+    }
+
+    // Check if the email already exists
+    const existingUser = await getUserByEmail(email);
+    if (existingUser) {
+      return {
+        success: false,
+        message: "Email already exists. Please use a different email.",
+      };
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert new user
+    const newUser = {
+      name,
+      email,
+      password: hashedPassword,
+      dept,
+      role,
+    };
+
+    const res = await insertUser(newUser);
+
+    if (res) {
+      revalidatePath(`/admin/users`);
+
+      return { success: true, message: "User created successfully" };
+    }
+    return { success: false, message: "Failed to create user" };
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return { success: false, message: `Error creating user: ${error.message}` };
+  }
+}
 
 export async function updateUser(formData) {
   try {

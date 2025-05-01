@@ -2,7 +2,9 @@
 
 import LoginForm from "./LoginForm";
 
-export default function Login() {
+export default function Login({ mode, depts }) {
+  const isSignup = mode === "signup";
+
   return (
     <div className="relative min-h-screen flex flex-col lg:flex-row bg-indigo-50 overflow-hidden">
       {/* Full Screen Clock Watermark */}
@@ -67,7 +69,7 @@ export default function Login() {
           Manage overtime effortlessly
         </p>
       </div>
-      <LoginForm />
+      <LoginForm isSignup={isSignup} depts={depts} />
     </div>
   );
 }

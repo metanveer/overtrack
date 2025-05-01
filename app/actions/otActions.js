@@ -49,6 +49,8 @@ export async function createOtEntry(prevData, formData) {
     const newOtEntry = await insertOt(parsedData);
 
     if (newOtEntry.acknowledged) {
+      revalidatePath(`/${Dept}`);
+      revalidatePath(`/${Dept}/overtime`);
       revalidatePath(`/${Dept}/overtime/daily`);
       revalidatePath(`/${Dept}/overtime/monthly`);
 
@@ -92,6 +94,7 @@ export async function editOtEntry(prevData, formData) {
     const result = await updateOtById(parsedData);
 
     if (result.modifiedCount > 0) {
+      revalidatePath(`/${Dept}`);
       revalidatePath(`/${Dept}/overtime`);
       revalidatePath(`/${Dept}/overtime/daily`);
       revalidatePath(`/${Dept}/overtime/monthly`);
@@ -125,6 +128,7 @@ export async function deleteOtEntry(id, dept) {
     if (result.deletedCount === 0) {
       return { success: false, message: "Document not found!" };
     }
+    revalidatePath(`/${dept}`);
     revalidatePath(`/${dept}/overtime`);
     revalidatePath(`/${dept}/overtime/daily`);
     revalidatePath(`/${dept}/overtime/monthly`);

@@ -50,6 +50,7 @@ export async function addDept(label) {
 
     if (newDept.acknowledged) {
       revalidatePath("/admin/depts");
+      revalidatePath("/admin/roles/permissions");
 
       return { success: true, message: "Dept created successfully." };
     }
@@ -87,6 +88,7 @@ export async function editDept(_id, deptName) {
 
     if (updatedDept.modifiedCount > 0) {
       revalidatePath("/admin/depts");
+      revalidatePath("/admin/roles/permissions");
 
       return { success: true, message: "Data updated successfully" };
     }
@@ -117,7 +119,8 @@ export async function deleteDept(id) {
     if (result.deletedCount === 0) {
       return { success: false, message: "Document not found!" };
     }
-    revalidatePath(`/admin/depts`);
+    revalidatePath("/admin/depts");
+    revalidatePath("/admin/roles/permissions");
 
     return { success: true, message: "Deleted successfully!" };
   } catch (error) {

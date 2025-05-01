@@ -63,14 +63,7 @@ const LoginForm = ({ isSignup, depts }) => {
 
       setStatus({ success: true, message: "Login successful! Please wait..." });
 
-      const sessionRes = await fetch("/api/auth/session");
-      const session = await sessionRes.json();
-
-      if (session?.user?.role === "Admin") {
-        router.push("/admin");
-      } else {
-        router.push("/");
-      }
+      router.push("/");
     } catch (error) {
       console.error("Error in login:", error);
       setStatus({

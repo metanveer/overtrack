@@ -115,118 +115,126 @@ const BillingCreate = ({ employees, totalOtRecords, month, dept }) => {
           for preparing bill.)`}
         </div>
       </div>
+      <div className="rounded-lg shadow-md border border-gray-200 overflow-hidden">
+        <div className="overflow-x-auto rounded-lg  ">
+          <table className="min-w-full text-sm text-center bg-white">
+            <thead className="bg-blue-100 text-blue-700 text-xs uppercase tracking-wider sticky top-0 z-10">
+              <tr>
+                <th className="p-3">#</th>
+                <th className="p-3 w-48 text-left sticky left-0 bg-blue-100 z-20">
+                  Employee
+                </th>
+                <th className="p-3 text-left">Designation</th>
+                <th className="p-3">Double</th>
+                <th className="p-3">Triple</th>
+                <th className="p-3">Total</th>
+                <th className="p-3">Bill</th>
+                <th className="p-3">Diff</th>
+                <th className="p-3">Basic</th>
+                <th className="p-3">Payment</th>
+                <th className="p-3">Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => {
+                const double = getDouble(row);
+                const diff = getDiff(row);
+                const payment = getPayment(row);
 
-      <div className="overflow-auto rounded-lg shadow border border-gray-200">
-        <table className="min-w-full text-sm text-center bg-white">
-          <thead className="bg-slate-100 text-slate-700 text-xs uppercase tracking-wider sticky top-0 z-10">
-            <tr>
-              <th className="p-3">#</th>
-              <th className="p-3 text-left">Employee</th>
-              <th className="p-3 text-left">Designation</th>
-              <th className="p-3">Double</th>
-              <th className="p-3">Triple</th>
-              <th className="p-3">Total</th>
-              <th className="p-3">Bill</th>
-              <th className="p-3">Diff</th>
-              <th className="p-3">Basic</th>
-              <th className="p-3">Payment</th>
-              <th className="p-3">Remarks</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, i) => {
-              const double = getDouble(row);
-              const diff = getDiff(row);
-              const payment = getPayment(row);
+                return (
+                  <tr
+                    key={`${row.name}-${i}`}
+                    className={
+                      i % 2 === 0 ? "bg-white" : "bg-blue-50  transition-colors"
+                    }
+                  >
+                    <td className="p-3 font-medium text-blue-700">{i + 1}</td>
+                    <td
+                      className={`p-3 w-48 text-left sticky left-0 z-10 ${
+                        i % 2 === 0 ? "bg-white" : "bg-blue-50"
+                      }`}
+                    >
+                      {row.name}
+                    </td>
 
-              return (
-                <tr
-                  key={`${row.name}-${i}`}
-                  className={
-                    i % 2 === 0
-                      ? "bg-white"
-                      : "bg-slate-50 hover:bg-slate-100 transition-colors"
-                  }
-                >
-                  <td className="p-3 font-medium text-slate-700">{i + 1}</td>
-                  <td className="p-3 text-left">{row.name}</td>
-                  <td className="p-3 text-left">{row.designation}</td>
-                  <td className="p-3">{double}</td>
-                  <td className="p-3">
-                    <input
-                      type="number"
-                      step="0.1"
-                      min="0"
-                      value={row.triple}
-                      onChange={(e) =>
-                        handleChange(i, "triple", e.target.valueAsNumber)
-                      }
-                      className="w-20 text-center border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
-                    />
-                  </td>
-                  <td className="p-3">{row.totalOt}</td>
-                  <td className="p-3">
-                    <input
-                      type="number"
-                      step="0.1"
-                      min="0"
-                      value={row.bill}
-                      onChange={(e) =>
-                        handleChange(i, "bill", e.target.valueAsNumber)
-                      }
-                      className="w-20 text-center border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
-                    />
-                  </td>
-                  <td className="p-3">{diff}</td>
-                  <td className="p-3">{row.basic.toLocaleString()}</td>
-                  <td className="p-3">
-                    {payment.toLocaleString(undefined, {
-                      minimumFractionDigits: 1,
-                      maximumFractionDigits: 1,
-                    })}
-                  </td>
-                  <td className="p-3">
-                    <textarea
-                      value={row.remarks}
-                      onChange={(e) =>
-                        handleChange(i, "remarks", e.target.value)
-                      }
-                      className="w-full min-w-[200px] border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300 resize"
-                      rows={3}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
+                    <td className="p-3 text-left">{row.designation}</td>
+                    <td className="p-3">{double}</td>
+                    <td className="p-3">
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={row.triple}
+                        onChange={(e) =>
+                          handleChange(i, "triple", e.target.valueAsNumber)
+                        }
+                        className="w-20 text-center border border-blue-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
+                      />
+                    </td>
+                    <td className="p-3">{row.totalOt}</td>
+                    <td className="p-3">
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={row.bill}
+                        onChange={(e) =>
+                          handleChange(i, "bill", e.target.valueAsNumber)
+                        }
+                        className="w-20 text-center border border-blue-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
+                      />
+                    </td>
+                    <td className="p-3">{diff}</td>
+                    <td className="p-3">{row.basic.toLocaleString()}</td>
+                    <td className="p-3">
+                      {payment.toLocaleString(undefined, {
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 1,
+                      })}
+                    </td>
+                    <td className="p-3">
+                      <textarea
+                        value={row.remarks}
+                        onChange={(e) =>
+                          handleChange(i, "remarks", e.target.value)
+                        }
+                        className="w-full min-w-[200px] border border-blue-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300 resize"
+                        rows={3}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
 
-            <tr className="bg-blue-50 font-semibold text-slate-700">
-              <td colSpan={5} className="p-3 text-right">
-                Total
-              </td>
-              <td className="p-3">
-                {round1(totals.totalOt).toLocaleString(undefined, {
-                  minimumFractionDigits: 1,
-                  maximumFractionDigits: 1,
-                })}
-              </td>
-              <td className="p-3">
-                {round1(totals.bill).toLocaleString(undefined, {
-                  minimumFractionDigits: 1,
-                  maximumFractionDigits: 1,
-                })}
-              </td>
-              <td className="p-3"></td>
-              <td className="p-3"></td>
-              <td className="p-3">
-                {round1(totals.payment).toLocaleString(undefined, {
-                  minimumFractionDigits: 1,
-                  maximumFractionDigits: 1,
-                })}
-              </td>
-              <td className="p-3"></td>
-            </tr>
-          </tbody>
-        </table>
+              <tr className="bg-blue-50 font-semibold text-blue-700">
+                <td colSpan={5} className="p-3 text-right">
+                  Total
+                </td>
+                <td className="p-3">
+                  {round1(totals.totalOt).toLocaleString(undefined, {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1,
+                  })}
+                </td>
+                <td className="p-3">
+                  {round1(totals.bill).toLocaleString(undefined, {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1,
+                  })}
+                </td>
+                <td className="p-3"></td>
+                <td className="p-3"></td>
+                <td className="p-3">
+                  {round1(totals.payment).toLocaleString(undefined, {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1,
+                  })}
+                </td>
+                <td className="p-3"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {isPending ? (

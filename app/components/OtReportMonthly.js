@@ -67,20 +67,20 @@ const OtReportMonthly = ({
         <table className="min-w-full  border-gray-200  border-gray-200-gray-300 table-auto bg-white">
           <thead className="bg-white">
             <tr>
-              <th className="border border-gray-200 px-4 py-2">Date</th>
+              <th className="border border-gray-200 px-2 py-2">Date</th>
               {otType ? null : (
-                <th className="border border-gray-200 px-4 py-2">Type</th>
+                <th className="border border-gray-200 px-2 py-2">Type</th>
               )}
               {unitName ? null : (
-                <th className="border border-gray-200 px-4 py-2">Unit</th>
+                <th className="border border-gray-200 px-2 py-2">Unit</th>
               )}
-              <th className="border border-gray-200 px-4 py-2">
+              <th className="border border-gray-200 px-2 py-2">
                 Work Description
               </th>
-              <th className="border border-gray-200 px-4 py-2">Employee</th>
-              <th className="border border-gray-200 px-4 py-2">OT Time</th>
-              <th className="border border-gray-200 px-4 py-2">OT Hour</th>
-              <th className="border border-gray-200 px-4 py-2">Remarks</th>
+              <th className="border border-gray-200 px-2 py-2">Employee</th>
+              <th className="border border-gray-200 px-2 py-2">OT Time</th>
+              <th className="border border-gray-200 px-2 py-2">OT Hour</th>
+              <th className="border border-gray-200 px-2 py-2">Remarks</th>
             </tr>
           </thead>
           <tbody>
@@ -100,7 +100,7 @@ const OtReportMonthly = ({
                       {!datePrinted && (
                         <td
                           rowSpan={dateRowSpan}
-                          className="border border-gray-200 px-4 py-2 align-top text-center bg-gray-50 font-semibold"
+                          className="border border-gray-200 px-2 py-2 align-top text-center bg-gray-50 font-semibold"
                         >
                           <TextLink
                             href={`/${dept}/overtime/daily?date=${group._id}`}
@@ -117,7 +117,7 @@ const OtReportMonthly = ({
                         otType ? null : (
                           <td
                             rowSpan={entry.Employee.length}
-                            className="border border-gray-200 px-4 py-2 align-top"
+                            className="border border-gray-200 px-2 py-2 align-top"
                           >
                             {entry.Type}
                           </td>
@@ -129,7 +129,7 @@ const OtReportMonthly = ({
                         unitName ? null : (
                           <td
                             rowSpan={entry.Employee.length}
-                            className="border border-gray-200 px-4 py-2 align-top"
+                            className="border border-gray-200 px-2 py-2 align-top"
                           >
                             {entry.Unit.map((item, index) => (
                               <TextLink
@@ -150,7 +150,7 @@ const OtReportMonthly = ({
                       {empIdx === 0 ? (
                         <td
                           rowSpan={entry.Employee.length}
-                          className="border border-gray-200 px-4 py-2 align-top"
+                          className="border border-gray-200 px-2 py-2 align-top"
                         >
                           <TextLink
                             href={`/${dept}/overtime/slip?id=${entry._id}`}
@@ -160,16 +160,16 @@ const OtReportMonthly = ({
                       ) : null}
 
                       {/* Employee */}
-                      <td className="border border-gray-200 px-4 py-2">
+                      <td className="border border-gray-200 px-2 py-2 whitespace-nowrap">
                         <TextLink
                           href={`/${dept}/overtime/employee?start=${start}&end=${end}&name=${emp.Name}`}
                           text={emp.Name}
                         />
                       </td>
-                      <td className="border border-gray-200 px-4 py-2">
+                      <td className="border border-gray-200 px-2 py-2">
                         {emp.OtTime}
                       </td>
-                      <td className="border border-gray-200 px-4 py-2">
+                      <td className="border border-gray-200 px-2 py-2">
                         {emp.OtHour}
                       </td>
 
@@ -177,7 +177,7 @@ const OtReportMonthly = ({
                       {empIdx === 0 ? (
                         <td
                           rowSpan={entry.Employee.length}
-                          className="border border-gray-200 px-4 py-2 align-top"
+                          className="border border-gray-200 px-2 py-2 align-top max-w-3xs"
                         >
                           {entry.Remarks}
                         </td>
@@ -192,14 +192,14 @@ const OtReportMonthly = ({
             <tr className="bg-gray-100 font-semibold">
               <td
                 colSpan={unitName || otType ? 5 : 6}
-                className="border border-gray-200 px-4 py-2 text-right"
+                className="border border-gray-200 px-2 py-2 text-right"
               >
                 Total OT Hours
               </td>
-              <td className="border border-gray-200 px-4 py-2 text-center">
+              <td className="border border-gray-200 px-2 py-2 text-center">
                 {grandTotalOt}
               </td>
-              <td className="border border-gray-200 px-4 py-2"></td>
+              <td className="border border-gray-200 px-2 py-2"></td>
             </tr>
           </tbody>
         </table>

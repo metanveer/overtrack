@@ -24,8 +24,8 @@ const OtReportDaily = ({ records, date, dept }) => {
           onClick={() => downloadDailyReport(records, date, dept)}
         />
       </div>
-      <div className="overflow-x-auto bg-white">
-        <table className="min-w-full table-auto border bg-white rounded shadow border-gray-300">
+      <div className="overflow-x-auto bg-white rounded-xl shadow-md p-2">
+        <table className="min-w-full table-auto border bg-white border-gray-300">
           <thead className="rounded">
             <tr className="bg-white">
               <th className="px-4 py-2 border border-gray-300" rowSpan="2">
@@ -89,7 +89,7 @@ const OtReportDaily = ({ records, date, dept }) => {
                       </td>
                     </>
                   )}
-                  <td className="px-4 py-2 border border-gray-200">
+                  <td className="px-4 py-2 border border-gray-200 whitespace-nowrap">
                     <TextLink
                       text={emp.Name}
                       href={`/${dept}/overtime/employee?start=${date}&end=${date}&name=${emp.Name}`}

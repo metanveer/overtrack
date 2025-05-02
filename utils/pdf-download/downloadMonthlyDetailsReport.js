@@ -48,7 +48,7 @@ export const downloadMonthlyDetailsReport = async (
     `${
       textConfig
         ? textConfig.otType
-          ? `Monthly ${textConfig.otType} Overtime Report`
+          ? `${textConfig.otType} Overtime Report`
           : `Overtime Log for ${textConfig.unitName}`
         : "Monthly Overtime Report"
     }`,

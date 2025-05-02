@@ -31,66 +31,66 @@ const BillingView = ({ data, dept }) => {
 
   return (
     <div className="py-6">
-      <h2 className="text-2xl font-bold mb-4 text-center">
+      <h2 className="text-2xl font-bold mb-10 mt-4 text-center text-blue-700">
         Monthly Overtime Bill for {month}
       </h2>
-      <div className="overflow-x-auto shadow rounded-lg border border-gray-200">
-        <table className="min-w-full text-sm text-left text-gray-700">
-          <thead className="bg-gray-100 text-xs uppercase font-semibold text-gray-600">
+      <div className="overflow-x-auto shadow-md rounded-lg border border-blue-200">
+        <table className="min-w-full text-sm text-left text-gray-800">
+          <thead className="bg-blue-100 text-xs uppercase font-semibold text-blue-600">
             <tr>
-              <th className="px-4 py-2 uppercase">#</th>
-              <th className="px-4 py-2 uppercase">Name</th>
-              <th className="px-4 py-2 uppercase">Designation</th>
-              <th className="px-4 py-2 uppercase">Double</th>
-              <th className="px-4 py-2 uppercase">Triple</th>
-              <th className="px-4 py-2 uppercase">Total HR.</th>
-              <th className="px-4 py-2 uppercase">Bill HR.</th>
-              <th className="px-4 py-2 uppercase">Diff</th>
-              <th className="px-4 py-2 uppercase">Basic TK.</th>
-              <th className="px-4 py-2 uppercase">Payment TK.</th>
-              <th className="px-4 py-2 uppercase">Remarks</th>
+              <th className="px-2 py-2 uppercase">#</th>
+              <th className="px-2 py-2 uppercase">Name</th>
+              <th className="px-2 py-2 uppercase">Designation</th>
+              <th className="px-2 py-2 uppercase">Double</th>
+              <th className="px-2 py-2 uppercase">Triple</th>
+              <th className="px-2 py-2 uppercase">Total HR.</th>
+              <th className="px-2 py-2 uppercase">Bill HR.</th>
+              <th className="px-2 py-2 uppercase">Diff</th>
+              <th className="px-2 py-2 uppercase">Basic TK.</th>
+              <th className="px-2 py-2 uppercase">Payment TK.</th>
+              <th className="px-2 py-2 uppercase">Remarks</th>
             </tr>
           </thead>
           <tbody>
             {data.billData.map((emp, idx) => (
               <tr
                 key={idx}
-                className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                className={idx % 2 === 0 ? "bg-white" : "bg-blue-50"}
               >
-                <td className="px-4 py-2">{idx + 1}</td>
-                <td className="px-4 py-2">{emp.name}</td>
-                <td className="px-4 py-2">{emp.designation}</td>
-                <td className="px-4 py-2">{emp.double}</td>
-                <td className="px-4 py-2">{emp.triple}</td>
-                <td className="px-4 py-2">{emp.totalOt}</td>
-                <td className="px-4 py-2">{emp.bill}</td>
-                <td className="px-4 py-2">{emp.difference}</td>
-                <td className="px-4 py-2">{emp.basic.toLocaleString()}</td>
-                <td className="px-4 py-2">
+                <td className="px-2 py-2 text-blue-600 font-bold">{idx + 1}</td>
+                <td className="px-2 py-2">{emp.name}</td>
+                <td className="px-2 py-2">{emp.designation}</td>
+                <td className="px-2 py-2">{emp.double}</td>
+                <td className="px-2 py-2">{emp.triple}</td>
+                <td className="px-2 py-2">{emp.totalOt}</td>
+                <td className="px-2 py-2">{emp.bill}</td>
+                <td className="px-2 py-2">{emp.difference}</td>
+                <td className="px-2 py-2">{emp.basic.toLocaleString()}</td>
+                <td className="px-2 py-2">
                   {emp.payment.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
                 </td>
-                <td className="px-4 py-2">{emp.remarks}</td>
+                <td className="px-2 py-2">{emp.remarks}</td>
               </tr>
             ))}
-            <tr className="bg-gray-200 font-semibold">
-              <td className="px-4 py-2 text-center" colSpan={4}>
+            <tr className="bg-blue-200 font-semibold">
+              <td className="px-2 py-2 text-center" colSpan={4}>
                 Totals
               </td>
-              <td className="px-4 py-2"></td>
-              <td className="px-4 py-2">{round1(totalMonthlyOtHour)}</td>
-              <td className="px-4 py-2">{totalBill.toLocaleString()}</td>
-              <td className="px-4 py-2"></td>
-              <td className="px-4 py-2"></td>
-              <td className="px-4 py-2">
+              <td className="px-2 py-2"></td>
+              <td className="px-2 py-2">{round1(totalMonthlyOtHour)}</td>
+              <td className="px-2 py-2">{totalBill.toLocaleString()}</td>
+              <td className="px-2 py-2"></td>
+              <td className="px-2 py-2"></td>
+              <td className="px-2 py-2">
                 {totalPayment.toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
               </td>
-              <td className="px-4 py-2"></td>
+              <td className="px-2 py-2"></td>
             </tr>
           </tbody>
         </table>
@@ -99,7 +99,7 @@ const BillingView = ({ data, dept }) => {
         <DownloadPdfButton onClick={() => downloadMonthlyBill(data, dept)} />
         <Link
           href={`/${dept}/overtime/billing?month=${data.billMonth}&mode=edit`}
-          className="flex items-center gap-1 text-sm text-white bg-blue-500 hover:bg-blue-600 px-4 py-1.5 rounded-xl shadow"
+          className="flex items-center gap-1 text-sm text-white bg-blue-500 hover:bg-blue-600 px-2 py-1.5 rounded-xl shadow"
         >
           <Pencil size={16} />
           Edit

@@ -5,7 +5,12 @@ import {
   insertDept,
   updateDept,
 } from "@/lib/mongodb/deptQueries";
+import {
+  deleteOtSettings,
+  saveOtSettingsToDb,
+} from "@/lib/mongodb/oTSettingsQueries";
 import checkAuthPermission from "@/utils/checkAuthPermission";
+import { defaultOtSettings } from "@/utils/defaultOtSettings";
 import { perm } from "@/utils/permissions";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
@@ -49,8 +54,23 @@ export async function addDept(label) {
     const newDept = await insertDept(dept);
 
     if (newDept.acknowledged) {
+      revalidatePath("/");
       revalidatePath("/admin/depts");
       revalidatePath("/admin/roles/permissions");
+
+      const deptSettings = await saveOtSettingsToDb(
+        defaultOtSettings(dept.deptName)
+      );
+
+      if (deptSettings.acknowledged && deptSettings.modifiedCount > 0) {
+        revalidatePath(`/`);
+        revalidatePath(`/${dept}`);
+        revalidatePath(`/${dept}/overtime`);
+        revalidatePath(`/${dept}/overtime/entry-form`);
+        revalidatePath(`/${dept}/overtime/settings/edit`);
+
+        // return { success: true, message: "Settings updated successfully!" };
+      }
 
       return { success: true, message: "Dept created successfully." };
     }
@@ -87,8 +107,23 @@ export async function editDept(_id, deptName) {
     const updatedDept = await updateDept(_id, dept);
 
     if (updatedDept.modifiedCount > 0) {
+      revalidatePath("/");
       revalidatePath("/admin/depts");
       revalidatePath("/admin/roles/permissions");
+
+      const deptSettings = await saveOtSettingsToDb(
+        defaultOtSettings(dept.deptName)
+      );
+
+      if (deptSettings.acknowledged && deptSettings.modifiedCount > 0) {
+        revalidatePath(`/`);
+        revalidatePath(`/${dept}`);
+        revalidatePath(`/${dept}/overtime`);
+        revalidatePath(`/${dept}/overtime/entry-form`);
+        revalidatePath(`/${dept}/overtime/settings/edit`);
+
+        // return { success: true, message: "Settings updated successfully!" };
+      }
 
       return { success: true, message: "Data updated successfully" };
     }
@@ -100,7 +135,7 @@ export async function editDept(_id, deptName) {
   }
 }
 
-export async function deleteDept(id) {
+export async function deleteDept(deptName) {
   try {
     const authCheck = await checkAuthPermission(perm.DEPTS_DELETE);
 
@@ -108,17 +143,19 @@ export async function deleteDept(id) {
       return authCheck;
     }
 
-    if (!id) return { success: false, message: "Missing month!" };
-
-    const _id = new ObjectId(id);
+    if (!deptName) return { success: false, message: "Missing dept name!" };
 
     const result = await DEPT_COLLECTION.deleteOne({
-      _id: _id,
+      deptName: deptName,
     });
 
     if (result.deletedCount === 0) {
       return { success: false, message: "Document not found!" };
     }
+
+    const delSetting = await deleteOtSettings(deptName);
+
+    revalidatePath("/");
     revalidatePath("/admin/depts");
     revalidatePath("/admin/roles/permissions");
 

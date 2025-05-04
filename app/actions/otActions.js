@@ -43,7 +43,7 @@ export async function createOtEntry(prevData, formData) {
     const hasDuplicateEntry = await checkDuplicateOtEntry(parsedData);
 
     if (hasDuplicateEntry) {
-      return { success: false, message: "Duplicate OT entry found." };
+      return { success: false, message: "Already added!" };
     }
 
     const newOtEntry = await insertOt(parsedData);

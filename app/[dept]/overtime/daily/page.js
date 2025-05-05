@@ -1,6 +1,6 @@
 import OtReportDaily from "@/app/components/OtReportDaily";
 import { getDailyOvertimes } from "@/lib/mongodb/otQueries";
-import formatDate from "@/utils/formatDate";
+import formatDate, { getDayName } from "@/utils/formatDate";
 
 import SelectDate from "@/app/components/SelectDate";
 
@@ -27,7 +27,9 @@ const DailyReportPage = async ({ searchParams, params }) => {
       ) : (
         <>
           <h1 className="flex items-center text-xl font-bold mb-4 mt-6 space-x-2 text-gray-800">
-            <span>{`Report dated ${formatDate(date)}`}</span>
+            <span>{`Report dated ${formatDate(date)} (${getDayName(
+              date
+            )})`}</span>
           </h1>
           <OtReportDaily dept={dept} records={records} date={date} />
         </>

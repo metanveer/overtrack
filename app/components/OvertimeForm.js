@@ -7,6 +7,7 @@ import getHourFromTimeData from "@/utils/getHourFromTimeData";
 
 import Select from "react-select";
 import Link from "next/link";
+import formatDate, { getDayName } from "@/utils/formatDate";
 
 export default function OvertimeForm({
   typeOptions,
@@ -48,6 +49,9 @@ export default function OvertimeForm({
       setLoading(false); // Data is ready
     }
   }, [typeOptions, unitOptions, nameOptions, otTimeOptions]);
+
+  const isWeekend =
+    getDayName(formData.Date) === "SAT" || getDayName(formData.Date) === "FRI";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -136,7 +140,9 @@ export default function OvertimeForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-4xl mx-auto p-6 bg-white shadow-xl rounded-2xl space-y-6 border border-gray-200"
+      className={`max-w-4xl mx-auto p-6 bg-white shadow-xl rounded-2xl space-y-6 border ${
+        isWeekend ? "border-red-400 border-2" : "border-gray-200"
+      }`}
     >
       {loading ? (
         <div className="space-y-6">
@@ -169,7 +175,7 @@ export default function OvertimeForm({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block font-medium text-gray-700 mb-1">
-                Date
+                Date {formData.Date ? `(${getDayName(formData.Date)})` : ""}
               </label>
               <input
                 type="date"

@@ -6,7 +6,7 @@ import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadEmployeeRecords } from "@/utils/pdf-download/downloadEmployeeRecords";
 import TextLink from "./TextLink";
 import round1 from "@/utils/round1";
-import formatDate from "@/utils/formatDate";
+import formatDate, { getDayName } from "@/utils/formatDate";
 
 const otTypeColors = {
   Holiday: "bg-red-100 text-red-700 border-red-300",
@@ -83,7 +83,9 @@ const EmployeeOtRecords = ({ data, start, end, dept }) => {
                       >
                         <td className="px-4 py-2 flex items-center gap-2 whitespace-nowrap">
                           <TextLink
-                            text={formatDate(entry.Date)}
+                            text={`${formatDate(entry.Date)} (${getDayName(
+                              entry.Date
+                            )})`}
                             href={`/${dept}/overtime/daily?date=${entry.Date}`}
                           />
                         </td>

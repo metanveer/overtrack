@@ -109,12 +109,16 @@ export const downloadMonthlyDetailsReport = async (
         }
 
         if (empIndex === 0) {
-          if (!textConfig.otType) {
-            row.push({ content: record.Type, rowSpan: empLen });
+          if (textConfig) {
+            if (!textConfig.otType) {
+              row.push({ content: record.Type, rowSpan: empLen });
+            }
+            if (!textConfig.unitName) {
+              row.push({ content: record.Unit, rowSpan: empLen });
+            }
           }
-          if (!textConfig.unitName) {
-            row.push({ content: record.Unit, rowSpan: empLen });
-          }
+          row.push({ content: record.Type, rowSpan: empLen });
+          row.push({ content: record.Unit, rowSpan: empLen });
           row.push({
             content: record.WorkDescription,
             rowSpan: empLen,
@@ -172,43 +176,48 @@ export const downloadMonthlyDetailsReport = async (
     "",
   ]);
 
-  const headRow = textConfig.unitName
-    ? [
-        "Date",
-        "Type",
-        "Work Description",
-        "Employee",
-        "OT Time",
-        "OT Hour",
-        "Remarks",
-      ]
-    : textConfig.otType
-    ? [
-        "Date",
+  const headRow = () => {
+    if (textConfig) {
+      if (textConfig.otType) {
+        return [
+          "Date",
+          "Unit",
+          "Work Description",
+          "Employee",
+          "OT Time",
+          "OT Hour",
+          "Remarks",
+        ];
+      }
+      if (textConfig.unitName) {
+        return [
+          "Date",
+          "Type",
+          "Work Description",
+          "Employee",
+          "OT Time",
+          "OT Hour",
+          "Remarks",
+        ];
+      }
+    }
+    // Default case (when no textConfig or neither field is set)
+    return [
+      "Date",
+      "Type",
+      "Unit",
+      "Work Description",
+      "Employee",
+      "OT Time",
+      "OT Hour",
+      "Remarks",
+    ];
+  };
 
-        "Unit",
-        "Work Description",
-        "Employee",
-        "OT Time",
-        "OT Hour",
-        "Remarks",
-      ]
-    : [
-        "Date",
-        "Type",
-        "Unit",
-        "Work Description",
-        "Employee",
-        "OT Time",
-        "OT Hour",
-        "Remarks",
-      ];
-
-  // 📄 Render table
   autoTable(doc, {
     startY: margin + 78,
     margin: { left: margin, right: margin },
-    head: [headRow],
+    head: [headRow()],
     body,
     styles: {
       fontSize: 10,

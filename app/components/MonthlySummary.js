@@ -17,6 +17,11 @@ const MonthlySummary = ({ data, employeeOrder, month, dept, isDashboard }) => {
 
   const monthName = formatMonthName(month);
 
+  const isWeekend = (dateStr) => {
+    const day = new Date(dateStr).getDay(); // 5 = Friday, 6 = Saturday
+    return day === 5 || day === 6;
+  };
+
   return (
     <div>
       <div className="text-2xl font-bold my-3 text-center text-gray-700">
@@ -42,16 +47,49 @@ const MonthlySummary = ({ data, employeeOrder, month, dept, isDashboard }) => {
           <table className="min-w-full border-collapse border border-gray-300 text-sm text-center">
             <thead className="bg-white">
               <tr>
+                <th className=" px-2 py-1"></th>
+                <th className=" px-2 py-1"></th>
+                {!isDashboard &&
+                  allDates.map((date) => {
+                    const dayLetter = new Date(date).toLocaleDateString(
+                      "en-US",
+                      {
+                        weekday: "short",
+                      }
+                    )[0];
+                    const weekend = isWeekend(date);
+                    return (
+                      <th
+                        key={`day-${date}`}
+                        className={`border border-gray-300 px-2 py-1 ${
+                          weekend ? "bg-red-100 text-red-600 font-semibold" : ""
+                        }`}
+                      >
+                        {dayLetter}
+                      </th>
+                    );
+                  })}
+                <th className="border border-gray-300 px-2 py-1"></th>
+              </tr>
+              <tr>
                 <th className="border border-gray-300 px-2 py-1">#</th>
                 <th className="border border-gray-300 px-2 py-1 whitespace-nowrap">
                   Employee Name
                 </th>
                 {!isDashboard &&
-                  allDates.map((date) => (
-                    <th key={date} className="border border-gray-300 px-2 py-1">
-                      {`${date.slice(8)}`}
-                    </th>
-                  ))}
+                  allDates.map((date) => {
+                    const weekend = isWeekend(date);
+                    return (
+                      <th
+                        key={date}
+                        className={`border border-gray-300 px-2 py-1 ${
+                          weekend ? "bg-red-100 text-red-600 font-semibold" : ""
+                        }`}
+                      >
+                        {`${date.slice(8)}`}
+                      </th>
+                    );
+                  })}
                 <th className="border border-gray-300 px-2 py-1 font-semibold">
                   Total Hrs
                 </th>
@@ -72,14 +110,23 @@ const MonthlySummary = ({ data, employeeOrder, month, dept, isDashboard }) => {
                       {name}
                     </td>
                     {!isDashboard &&
-                      allDates.map((date) => (
-                        <td
-                          key={date}
-                          className="border border-gray-300 px-2 py-1"
-                        >
-                          {employeeMap[name][date] || ""}
-                        </td>
-                      ))}
+                      allDates.map((date) => {
+                        const weekend = isWeekend(date);
+                        return (
+                          <td
+                            key={date}
+                            className={`border border-gray-300 px-2 py-1 ${
+                              weekend ? "bg-red-100 text-red-600" : ""
+                            } ${
+                              isTop
+                                ? "bg-yellow-100 z-10 relative font-semibold"
+                                : ""
+                            }`}
+                          >
+                            {employeeMap[name][date] || ""}
+                          </td>
+                        );
+                      })}
                     <td
                       className={`border border-gray-300 px-2 py-1 ${
                         isTop ? "bg-yellow-300 font-semibold" : ""
@@ -96,11 +143,19 @@ const MonthlySummary = ({ data, employeeOrder, month, dept, isDashboard }) => {
                   {isDashboard ? "Monthly Grand Total" : "Total Per Day"}
                 </td>
                 {!isDashboard &&
-                  allDates.map((date) => (
-                    <td key={date} className="border border-gray-300 px-2 py-1">
-                      {dayTotals[date]}
-                    </td>
-                  ))}
+                  allDates.map((date) => {
+                    const weekend = isWeekend(date);
+                    return (
+                      <td
+                        key={date}
+                        className={`border border-gray-300 px-2 py-1 ${
+                          weekend ? "bg-red-100 text-red-600 font-semibold" : ""
+                        }`}
+                      >
+                        {dayTotals[date]}
+                      </td>
+                    );
+                  })}
                 <td className="border border-gray-300 px-2 py-1">
                   {grandTotal}
                 </td>

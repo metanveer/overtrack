@@ -1,7 +1,6 @@
 export const defaultOtSettings = (deptName) => ({
   _id: deptName,
   OtType: [
-    "Regular",
     "Exigency",
     "Weekend",
     "Holiday",

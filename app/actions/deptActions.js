@@ -12,7 +12,7 @@ import {
 import checkAuthPermission from "@/utils/checkAuthPermission";
 import { defaultOtSettings } from "@/utils/defaultOtSettings";
 import { perm } from "@/utils/permissions";
-import { ObjectId } from "mongodb";
+
 import { revalidatePath } from "next/cache";
 
 export async function addDept(label) {

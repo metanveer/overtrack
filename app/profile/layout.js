@@ -7,7 +7,7 @@ import { getPermittedDepts } from "@/lib/mongodb/deptQueries";
 import { adminOptions } from "../admin/admin-options";
 
 const ProfileLayout = async ({ children }) => {
-  const { success, session } = await checkAuthPermission();
+  const { success, session } = await checkAuthPermission("isLoggedIn");
 
   if (!success) redirect("/");
 

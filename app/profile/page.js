@@ -6,7 +6,7 @@ import UserProfile from "../components/user/UserProfile";
 import { getPermittedDepts } from "@/lib/mongodb/deptQueries";
 
 const ProfilePage = async () => {
-  const { success, session } = await checkAuthPermission();
+  const { success, session } = await checkAuthPermission("isLoggedIn");
 
   if (!success) redirect("/");
 

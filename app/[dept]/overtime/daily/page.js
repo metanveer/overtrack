@@ -3,8 +3,17 @@ import { getDailyOvertimes } from "@/lib/mongodb/otQueries";
 import formatDate, { getDayName } from "@/utils/formatDate";
 
 import SelectDate from "@/app/components/SelectDate";
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import { perm } from "@/utils/permissions";
+import checkAuthPermission from "@/utils/checkAuthPermission";
 
 const DailyReportPage = async ({ searchParams, params }) => {
+  const authCheck = await checkAuthPermission(perm.VIEW_DAILY_REPORT);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
+
   const { date } = await searchParams;
   const { dept } = await params;
 

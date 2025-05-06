@@ -193,7 +193,7 @@ export async function deleteRole(roleName) {
 
 export async function updateRolePermissions(roleName, permissions) {
   try {
-    const authCheck = await checkAuthPermission();
+    const authCheck = await checkAuthPermission("isLoggedIn");
 
     if (!authCheck.success) {
       return authCheck;

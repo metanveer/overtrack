@@ -13,10 +13,13 @@ export const perm = {
   SETTINGS_VIEW: "SETTINGS__View settings",
 
   VIEW_DAILY_REPORT: "REPORT__View daily report",
-  VIEW_MONTHLY_REPORT: "REPORT__View monthly detailed report",
+  VIEW_MONTHLY_REPORT: "REPORT__View monthly report",
 
   VIEW_EMPLOYEE_REPORT: "REPORT__View employee records",
   VIEW_UNIT_REPORT: "REPORT__View unit records",
+  VIEW_OT_TYPE_REPORT: "REPORT__View overtime type records",
+  VIEW_DASHBOARD: "REPORT__View dashboard",
+  VIEW_MENU: "REPORT__View menu",
 
   VIEW_ADMIN_PAGE: "ADMIN__View admin page",
 

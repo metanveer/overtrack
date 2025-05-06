@@ -4,8 +4,16 @@ import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import DashboardStats from "../components/DashboardStats";
 import MonthlySummary from "../components/MonthlySummary";
 import { getMonthlyOvertimes } from "@/lib/mongodb/otQueries";
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 
 export default async function DeptHomePage({ params }) {
+  const authCheck = await checkAuthPermission(perm.VIEW_DASHBOARD);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
   const { dept } = await params;
   const totalOtEntries = await OVERTIME_COLLECTION.countDocuments({
     Dept: dept,

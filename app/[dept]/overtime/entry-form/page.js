@@ -1,8 +1,17 @@
 import OvertimeForm from "@/app/components/OvertimeForm";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import { redirect } from "next/navigation";
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 
 export default async function Page({ params }) {
+  const authCheck = await checkAuthPermission(perm.OT_ADD);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
+
   const { dept } = await params;
   const { OtType, Unit, Employee, OtTime } = await getOtSettings(dept);
 

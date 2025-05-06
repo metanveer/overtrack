@@ -46,31 +46,35 @@ const MonthlySummary = ({ data, employeeOrder, month, dept, isDashboard }) => {
         <div className="overflow-auto bg-white p-4 rounded-xl shadow">
           <table className="min-w-full border-collapse border border-gray-300 text-sm text-center">
             <thead className="bg-white">
-              <tr>
-                <th className=" px-2 py-1"></th>
-                <th className=" px-2 py-1"></th>
-                {!isDashboard &&
-                  allDates.map((date) => {
-                    const dayLetter = new Date(date).toLocaleDateString(
-                      "en-US",
-                      {
-                        weekday: "short",
-                      }
-                    )[0];
-                    const weekend = isWeekend(date);
-                    return (
-                      <th
-                        key={`day-${date}`}
-                        className={`border border-gray-300 px-2 py-1 ${
-                          weekend ? "bg-red-100 text-red-600 font-semibold" : ""
-                        }`}
-                      >
-                        {dayLetter}
-                      </th>
-                    );
-                  })}
-                <th className="border border-gray-300 px-2 py-1"></th>
-              </tr>
+              {isDashboard ? null : (
+                <tr>
+                  <th className=" px-2 py-1"></th>
+                  <th className=" px-2 py-1"></th>
+                  {!isDashboard &&
+                    allDates.map((date) => {
+                      const dayLetter = new Date(date).toLocaleDateString(
+                        "en-US",
+                        {
+                          weekday: "short",
+                        }
+                      )[0];
+                      const weekend = isWeekend(date);
+                      return (
+                        <th
+                          key={`day-${date}`}
+                          className={`border border-gray-300 px-2 py-1 ${
+                            weekend
+                              ? "bg-red-100 text-red-600 font-semibold"
+                              : ""
+                          }`}
+                        >
+                          {dayLetter}
+                        </th>
+                      );
+                    })}
+                  <th className="border border-gray-300 px-2 py-1"></th>
+                </tr>
+              )}
               <tr>
                 <th className="border border-gray-300 px-2 py-1">#</th>
                 <th className="border border-gray-300 px-2 py-1 whitespace-nowrap">

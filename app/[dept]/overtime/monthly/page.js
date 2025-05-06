@@ -5,8 +5,16 @@ import MonthSelector from "@/app/components/MonthSelector";
 import MonthlySummary from "@/app/components/MonthlySummary";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import getMonthStartAndEnd from "@/utils/getMonthStartAndEnd";
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import { perm } from "@/utils/permissions";
+import checkAuthPermission from "@/utils/checkAuthPermission";
 
 const MonthlyReportPage = async ({ searchParams, params }) => {
+  const authCheck = await checkAuthPermission(perm.VIEW_MONTHLY_REPORT);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
   const { month, type } = await searchParams;
   const { dept } = await params;
 

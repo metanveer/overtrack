@@ -18,12 +18,11 @@ function isValidMonth(input) {
 }
 
 const BillingPage = async ({ searchParams, params }) => {
-  const authCheck = await checkAuthPermission(perm.BILLING_VIEW);
+  const authCheck = await checkAuthPermission(perm.VIEW_BILL);
 
   if (!authCheck.success) {
     return <AccessDenied />;
   }
-
   const { month, mode } = await searchParams;
   const { dept } = await params;
 

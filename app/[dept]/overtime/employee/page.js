@@ -3,8 +3,16 @@ import { getEmployeeOvertimeRecords } from "@/lib/mongodb/otQueries";
 import CriteriaSelector from "@/app/components/CriteriaSelector";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import EmployeeOtRecords from "@/app/components/EmployeeOtRecords";
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 
 const MonthlyReportPage = async ({ searchParams, params }) => {
+  const authCheck = await checkAuthPermission(perm.VIEW_EMPLOYEE_REPORT);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
   const { start, end, name } = await searchParams;
   const { dept } = await params;
   const { Employee } = await getOtSettings(dept);

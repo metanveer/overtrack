@@ -8,7 +8,7 @@ import { adminOptions } from "./admin/admin-options";
 export default async function HomePage({ searchParams }) {
   const { mode } = await searchParams;
 
-  const { success, session } = await checkAuthPermission();
+  const { success, session } = await checkAuthPermission("isLoggedIn");
 
   // const depts = await getAllDepts();
 

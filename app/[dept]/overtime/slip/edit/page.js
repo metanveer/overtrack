@@ -4,7 +4,17 @@ import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 
 import { notFound } from "next/navigation";
 
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
+
 export default async function Page({ searchParams, params }) {
+  const authCheck = await checkAuthPermission(perm.OT_SLIP_EDIT);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
+
   const { id } = await searchParams;
   const { dept } = await params;
 

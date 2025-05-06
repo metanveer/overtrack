@@ -5,7 +5,17 @@ import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 
 import OtReportMonthly from "@/app/components/OtReportMonthly";
 
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
+
 const OtTypePage = async ({ searchParams, params }) => {
+  const authCheck = await checkAuthPermission(perm.VIEW_OT_TYPE_REPORT);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
+
   const { start, end, name } = await searchParams;
   const { dept } = await params;
   const { OtType } = await getOtSettings(dept);

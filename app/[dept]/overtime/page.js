@@ -1,8 +1,16 @@
 import CustomLink from "@/app/components/CustomLink";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import getNavLinks from "@/utils/getNavLinks";
+import AccessDenied from "@/app/components/auth/AccessDenied";
+import checkAuthPermission from "@/utils/checkAuthPermission";
+import { perm } from "@/utils/permissions";
 
 const Settings = async ({ params }) => {
+  const authCheck = await checkAuthPermission(perm.VIEW_MENU);
+
+  if (!authCheck.success) {
+    return <AccessDenied />;
+  }
   const { dept } = await params;
 
   const { Employee, Unit, OtType, OtTime } = await getOtSettings(dept);

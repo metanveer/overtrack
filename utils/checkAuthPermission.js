@@ -7,9 +7,9 @@ import { getRoleByName } from "@/lib/mongodb/roleQueries";
 async function checkRolePermission(role, permission) {
   const roleData = await getRoleByName(role);
 
-  if (!roleData || !Array.isArray(roleData.permissions)) return false;
+  if (!roleData) return false;
 
-  return roleData.permissions.map((p) => p.trim()).includes(permission.trim());
+  return roleData.permissions.includes(permission);
 }
 
 // Main function to check authentication and permission
@@ -22,7 +22,7 @@ export default async function checkAuthPermission(permission) {
   }
 
   // If no specific permission is required, just return the user info
-  if (!permission) {
+  if (permission === "isLoggedIn") {
     return { success: true, user: session.user, session };
   }
 

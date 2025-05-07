@@ -292,7 +292,7 @@ export default function OvertimeForm({
 
                   <input
                     type="text"
-                    value={emp.OtHour}
+                    value={emp.OtHour || ""}
                     readOnly
                     disabled
                     className={`${inputClass} bg-gray-100 text-center sm:flex-1`}

@@ -4,6 +4,7 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
   const today = new Date();
   const selectedDate = today.toISOString().split("T")[0]; // returns YYYY-MM-DD
   const yearMonth = today.toISOString().slice(0, 7);
+  const year = today.getFullYear();
 
   const { start, end } = getMonthStartAndEnd(selectedDate);
 
@@ -31,6 +32,10 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
     {
       href: `/${dept}/overtime/monthly?month=${yearMonth}`,
       label: "Monthly Report",
+    },
+    {
+      href: `/${dept}/overtime/yearly?year=${year}`,
+      label: "Yearly Report",
     },
     {
       href: `/${dept}/overtime/employee?start=${start}&end=${end}&name=${firstEmp}`,

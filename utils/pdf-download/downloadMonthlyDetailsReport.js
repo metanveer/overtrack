@@ -257,5 +257,5 @@ export const downloadMonthlyDetailsReport = async (
   doc.text("______________________", pageWidth - margin - 160, finalY);
   doc.text("Manager / AGM", pageWidth - margin - 140, finalY + 15);
 
-  doc.save(`Monthly_OT_Report_${monthName}.pdf`);
+  doc.save(`Monthly_OT_Report__${dept}_${monthName}.pdf`);
 };

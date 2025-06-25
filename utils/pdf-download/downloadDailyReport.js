@@ -140,5 +140,5 @@ export const downloadDailyReport = async (records, reportDate, dept) => {
   doc.text("______________________", pageWidth - margin - 160, finalY);
   doc.text("Manager / AGM", pageWidth - margin - 140, finalY + 15);
 
-  doc.save(`Daily_OT_Report_${reportDate}`);
+  doc.save(`Daily_OT_Report_${dept}_${reportDate}`);
 };

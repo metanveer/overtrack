@@ -218,6 +218,8 @@ export const downloadEmployeeRecords = async (
   });
 
   doc.save(
-    `Employee_OT_Record_${safeDate(startDate)}_to_${safeDate(endDate)}.pdf`
+    `Employee_OT_Record_${dept}_${safeDate(startDate)}_to_${safeDate(
+      endDate
+    )}.pdf`
   );
 };

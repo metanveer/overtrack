@@ -196,5 +196,5 @@ export const downloadMonthlyBill = async (data, dept) => {
   doc.text("______________________", pageWidth - margin - 160, finalY);
   doc.text("Manager / AGM", pageWidth - margin - 140, finalY + 15);
 
-  doc.save(`Monthly_Billing_Summary_${data.billMonth}.pdf`);
+  doc.save(`Monthly_Billing_Summary__${dept}_${data.billMonth}.pdf`);
 };

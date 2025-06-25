@@ -144,5 +144,5 @@ export const downloadOtSlip = async (data, dept) => {
 
   doc.text("Manager / AGM", pageWidth - margin - 130, signatureY + 10 + 32);
 
-  doc.save(`Overtime_Slip_${data.Date}.pdf`);
+  doc.save(`Overtime_Slip__${dept}_${data.Date}.pdf`);
 };

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-const YearSelector = ({ dept, initYear }) => {
+const YearSelector = ({ dept, initYear, reportType }) => {
   const currentDate = new Date();
 
   const year = initYear || currentDate.getFullYear();
@@ -35,13 +35,21 @@ const YearSelector = ({ dept, initYear }) => {
         <div className="w-full flex gap-4">
           <Link
             href={`/${dept}/overtime/yearly?year=${yearSelected}`}
-            className="w-full text-center px-6 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
+            className={`w-full text-center px-6 py-2.5 rounded-xl font-semibold transition ${
+              reportType === "billed"
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-400 text-white cursor-not-allowed pointer-events-none"
+            }`}
           >
             Actual Hrs
           </Link>
           <Link
             href={`/${dept}/overtime/yearly?year=${yearSelected}&type=billed`}
-            className="w-full text-center px-6 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
+            className={`w-full text-center px-6 py-2.5 rounded-xl font-semibold transition ${
+              reportType !== "billed"
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-400 text-white cursor-not-allowed pointer-events-none"
+            }`}
           >
             Billed Hrs
           </Link>

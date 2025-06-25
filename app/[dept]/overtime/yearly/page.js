@@ -20,7 +20,7 @@ const YearlyReportPage = async ({ params, searchParams }) => {
 
   return (
     <div>
-      <YearSelector dept={dept} year={year} />
+      <YearSelector dept={dept} year={year} reportType={type} />
       <YearView billData={data} reportType={type} year={year} dept={dept} />
     </div>
   );

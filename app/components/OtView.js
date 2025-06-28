@@ -6,6 +6,7 @@ import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadOtSlip } from "@/utils/pdf-download/downloadOtSlip";
 import TextLink from "./TextLink";
 import formatDate from "@/utils/formatDate";
+import { extractAfterH } from "@/utils/extractAfterH";
 
 const OtView = ({ dept, data }) => {
   return (
@@ -55,7 +56,7 @@ const OtView = ({ dept, data }) => {
               {data.Employee.map((emp, index) => (
                 <tr key={index} className="hover:bg-gray-50 border-b">
                   <td className="px-4 py-2">{emp.Name}</td>
-                  <td className="px-4 py-2">{emp.OtTime}</td>
+                  <td className="px-4 py-2">{extractAfterH(emp.OtTime)}</td>
                   <td className="px-4 py-2">{emp.OtHour}</td>
                 </tr>
               ))}

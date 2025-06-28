@@ -6,8 +6,8 @@ import getYearlyEmployeesBilledOtHour from "@/utils/getYearlyEmployeesBilledOtHo
 import getYearlyEmployeesOtHour from "@/utils/getYearlyEmployeesOtHour";
 
 const YearlyReportPage = async ({ params, searchParams }) => {
-  const { dept } = params;
-  const { year, type } = searchParams;
+  const { dept } = await params;
+  const { year, type } = await searchParams;
 
   const { Employee } = await getOtSettings(dept);
 

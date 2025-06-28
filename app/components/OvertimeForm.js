@@ -179,6 +179,7 @@ export default function OvertimeForm({
               </label>
               <input
                 type="date"
+                id="Date"
                 name="Date"
                 value={formData.Date}
                 onChange={handleChange}
@@ -192,6 +193,7 @@ export default function OvertimeForm({
                 Type
               </label>
               <Select
+                inputId="OtType"
                 classNames={selectStyles}
                 value={
                   formData.Type
@@ -212,6 +214,7 @@ export default function OvertimeForm({
                 Unit
               </label>
               <Select
+                inputId="Unit"
                 isMulti
                 classNames={selectStyles}
                 value={formData.Unit.map((unit) => ({
@@ -233,6 +236,7 @@ export default function OvertimeForm({
               Work Description
             </label>
             <textarea
+              id="WorkDescription"
               name="WorkDescription"
               value={formData.WorkDescription}
               onChange={handleChange}
@@ -253,6 +257,7 @@ export default function OvertimeForm({
                   className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center"
                 >
                   <Select
+                    inputId={`Employee-${idx}`}
                     className="w-full sm:flex-1"
                     classNames={selectStyles}
                     value={
@@ -271,6 +276,7 @@ export default function OvertimeForm({
                   <Select
                     className="w-full sm:flex-1"
                     classNames={selectStyles}
+                    inputId={`OtTime-${idx}`}
                     value={
                       emp.OtTime
                         ? { label: emp.OtTime, value: emp.OtTime }
@@ -311,6 +317,7 @@ export default function OvertimeForm({
 
             <button
               type="button"
+              id="add-employee-btn"
               onClick={addEmployee}
               className="mt-3 inline-block px-4 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition"
             >
@@ -323,6 +330,7 @@ export default function OvertimeForm({
               Remarks
             </label>
             <textarea
+              id="Remarks"
               name="Remarks"
               value={formData.Remarks}
               onChange={handleChange}

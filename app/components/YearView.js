@@ -3,6 +3,13 @@ import { downloadYearlyOtSummary } from "@/utils/pdf-download/downloadYearlyOtSu
 import round1 from "@/utils/round1";
 import DownloadPdfButton from "./DownloadPdfButton";
 
+// 🔢 Helper function to convert number to ordinal
+const getOrdinal = (n) => {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
+
 const YearView = ({ billData, reportType, year, dept }) => {
   const months = [
     "january",
@@ -27,12 +34,24 @@ const YearView = ({ billData, reportType, year, dept }) => {
     return acc;
   }, {});
 
-  // Get total overtime for each employee
-  const getEmployeeTotal = (emp) => {
-    return months.reduce((sum, month) => sum + (Number(emp[month]) || 0), 0);
-  };
+  // Total overtime for a single employee
+  const getEmployeeTotal = (emp) =>
+    months.reduce((sum, month) => sum + (Number(emp[month]) || 0), 0);
 
-  // Total of all employees' totals
+  // Add total to each employee
+  const employeeTotals = billData.map((emp) => ({
+    ...emp,
+    total: getEmployeeTotal(emp),
+  }));
+
+  // Assign positions based on total
+  const sortedByTotal = [...employeeTotals].sort((a, b) => b.total - a.total);
+  const positionMap = new Map();
+  sortedByTotal.forEach((emp, index) => {
+    positionMap.set(emp.name, getOrdinal(index + 1));
+  });
+
+  // Overall grand total
   const overallTotal = Object.values(monthlyTotals).reduce(
     (sum, val) => sum + val,
     0
@@ -41,8 +60,9 @@ const YearView = ({ billData, reportType, year, dept }) => {
   return (
     <div className="py-6">
       <h2 className="text-2xl font-bold mb-10 mt-4 text-center text-blue-700">
-        {`Overtime Record for ${year}
-        ${reportType === "billed" ? "(Billed)" : "(Actual)"}`}
+        {`Overtime Record for ${year} ${
+          reportType === "billed" ? "(Billed)" : "(Actual)"
+        }`}
       </h2>
       <div className="py-4">
         <DownloadPdfButton
@@ -63,10 +83,11 @@ const YearView = ({ billData, reportType, year, dept }) => {
                 </th>
               ))}
               <th className="px-2 py-2 text-blue-700">Total</th>
+              <th className="px-2 py-2 text-blue-700">Position</th>
             </tr>
           </thead>
           <tbody>
-            {billData.map((emp, idx) => (
+            {employeeTotals.map((emp, idx) => (
               <tr
                 key={idx}
                 className={idx % 2 === 0 ? "bg-white" : "bg-blue-50"}
@@ -79,7 +100,10 @@ const YearView = ({ billData, reportType, year, dept }) => {
                   </td>
                 ))}
                 <td className="px-2 py-2 font-semibold text-blue-700">
-                  {round1(getEmployeeTotal(emp))}
+                  {round1(emp.total)}
+                </td>
+                <td className="px-2 py-2 font-medium text-blue-600">
+                  {positionMap.get(emp.name)}
                 </td>
               </tr>
             ))}
@@ -94,7 +118,8 @@ const YearView = ({ billData, reportType, year, dept }) => {
                   {round1(Number(monthlyTotals[month] ?? 0))}
                 </td>
               ))}
-              <td className="px-2 py-2">{overallTotal}</td>
+              <td className="px-2 py-2">{round1(overallTotal)}</td>
+              <td className="px-2 py-2"></td>
             </tr>
           </tfoot>
         </table>

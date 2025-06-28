@@ -3,6 +3,13 @@ import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
 import round1 from "../round1";
 
+// ➕ Helper to convert number to ordinal string
+const getOrdinal = (n) => {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
+
 export const downloadYearlyOtSummary = async (data, dept, year, reportType) => {
   if (!data || data.length === 0) return;
 
@@ -43,7 +50,7 @@ export const downloadYearlyOtSummary = async (data, dept, year, reportType) => {
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
   doc.text(
-    `Yearly Overtime Summary - ${year} (${
+    `Yearly Overtime (Hour) Summary - ${year} (${
       reportType === "billed" ? "Billed" : "Actual"
     })`,
     pageWidth / 2,
@@ -69,23 +76,44 @@ export const downloadYearlyOtSummary = async (data, dept, year, reportType) => {
     "DEC",
   ];
 
-  // 🔁 Convert display month to lowercase full name
   const getFullMonthKey = (abbr, index) =>
     new Date(0, index)
       .toLocaleString("default", { month: "long" })
       .toLowerCase();
 
-  const head = [["#", "Name", ...displayMonths, "TOTAL"]];
+  const head = [["#", "Name", ...displayMonths, "TOTAL HRS.", "POSITION"]];
 
-  const body = data.map((emp, idx) => {
+  // Step 1: Compute totals for each employee
+  const employeeData = data.map((emp, idx) => {
     const values = displayMonths.map(
       (abbr, i) => round1(emp[getFullMonthKey(abbr, i)]) || 0
     );
     const total = values.reduce((sum, v) => sum + v, 0);
-    return [idx + 1, emp.name, ...values.map((v) => v || ""), round1(total)];
+    return {
+      idx: idx + 1,
+      name: emp.name,
+      values,
+      total,
+    };
   });
 
-  // ➕ Monthly column totals
+  // Step 2: Sort by total and assign ordinal position
+  const sorted = [...employeeData].sort((a, b) => b.total - a.total);
+  const positions = new Map();
+  sorted.forEach((emp, rank) => {
+    positions.set(emp.name, getOrdinal(rank + 1));
+  });
+
+  // Step 3: Final body rows
+  const body = employeeData.map((emp) => [
+    emp.idx,
+    emp.name,
+    ...emp.values.map((v) => v || ""),
+    round1(emp.total),
+    positions.get(emp.name),
+  ]);
+
+  // Monthly totals
   const totals = displayMonths.map((abbr, i) =>
     data.reduce(
       (sum, emp) => sum + (round1(emp[getFullMonthKey(abbr, i)]) || 0),
@@ -96,9 +124,10 @@ export const downloadYearlyOtSummary = async (data, dept, year, reportType) => {
 
   body.push([
     "",
-    { content: "TOTAL", styles: { fontStyle: "bold", halign: "right" } },
+    { content: "TOTAL HRS.", styles: { fontStyle: "bold", halign: "right" } },
     ...totals.map((t) => round1(t)),
     round1(grandTotal),
+    "", // for Position column
   ]);
 
   autoTable(doc, {
@@ -108,7 +137,7 @@ export const downloadYearlyOtSummary = async (data, dept, year, reportType) => {
     body,
     theme: "grid",
     styles: {
-      fontSize: 7,
+      fontSize: 10,
       cellPadding: 3,
       textColor: 0,
       valign: "middle",
@@ -127,6 +156,7 @@ export const downloadYearlyOtSummary = async (data, dept, year, reportType) => {
         Array.from({ length: 12 }, (_, i) => [i + 2, { halign: "center" }])
       ),
       14: { halign: "center", fontStyle: "bold" }, // TOTAL
+      15: { halign: "center", fontStyle: "bold" }, // POSITION, same width as month columns
     },
   });
 

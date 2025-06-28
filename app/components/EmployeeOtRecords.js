@@ -7,6 +7,7 @@ import { downloadEmployeeRecords } from "@/utils/pdf-download/downloadEmployeeRe
 import TextLink from "./TextLink";
 import round1 from "@/utils/round1";
 import formatDate, { getDayName } from "@/utils/formatDate";
+import { extractAfterH } from "@/utils/extractAfterH";
 
 const otTypeColors = {
   Holiday: "bg-red-100 text-red-700 border-red-300",
@@ -90,7 +91,9 @@ const EmployeeOtRecords = ({ data, start, end, dept }) => {
                           />
                         </td>
                         <td className="px-4 py-2">{entry.OtHour}</td>
-                        <td className="px-4 py-2">{entry.OtTime}</td>
+                        <td className="px-4 py-2">
+                          {extractAfterH(entry.OtTime)}
+                        </td>
                         <td className="px-4 py-2">{entry.Unit.join(", ")}</td>
                         <td className="px-4 py-2">
                           <TextLink

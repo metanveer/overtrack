@@ -4,6 +4,7 @@ import { formatMonthNameFromRange } from "@/utils/formatMonthName";
 import { downloadMonthlyDetailsReport } from "@/utils/pdf-download/downloadMonthlyDetailsReport";
 import TextLink from "./TextLink";
 import formatDate, { getDayName } from "@/utils/formatDate";
+import { extractAfterH } from "@/utils/extractAfterH";
 
 const OtReportMonthly = ({
   unitName,
@@ -178,7 +179,7 @@ const OtReportMonthly = ({
                           />
                         </td>
                         <td className="border border-gray-200 px-2 py-2">
-                          {emp.OtTime}
+                          {extractAfterH(emp.OtTime)}
                         </td>
                         <td className="border border-gray-200 px-2 py-2">
                           {emp.OtHour}

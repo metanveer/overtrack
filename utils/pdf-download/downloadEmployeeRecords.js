@@ -171,8 +171,8 @@ export const downloadEmployeeRecords = async (
     entry.OtTime,
     entry.Unit,
     entry.WorkDescription,
-    entry.Remarks || "",
     entry.Type,
+    entry.Remarks || "",
   ]);
 
   autoTable(doc, {
@@ -185,8 +185,8 @@ export const downloadEmployeeRecords = async (
         "OT Time",
         "Unit",
         "Work Description",
-        "Remarks",
         "Type",
+        "Remarks",
       ],
     ],
     body,

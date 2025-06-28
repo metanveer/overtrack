@@ -4,6 +4,7 @@ import DownloadPdfButton from "./DownloadPdfButton";
 import { downloadDailyReport } from "@/utils/pdf-download/downloadDailyReport";
 import TextLink from "./TextLink";
 import round1 from "@/utils/round1";
+import { extractAfterH } from "@/utils/extractAfterH";
 
 const calculateTotalOtHours = (data) => {
   return data.reduce((sum, item) => {
@@ -96,7 +97,7 @@ const OtReportDaily = ({ records, date, dept }) => {
                     />
                   </td>
                   <td className="px-4 py-2 border border-gray-200">
-                    {emp.OtTime}
+                    {extractAfterH(emp.OtTime)}
                   </td>
                   <td className="px-4 py-2 border border-gray-200">
                     {emp.OtHour}

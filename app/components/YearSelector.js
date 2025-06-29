@@ -35,20 +35,20 @@ const YearSelector = ({ dept, initYear, reportType }) => {
         <div className="w-full flex gap-4">
           <Link
             href={`/${dept}/overtime/yearly?year=${yearSelected}`}
-            className={`w-full text-center px-6 py-2.5 rounded-xl font-semibold transition ${
-              reportType === "billed"
+            className={`w-full text-center px-6 py-2.5 rounded-xl font-semibold transition border border-blue-600 ${
+              reportType !== "billed"
                 ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-400 text-white cursor-not-allowed pointer-events-none"
+                : "bg-white text-blue-600 hover:bg-blue-100"
             }`}
           >
             Actual Hrs
           </Link>
           <Link
             href={`/${dept}/overtime/yearly?year=${yearSelected}&type=billed`}
-            className={`w-full text-center px-6 py-2.5 rounded-xl font-semibold transition ${
-              reportType !== "billed"
+            className={`w-full text-center px-6 py-2.5 rounded-xl font-semibold transition border border-blue-600 ${
+              reportType === "billed"
                 ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-400 text-white cursor-not-allowed pointer-events-none"
+                : "bg-white text-blue-600 hover:bg-blue-100"
             }`}
           >
             Billed Hrs

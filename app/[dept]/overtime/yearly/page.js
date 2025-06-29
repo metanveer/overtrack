@@ -1,21 +1,15 @@
 import YearSelector from "@/app/components/YearSelector";
 import YearView from "@/app/components/YearView";
-import { getBillsByYear } from "@/lib/mongodb/billQueries";
-import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
-import getYearlyEmployeesBilledOtHour from "@/utils/getYearlyEmployeesBilledOtHour";
-import getYearlyEmployeesOtHour from "@/utils/getYearlyEmployeesOtHour";
+import { getYearlyBilledOt } from "@/lib/mongodb/billQueries";
+import { getYearlyActualOt } from "@/lib/mongodb/otQueries";
 
 const YearlyReportPage = async ({ params, searchParams }) => {
   const { dept } = await params;
   const { year, type } = await searchParams;
 
-  const { Employee } = await getOtSettings(dept);
+  const actualYearlyOt = await getYearlyActualOt(dept, year);
 
-  const actualYearlyOt = await getYearlyEmployeesOtHour(year, Employee, dept);
-
-  const monthlyData = await getBillsByYear(year, dept);
-
-  const billedYearlyOt = getYearlyEmployeesBilledOtHour(monthlyData);
+  const billedYearlyOt = await getYearlyBilledOt(dept, year);
   const data = type === "billed" ? billedYearlyOt : actualYearlyOt;
 
   return (

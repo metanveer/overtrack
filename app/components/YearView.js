@@ -60,7 +60,7 @@ const YearView = ({ billData, reportType, year, dept }) => {
   return (
     <div className="py-6">
       <h2 className="text-2xl font-bold mb-10 mt-4 text-center text-blue-700">
-        {`Overtime Record for ${year} ${
+        {`Overtime Records for ${year} ${
           reportType === "billed" ? "(Billed)" : "(Actual)"
         }`}
       </h2>
@@ -96,7 +96,7 @@ const YearView = ({ billData, reportType, year, dept }) => {
                 <td className="px-2 py-2">{emp.name}</td>
                 {months.map((month, i) => (
                   <td key={i} className="px-2 py-2">
-                    {Number(emp[month]) || 0}
+                    {round1(Number(emp[month])) || 0}
                   </td>
                 ))}
                 <td className="px-2 py-2 font-semibold text-blue-700">

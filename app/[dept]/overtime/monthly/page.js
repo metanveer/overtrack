@@ -32,7 +32,7 @@ const MonthlyReportPage = async ({ searchParams, params }) => {
     return (
       <div className="p-0">
         <MonthSelector dept={dept} initMonth={month} />
-        <div className="text-center py-8 text-xl">
+        <div className="text-center py-8 text-xl text-gray-500 font-semibold">
           No overtime data available!
         </div>
       </div>

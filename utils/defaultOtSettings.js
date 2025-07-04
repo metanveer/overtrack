@@ -114,10 +114,6 @@ export const defaultOtSettings = (deptName) => ({
       Hour: "20",
     },
     {
-      Time: "Emergency",
-      Hour: "9",
-    },
-    {
       Time: "12.00-14.00",
       Hour: "5",
     },
@@ -164,6 +160,10 @@ export const defaultOtSettings = (deptName) => ({
     {
       Time: "20.00-08.00",
       Hour: "12",
+    },
+    {
+      Time: "Special",
+      Hour: "0",
     },
   ],
 });

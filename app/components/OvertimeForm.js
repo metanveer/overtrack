@@ -301,7 +301,7 @@ export default function OvertimeForm({
                     value={emp.OtHour || ""}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (/^\d{1,2}(\.\d{0,2})?$/.test(value)) {
+                      if (/^\d{1,3}(\.\d{0,2})?$/.test(value)) {
                         handleEmployeeChange(idx, "OtHour", value);
                       }
                     }}

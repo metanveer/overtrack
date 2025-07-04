@@ -14,6 +14,7 @@ export const perm = {
 
   VIEW_DAILY_REPORT: "REPORT__View daily report",
   VIEW_MONTHLY_REPORT: "REPORT__View monthly report",
+  VIEW_YEARLY_REPORT: "REPORT__View yearly report",
 
   VIEW_EMPLOYEE_REPORT: "REPORT__View employee records",
   VIEW_UNIT_REPORT: "REPORT__View unit records",

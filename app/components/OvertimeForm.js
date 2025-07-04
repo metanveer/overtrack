@@ -7,7 +7,7 @@ import getHourFromTimeData from "@/utils/getHourFromTimeData";
 
 import Select from "react-select";
 import Link from "next/link";
-import formatDate, { getDayName } from "@/utils/formatDate";
+import { getDayName } from "@/utils/formatDate";
 
 export default function OvertimeForm({
   typeOptions,
@@ -299,9 +299,17 @@ export default function OvertimeForm({
                   <input
                     type="text"
                     value={emp.OtHour || ""}
-                    readOnly
-                    disabled
-                    className={`${inputClass} bg-gray-100 text-center sm:flex-1`}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d{1,2}(\.\d{0,2})?$/.test(value)) {
+                        handleEmployeeChange(idx, "OtHour", value);
+                      }
+                    }}
+                    readOnly={emp.OtTime !== "Special"}
+                    disabled={emp.OtTime !== "Special"}
+                    className={`${inputClass} ${
+                      emp.OtTime === "Special" ? "" : "bg-gray-100"
+                    } text-center sm:flex-1`}
                   />
 
                   <button

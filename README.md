@@ -2,7 +2,15 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+First set the environment variables:
+
+MONGODB_URI=mongodb://localhost:27017/
+AUTH_SECRET=ANY_STRING_OF_YOUR_CHOICE
+JWT_SECRET=ANY_STRING_OF_YOUR_CHOICE_JWT_SECRET
+AUTH_TRUST_HOST=true
+DB_NAME=OVERTRACK
+
+Then, run the development server:
 
 ```bash
 npm run dev

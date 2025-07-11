@@ -36,20 +36,20 @@ const BillingView = ({ data, dept }) => {
       </h2>
       <div className="overflow-x-auto shadow-md rounded-lg border border-blue-200">
         <table className="min-w-full text-sm text-left text-gray-800">
-          <thead className="bg-blue-100 text-xs uppercase font-semibold text-blue-600">
+          <thead className="bg-blue-100 text-xs font-semibold text-blue-600">
             <tr>
-              <th className="px-2 py-2 uppercase">#</th>
-              <th className="px-2 py-2 uppercase">Name</th>
-              <th className="px-2 py-2 uppercase">Designation</th>
-              <th className="px-2 py-2 uppercase">Double</th>
-              <th className="px-2 py-2 uppercase">Triple</th>
-              <th className="px-2 py-2 uppercase">Total HR.</th>
-              <th className="px-2 py-2 uppercase">Bill HR.</th>
-              <th className="px-2 py-2 uppercase">Diff</th>
-              <th className="px-2 py-2 uppercase">Balance</th>
-              <th className="px-2 py-2 uppercase">Basic TK.</th>
-              <th className="px-2 py-2 uppercase">Payment TK.</th>
-              <th className="px-2 py-2 uppercase">Remarks</th>
+              <th className="px-2 py-2">#</th>
+              <th className="px-2 py-2">Name</th>
+              <th className="px-2 py-2">Desig.</th>
+              <th className="px-2 py-2 text-center">Double</th>
+              <th className="px-2 py-2 text-center">Triple</th>
+              <th className="px-2 py-2 text-center">Total Hr.</th>
+              <th className="px-2 py-2 text-center">Billed Hr.</th>
+              <th className="px-2 py-2 text-center">Diff</th>
+              <th className="px-2 py-2 text-center">Balance Hr.</th>
+              <th className="px-2 py-2 text-center">Basic TK.</th>
+              <th className="px-2 py-2 text-center">Payment TK.</th>
+              <th className="px-2 py-2">Remarks</th>
             </tr>
           </thead>
           <tbody>
@@ -61,14 +61,16 @@ const BillingView = ({ data, dept }) => {
                 <td className="px-2 py-2 text-blue-600 font-bold">{idx + 1}</td>
                 <td className="px-2 py-2">{emp.name}</td>
                 <td className="px-2 py-2">{emp.designation}</td>
-                <td className="px-2 py-2">{emp.double}</td>
-                <td className="px-2 py-2">{emp.triple}</td>
-                <td className="px-2 py-2">{emp.totalOt}</td>
-                <td className="px-2 py-2">{emp.bill}</td>
-                <td className="px-2 py-2">{emp.difference}</td>
-                <td className="px-2 py-2">{emp?.balance}</td>
-                <td className="px-2 py-2">{emp.basic.toLocaleString()}</td>
-                <td className="px-2 py-2">
+                <td className="px-2 py-2 text-center">{emp.double}</td>
+                <td className="px-2 py-2 text-center">{emp.triple}</td>
+                <td className="px-2 py-2 text-center">{emp.totalOt}</td>
+                <td className="px-2 py-2 text-center">{emp.bill}</td>
+                <td className="px-2 py-2 text-center">{emp.difference}</td>
+                <td className="px-2 py-2 text-center">{emp?.balance}</td>
+                <td className="px-2 py-2 text-center">
+                  {emp.basic.toLocaleString()}
+                </td>
+                <td className="px-2 py-2 text-center">
                   {emp.payment.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -82,17 +84,22 @@ const BillingView = ({ data, dept }) => {
                 Totals
               </td>
               <td className="px-2 py-2"></td>
-              <td className="px-2 py-2">{round1(totalMonthlyOtHour)}</td>
-              <td className="px-2 py-2">{totalBill.toLocaleString()}</td>
+              <td className="px-2 py-2 text-center">
+                {round1(totalMonthlyOtHour)}
+              </td>
+              <td className="px-2 py-2 text-center">
+                {totalBill.toLocaleString()}
+              </td>
               <td className="px-2 py-2"></td>
               <td className="px-2 py-2"></td>
-              <td className="px-2 py-2">
+              <td className="px-2 py-2"></td>
+              <td className="px-2 py-2 text-center">
                 {totalPayment.toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
               </td>
-              <td className="px-2 py-2"></td>
+
               <td className="px-2 py-2"></td>
             </tr>
           </tbody>

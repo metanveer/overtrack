@@ -123,7 +123,7 @@ const BillingEdit = ({
 
       <div className="overflow-auto rounded-lg shadow border border-gray-200">
         <table className="min-w-full text-sm text-center bg-white">
-          <thead className="bg-blue-100 text-blue-700 text-xs uppercase tracking-wider">
+          <thead className="bg-blue-100 text-blue-700 text-xs tracking-wider">
             <tr>
               <th className="p-3">#</th>
               <th className="p-3 text-left">Employee</th>
@@ -131,9 +131,9 @@ const BillingEdit = ({
               <th className="p-3">Double</th>
               <th className="p-3">Triple</th>
               <th className="p-3">Total</th>
-              <th className="p-3">Bill</th>
+              <th className="p-3">Billed Hr.</th>
               <th className="p-3">Diff</th>
-              <th className="p-3">Balance</th>
+              <th className="p-3">Balance Hr.</th>
               <th className="p-3">Basic</th>
               <th className="p-3">Payment</th>
               <th className="p-3">Remarks</th>
@@ -213,13 +213,14 @@ const BillingEdit = ({
               <td className="p-3">{round1(totals.bill)}</td>
               <td className="p-3"></td>
               <td className="p-3"></td>
+              <td className="p-3"></td>
               <td className="p-3">
                 {Number(totals.payment).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
               </td>
-              <td className="p-3"></td>
+
               <td className="p-3"></td>
             </tr>
           </tbody>

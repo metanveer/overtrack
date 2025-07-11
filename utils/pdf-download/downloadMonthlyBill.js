@@ -77,12 +77,13 @@ export const downloadMonthlyBill = async (data, dept) => {
     [
       "#",
       "Name",
-      "Designation",
+      "Desig.",
       "Double",
       "Triple",
-      "Total HR.",
-      "Bill HR.",
+      "Total Hr.",
+      "Billed Hr.",
       "Diff",
+      "Balance Hr.",
       "Basic TK.",
       "Payment TK.",
       "Remarks",
@@ -98,6 +99,7 @@ export const downloadMonthlyBill = async (data, dept) => {
     emp.totalOt,
     emp.bill,
     emp.difference,
+    emp.balance,
     emp.basic.toLocaleString(),
     emp.payment.toLocaleString(undefined, {
       minimumFractionDigits: 2,
@@ -110,12 +112,14 @@ export const downloadMonthlyBill = async (data, dept) => {
     "",
     {
       content: "Totals",
-      colSpan: 3,
+      colSpan: 2,
       styles: { fontStyle: "bold", halign: "right" },
     },
     "",
+    "",
     round1(totalOt),
     totalBill.toLocaleString(),
+    "",
     "",
     "",
     totalPayment.toLocaleString(undefined, {
@@ -155,9 +159,10 @@ export const downloadMonthlyBill = async (data, dept) => {
       5: { halign: "center" }, // Total HR
       6: { halign: "center" }, // Bill HR
       7: { halign: "center" }, // Diff
-      8: { halign: "righ" }, // Basic TK
-      9: { halign: "right" }, // Payment TK
-      10: { halign: "left" }, // Remarks
+      8: { halign: "center" }, // Balance
+      9: { halign: "center" }, // Basic TK
+      10: { halign: "center" }, // Payment TK
+      11: { halign: "left" }, // Remarks
     },
   });
 

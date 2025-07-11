@@ -31,9 +31,6 @@ const BillingPage = async ({ searchParams, params }) => {
 
     const prevBill = await getBillByMonth(previousMonth, dept);
 
-    console.log("BillingPage: bill", bill);
-    console.log("BillingPage: prevBill", prevBill);
-
     if (bill) {
       if (mode && mode === "edit") {
         const date = getMonthStartAndEnd(month);

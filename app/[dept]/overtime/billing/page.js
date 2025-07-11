@@ -1,8 +1,5 @@
-import BillingCreate from "@/app/components/BillingCreate";
-
 import BillingMonthSelector from "@/app/components/BillingMonthSelector";
 import BillingView from "@/app/components/BillingView";
-
 import { getBillByMonth } from "@/lib/mongodb/billQueries";
 import { getEmployeesOtHours } from "@/lib/mongodb/otQueries";
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
@@ -11,6 +8,7 @@ import BillingEdit from "@/app/components/BillingEdit";
 import AccessDenied from "@/app/components/auth/AccessDenied";
 import { perm } from "@/utils/permissions";
 import checkAuthPermission from "@/utils/checkAuthPermission";
+import getPreviousMonth from "@/utils/getPreviousMonth";
 
 function isValidMonth(input) {
   const regex = /^\d{4}-(0[1-9]|1[0-2])$/;
@@ -29,6 +27,13 @@ const BillingPage = async ({ searchParams, params }) => {
   if (month && isValidMonth(month)) {
     const bill = await getBillByMonth(month, dept);
 
+    const previousMonth = getPreviousMonth(month);
+
+    const prevBill = await getBillByMonth(previousMonth, dept);
+
+    console.log("BillingPage: bill", bill);
+    console.log("BillingPage: prevBill", prevBill);
+
     if (bill) {
       if (mode && mode === "edit") {
         const date = getMonthStartAndEnd(month);
@@ -42,6 +47,7 @@ const BillingPage = async ({ searchParams, params }) => {
             <BillingMonthSelector dept={dept} initMonth={month} />
             <BillingEdit
               empMonthlyData={bill}
+              prevBill={prevBill}
               employees={Employee}
               totalOtRecords={res}
               month={month}
@@ -79,11 +85,14 @@ const BillingPage = async ({ searchParams, params }) => {
     return (
       <div>
         <BillingMonthSelector dept={dept} initMonth={month} />
-        <BillingCreate
+        <BillingEdit
           employees={Employee}
           totalOtRecords={empHours}
           month={month}
           dept={dept}
+          empMonthlyData={bill}
+          prevBill={prevBill}
+          isNewBill
         />
       </div>
     );

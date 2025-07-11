@@ -4,9 +4,10 @@ import React, {
   startTransition,
   useActionState,
   useEffect,
+  useMemo,
   useState,
 } from "react";
-import { editBill } from "../actions/billActions";
+import { createBill, editBill } from "../actions/billActions";
 import FormStatus from "./FormStatus";
 import { useRouter } from "next/navigation";
 import formatMonthName from "@/utils/formatMonthName";
@@ -17,33 +18,36 @@ const BillingEdit = ({
   employees,
   totalOtRecords,
   month,
-  empMonthlyData,
+  empMonthlyData, // current month bill data {}
+  prevBill, // previous month bill data {}
   dept,
+  isNewBill,
 }) => {
-  const { billMonth, billData } = empMonthlyData;
+  const { billMonth, billData } = empMonthlyData || {};
 
-  const initializeRows = () => {
+  const initializedRows = useMemo(() => {
     return employees.map((emp) => {
       const ot =
         totalOtRecords.find((r) => r.name === emp.Name)?.totalOtHour || 0;
 
-      const existing = billData.find((b) => b.name === emp.Name);
+      const existing = billData?.find((b) => b.name === emp.Name);
 
       return {
         name: emp.Name,
         designation: emp.Designation,
         basic: Number(emp.BasicSalary),
-        totalOt: ot,
-        triple: existing?.triple ?? "",
-        bill: existing?.bill ?? "",
+        totalOt: round1(ot),
+        triple: existing?.triple ?? 0,
+        bill: isNewBill ? round1(ot) : existing?.bill ?? 0,
         remarks: existing?.remarks ?? "",
       };
     });
-  };
+  }, [employees, totalOtRecords, billData, isNewBill]);
 
-  const [rows, setRows] = useState(initializeRows());
-  const [state, formAction, isPending] = useActionState(editBill, {});
+  const [rows, setRows] = useState(initializedRows);
 
+  const actionFn = isNewBill ? createBill : editBill;
+  const [state, formAction, isPending] = useActionState(actionFn, {});
   const router = useRouter();
 
   useEffect(() => {
@@ -61,6 +65,14 @@ const BillingEdit = ({
 
   const getDouble = (row) => round1(row.totalOt - (Number(row.triple) || 0));
   const getDiff = (row) => round1((Number(row.bill) || 0) - row.totalOt);
+  const getBalance = (row) => {
+    const currentDiff = getDiff(row);
+    const prev = prevBill?.billData?.find((p) => p.name === row.name);
+    const prevBalance = prev?.balance ?? 0;
+
+    return round1(-currentDiff + prevBalance);
+  };
+
   const getPayment = (row) => {
     const bill = Number(row.bill) || 0;
     if (bill === 0) return 0;
@@ -69,15 +81,17 @@ const BillingEdit = ({
     return round1((row.basic / 104) * (bill + triple / 2));
   };
 
-  const totals = rows.reduce(
-    (acc, row) => {
-      acc.totalOt += row.totalOt;
-      acc.bill += Number(row.bill) || 0;
-      acc.payment += getPayment(row);
-      return acc;
-    },
-    { totalOt: 0, bill: 0, payment: 0 }
-  );
+  const totals = useMemo(() => {
+    return rows.reduce(
+      (acc, row) => {
+        acc.totalOt += row.totalOt;
+        acc.bill += Number(row.bill) || 0;
+        acc.payment += getPayment(row);
+        return acc;
+      },
+      { totalOt: 0, bill: 0, payment: 0 }
+    );
+  }, [rows]);
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -85,6 +99,7 @@ const BillingEdit = ({
       ...row,
       double: getDouble(row),
       difference: getDiff(row),
+      balance: getBalance(row),
       payment: getPayment(row),
       month: month,
     }));
@@ -102,13 +117,13 @@ const BillingEdit = ({
 
   return (
     <form className="py-6" onSubmit={handleSave}>
-      <div className="mb-6 text-2xl font-bold text-red-700 text-center">
-        Edit Bill for {formatMonthName(month)}
+      <div className="mb-6 text-2xl font-bold text-blue-700 text-center">
+        {`${isNewBill ? "Prepare" : "Edit"}`} Bill for {formatMonthName(month)}
       </div>
 
       <div className="overflow-auto rounded-lg shadow border border-gray-200">
         <table className="min-w-full text-sm text-center bg-white">
-          <thead className="bg-slate-100 text-slate-700 text-xs uppercase tracking-wider">
+          <thead className="bg-blue-100 text-blue-700 text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">#</th>
               <th className="p-3 text-left">Employee</th>
@@ -118,6 +133,7 @@ const BillingEdit = ({
               <th className="p-3">Total</th>
               <th className="p-3">Bill</th>
               <th className="p-3">Diff</th>
+              <th className="p-3">Balance</th>
               <th className="p-3">Basic</th>
               <th className="p-3">Payment</th>
               <th className="p-3">Remarks</th>
@@ -127,6 +143,7 @@ const BillingEdit = ({
             {rows.map((row, i) => {
               const double = getDouble(row);
               const diff = getDiff(row);
+              const balance = getBalance(row);
               const payment = getPayment(row);
 
               return (
@@ -134,11 +151,11 @@ const BillingEdit = ({
                   key={row.name}
                   className={
                     i % 2 === 0
-                      ? "bg-white"
-                      : "bg-slate-50 hover:bg-slate-100 transition-colors"
+                      ? "bg-white hover:bg-blue-100 transition-colors"
+                      : "bg-blue-50 hover:bg-blue-100 transition-colors"
                   }
                 >
-                  <td className="p-3 font-medium text-slate-700">{i + 1}</td>
+                  <td className="p-3 font-medium text-blue-700">{i + 1}</td>
                   <td className="p-3 text-left">{row.name}</td>
                   <td className="p-3 text-left">{row.designation}</td>
                   <td className="p-3">{double}</td>
@@ -151,7 +168,7 @@ const BillingEdit = ({
                       onChange={(e) =>
                         handleChange(i, "triple", e.target.value)
                       }
-                      className="w-20 text-center border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
+                      className="w-20 text-center border border-blue-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
                     />
                   </td>
                   <td className="p-3">{row.totalOt}</td>
@@ -162,10 +179,11 @@ const BillingEdit = ({
                       step="0.1"
                       value={row.bill}
                       onChange={(e) => handleChange(i, "bill", e.target.value)}
-                      className="w-20 text-center border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
+                      className="w-20 text-center border border-blue-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300"
                     />
                   </td>
                   <td className="p-3">{diff}</td>
+                  <td className="p-3">{balance}</td>
                   <td className="p-3">{row.basic.toLocaleString()}</td>
                   <td className="p-3">
                     {Number(payment).toLocaleString(undefined, {
@@ -179,7 +197,7 @@ const BillingEdit = ({
                       onChange={(e) =>
                         handleChange(i, "remarks", e.target.value)
                       }
-                      className="w-full min-w-[200px] border border-slate-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300 resize"
+                      className="w-full min-w-[200px] border border-blue-300 rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300 resize"
                       rows={3}
                     />
                   </td>
@@ -187,7 +205,7 @@ const BillingEdit = ({
               );
             })}
 
-            <tr className="bg-blue-50 font-semibold text-slate-700">
+            <tr className="bg-blue-50 font-semibold text-blue-700">
               <td colSpan={5} className="p-3 text-right">
                 Total
               </td>
@@ -201,6 +219,7 @@ const BillingEdit = ({
                   maximumFractionDigits: 2,
                 })}
               </td>
+              <td className="p-3"></td>
               <td className="p-3"></td>
             </tr>
           </tbody>

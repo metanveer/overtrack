@@ -61,6 +61,7 @@ const MonthlyReportPage = async ({ searchParams, params }) => {
           start={start}
           end={end}
           groupedData={result}
+          employeePhones={Employee}
         />
       )}
     </div>

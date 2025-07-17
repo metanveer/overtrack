@@ -15,7 +15,7 @@ const OtSettingsEdit = ({ deptName, dataFromDb }) => {
     _id: deptName,
     OtType: [""],
     Unit: [""],
-    Employee: [{ Name: "", Designation: "", BasicSalary: "" }],
+    Employee: [{ Name: "", Designation: "", BasicSalary: "", Phone: "" }],
     OtTime: [{ Time: "", Hour: "" }],
   };
 
@@ -78,7 +78,7 @@ const OtSettingsEdit = ({ deptName, dataFromDb }) => {
   const handleAdd = (key) => {
     let newItem;
     if (key === "Employee")
-      newItem = { Name: "", Designation: "", BasicSalary: "" };
+      newItem = { Name: "", Designation: "", BasicSalary: "", Phone: "" };
     else if (key === "Unit") newItem = "";
     else if (key === "OtType") newItem = "";
     else if (key === "OtTime") newItem = { Time: "", Hour: "" };
@@ -256,6 +256,15 @@ const OtSettingsEdit = ({ deptName, dataFromDb }) => {
                         "BasicSalary",
                         e.target.value
                       )
+                    }
+                  />
+                  <input
+                    type="tel"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Phone Number"
+                    value={data.Employee[index].Phone || ""}
+                    onChange={(e) =>
+                      handleChange("Employee", index, "Phone", e.target.value)
                     }
                   />
                 </div>

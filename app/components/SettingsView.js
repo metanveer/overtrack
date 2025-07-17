@@ -51,6 +51,7 @@ const SettingsView = ({ settingsData }) => {
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">Designation</th>
                   <th className="px-4 py-2">Basic Salary</th>
+                  <th className="px-4 py-2">Phone</th>
                 </tr>
               </thead>
               <tbody>
@@ -59,6 +60,7 @@ const SettingsView = ({ settingsData }) => {
                     <td className="px-4 py-2 border-t">{emp.Name}</td>
                     <td className="px-4 py-2 border-t">{emp.Designation}</td>
                     <td className="px-4 py-2 border-t">{emp.BasicSalary}</td>
+                    <td className="px-4 py-2 border-t">{emp.Phone}</td>
                   </tr>
                 ))}
               </tbody>

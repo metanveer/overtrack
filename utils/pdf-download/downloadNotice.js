@@ -4,6 +4,18 @@ import { fetchLogoBase64 } from "./fetchLogo";
 import formatDate, { getDayName } from "../formatDate";
 
 export const downloadNotice = async (groupedData, employeePhones, dept) => {
+  const noticeDate = (dateString) => {
+    const date = new Date(dateString);
+    date.setDate(date.getDate() - 1);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+    //return previous date of the given date
+  };
+
   const logoBase64 = await fetchLogoBase64();
 
   const doc = new jsPDF({
@@ -60,9 +72,14 @@ export const downloadNotice = async (groupedData, employeePhones, dept) => {
 
   doc.setFont(documentFont, "bold");
   doc.setFontSize(11);
-  doc.text(`Date: ${currentDate()}`, pageWidth - margin, margin + 98, {
-    align: "right",
-  });
+  doc.text(
+    `Date: ${formatDate(noticeDate(groupedData[0]._id))}`,
+    pageWidth - margin,
+    margin + 98,
+    {
+      align: "right",
+    }
+  );
 
   let body = [];
 
@@ -146,12 +163,12 @@ export const downloadNotice = async (groupedData, employeePhones, dept) => {
       align: "right",
     });
   }
-
+  doc.text(`Print date: ${currentDate()}`, margin, pageHeight - 20);
   // ✍️ Signature
   const finalY = doc.lastAutoTable.finalY + 70;
   doc.setFont(documentFont, "normal");
   // doc.text("______________________", pageWidth - margin - 160, finalY);
   // doc.text("Manager / AGM", pageWidth - margin - 140, finalY + 15);
 
-  doc.save(`Holiday_Duty_Notice_${dept}_${currentDate()}.pdf`);
+  doc.save(`Holiday_Duty_Notice_${dept}_${noticeDate(groupedData[0]._id)}.pdf`);
 };

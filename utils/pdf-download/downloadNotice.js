@@ -3,7 +3,12 @@ import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
 import formatDate, { getDayName } from "../formatDate";
 
-export const downloadNotice = async (groupedData, employeePhones, dept) => {
+export const downloadNotice = async (
+  groupedData,
+  employeePhones,
+  dept,
+  noticeTitle
+) => {
   const noticeDate = (dateString) => {
     const date = new Date(dateString);
     date.setDate(date.getDate() - 1);
@@ -49,11 +54,27 @@ export const downloadNotice = async (groupedData, employeePhones, dept) => {
   doc.text(`${dept} Department`, pageWidth / 2, margin + 38, {
     align: "center",
   });
+
+  // HOLIDAY DUTY NOTICE TITLE
   doc.setFontSize(14);
   doc.setFont(documentFont, "bold");
-  doc.text("Holiday Duty", pageWidth / 2, margin + 58, {
-    align: "center",
-  });
+  const titleText = noticeTitle || "Holiday Duty";
+  const x = pageWidth / 2;
+  const y = margin + 78;
+
+  doc.text(titleText, x, y, { align: "center" });
+
+  // Underline a bit lower
+  const underlineOffset = 5; // adjust as needed
+  doc.setLineWidth(1.5);
+  doc.setDrawColor(0, 0, 0);
+  const textWidth = doc.getTextWidth(titleText);
+  doc.line(
+    x - textWidth / 2,
+    y + underlineOffset,
+    x + textWidth / 2,
+    y + underlineOffset
+  );
 
   // 📅 DATE
 
@@ -75,7 +96,7 @@ export const downloadNotice = async (groupedData, employeePhones, dept) => {
   doc.text(
     `Date: ${formatDate(noticeDate(groupedData[0]._id))}`,
     pageWidth - margin,
-    margin + 98,
+    margin + 108,
     {
       align: "right",
     }
@@ -127,7 +148,7 @@ export const downloadNotice = async (groupedData, employeePhones, dept) => {
   };
 
   autoTable(doc, {
-    startY: margin + 118,
+    startY: margin + 128,
     margin: { left: margin, right: margin },
     head: [headRow()],
     body,

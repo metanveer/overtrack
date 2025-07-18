@@ -20,8 +20,10 @@ const OtReportMonthly = ({
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [selectedDates, setSelectedDates] = useState(new Set());
   const [showOnlySelected, setShowOnlySelected] = useState(false);
+  const [noticeTitle, setNoticeTitle] = useState("");
 
   const isNotice = showOnlySelected;
+  const hasSelectedDates = selectedDates.size > 0;
 
   const toggleCheckboxes = () => {
     setShowCheckboxes((prev) => !prev);
@@ -62,43 +64,39 @@ const OtReportMonthly = ({
 
   return (
     <>
-      <div className="flex justify-between items-center mt-4 mb-2">
+      <div className="flex justify-between items-center mt-6 mb-6">
         <div className="text-2xl font-bold text-center flex-grow">
-          {unitName
-            ? `Overtime Log for ${unitName} from ${formatDate(
-                start
-              )} to ${formatDate(end)}`
-            : otType
-            ? `${otType} Overtime from ${formatDate(start)} to ${formatDate(
-                end
-              )}`
-            : `Monthly Overtime Details for ${monthName}`}
+          {unitName ? (
+            `Overtime Log for ${unitName} from ${formatDate(
+              start
+            )} to ${formatDate(end)}`
+          ) : otType ? (
+            `${otType} Overtime from ${formatDate(start)} to ${formatDate(end)}`
+          ) : showCheckboxes ? (
+            isNotice ? (
+              <input
+                type="text"
+                value={noticeTitle}
+                onChange={(e) => setNoticeTitle(e.target.value)}
+                placeholder="Edit notice title"
+                className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            ) : (
+              "Select Date(s)"
+            )
+          ) : (
+            `Monthly Overtime Details for ${monthName}`
+          )}
         </div>
+      </div>
+      {showCheckboxes ? null : (
         <button
           onClick={toggleCheckboxes}
-          className="bg-blue-600 text-white rounded px-4 py-2 ml-4 hover:bg-blue-700"
+          className="bg-blue-600 font-bold mb-2 text-white rounded-2xl px-6 py-2 hover:bg-blue-700"
         >
-          Create Holiday Notice
+          Create Holiday Duty Notice
         </button>
-      </div>
-
-      <div className="my-2">
-        <DownloadPdfButton
-          onClick={() => {
-            if (isNotice) {
-              downloadNotice(visibleData, employeePhones, dept);
-              return;
-            }
-
-            downloadMonthlyDetailsReport(
-              visibleData,
-              monthName,
-              pdfConfig,
-              dept
-            );
-          }}
-        />
-      </div>
+      )}
 
       <div className="overflow-hidden bg-white rounded-xl border-gray-400 shadow-md">
         <div className="overflow-x-auto">
@@ -297,24 +295,56 @@ const OtReportMonthly = ({
         </div>
       </div>
 
+      {hasSelectedDates || !showCheckboxes ? (
+        <div className="my-2">
+          <DownloadPdfButton
+            onClick={() => {
+              if (isNotice) {
+                downloadNotice(visibleData, employeePhones, dept, noticeTitle);
+                return;
+              }
+
+              downloadMonthlyDetailsReport(
+                visibleData,
+                monthName,
+                pdfConfig,
+                dept
+              );
+            }}
+          />
+        </div>
+      ) : null}
+
       {showCheckboxes && (
         <div className="flex justify-center gap-4 mt-4">
-          <button
-            onClick={() => setShowOnlySelected(true)}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            Generate
-          </button>
-          <button
-            onClick={() => {
-              setShowCheckboxes(false);
-              setSelectedDates(new Set());
-              setShowOnlySelected(false);
-            }}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-          >
-            Discard
-          </button>
+          <div className="flex gap-3">
+            {isNotice ? null : (
+              <button
+                onClick={() => setShowOnlySelected(true)}
+                className={`px-5 py-2.5 rounded-2xl text-white font-medium transition-all shadow-sm
+      ${
+        selectedDates.size === 0
+          ? "bg-green-300 cursor-not-allowed opacity-60"
+          : "bg-green-600 hover:bg-green-700 hover:shadow-md"
+      }
+    `}
+                disabled={!hasSelectedDates}
+              >
+                Generate
+              </button>
+            )}
+
+            <button
+              onClick={() => {
+                setShowCheckboxes(false);
+                setSelectedDates(new Set());
+                setShowOnlySelected(false);
+              }}
+              className="px-5 py-2.5 rounded-2xl bg-red-600 text-white font-medium hover:bg-red-700 transition-all shadow-sm hover:shadow-md"
+            >
+              Discard
+            </button>
+          </div>
         </div>
       )}
     </>

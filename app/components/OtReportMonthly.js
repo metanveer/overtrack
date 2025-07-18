@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DownloadPdfButton from "./DownloadPdfButton";
 import { formatMonthNameFromRange } from "@/utils/formatMonthName";
 import { downloadMonthlyDetailsReport } from "@/utils/pdf-download/downloadMonthlyDetailsReport";
@@ -24,6 +24,15 @@ const OtReportMonthly = ({
 
   const isNotice = showOnlySelected;
   const hasSelectedDates = selectedDates.size > 0;
+
+  const inputRef = useRef(null);
+
+  // Focus input when it appears
+  useEffect(() => {
+    if (showOnlySelected && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [showOnlySelected]);
 
   const toggleCheckboxes = () => {
     setShowCheckboxes((prev) => !prev);
@@ -76,6 +85,7 @@ const OtReportMonthly = ({
             isNotice ? (
               <input
                 type="text"
+                ref={inputRef}
                 value={noticeTitle}
                 onChange={(e) => setNoticeTitle(e.target.value)}
                 placeholder="Edit notice title"
@@ -320,7 +330,9 @@ const OtReportMonthly = ({
           <div className="flex gap-3">
             {isNotice ? null : (
               <button
-                onClick={() => setShowOnlySelected(true)}
+                onClick={() => {
+                  setShowOnlySelected(true);
+                }}
                 className={`px-5 py-2.5 rounded-2xl text-white font-medium transition-all shadow-sm
       ${
         selectedDates.size === 0

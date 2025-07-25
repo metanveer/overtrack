@@ -72,7 +72,7 @@ const OtView = ({ dept, data }) => {
         )}
       </div>
 
-      <div className="mt-6 flex gap-6">
+      <div className="mt-6 flex flex-wrap gap-4">
         <DownloadPdfButton onClick={() => downloadOtSlip(data, dept)} />
         <TextLink
           isButton

@@ -35,10 +35,10 @@ const CurrentUser = ({ session }) => {
       {session ? (
         <div className="relative" ref={menuRef}>
           <span
-            className="flex items-center gap-1 cursor-pointer font-medium text-gray-700 hover:text-gray-900"
+            className="flex items-center gap-1 cursor-pointer font-medium text-gray-700 hover:text-gray-900 hidden lg:flex"
             onClick={() => setIsMenuOpen((prev) => !prev)}
           >
-            {session.user.username || session.user.email}
+            <span>{session.user.username || session.user.email}</span>
             {isMenuOpen ? (
               <ChevronUp className="w-4 h-4" />
             ) : (

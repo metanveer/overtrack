@@ -23,7 +23,7 @@ export default async function RootLayout({ children, params }) {
   const navLinks = getNavLinks(Employee, Unit, OtType, OtTime, dept);
 
   return (
-    <LayoutShell navLinks={navLinks} session={session}>
+    <LayoutShell dept={dept} navLinks={navLinks} session={session}>
       {children}
     </LayoutShell>
   );

@@ -7,6 +7,7 @@ import TextLink from "./TextLink";
 import formatDate, { getDayName } from "@/utils/formatDate";
 import { extractAfterH } from "@/utils/extractAfterH";
 import { downloadNotice } from "@/utils/pdf-download/downloadNotice";
+import { usePathname } from "next/navigation";
 
 const OtReportMonthly = ({
   unitName,
@@ -21,10 +22,12 @@ const OtReportMonthly = ({
   const [selectedDates, setSelectedDates] = useState(new Set());
   const [showOnlySelected, setShowOnlySelected] = useState(false);
   const [noticeTitle, setNoticeTitle] = useState("");
+  const pathName = usePathname();
 
   const isNotice = showOnlySelected;
   const hasSelectedDates = selectedDates.size > 0;
-
+  const showHolidayNoticeBtn =
+    pathName === `/${dept}/overtime/monthly` && !showCheckboxes;
   const inputRef = useRef(null);
 
   // Focus input when it appears
@@ -99,7 +102,7 @@ const OtReportMonthly = ({
           )}
         </div>
       </div>
-      {showCheckboxes ? null : (
+      {showHolidayNoticeBtn && (
         <button
           onClick={toggleCheckboxes}
           className="bg-blue-600 font-bold mb-2 text-white rounded-2xl px-6 py-2 hover:bg-blue-700"
@@ -305,7 +308,7 @@ const OtReportMonthly = ({
         </div>
       </div>
 
-      {hasSelectedDates || !showCheckboxes ? (
+      {showOnlySelected || !showCheckboxes ? (
         <div className="my-2">
           <DownloadPdfButton
             onClick={() => {

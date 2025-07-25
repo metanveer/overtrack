@@ -6,7 +6,7 @@ import Footer from "../Footer";
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
 
-export default function LayoutShell({ children, session, navLinks }) {
+export default function LayoutShell({ children, session, navLinks, dept }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
 
@@ -40,6 +40,7 @@ export default function LayoutShell({ children, session, navLinks }) {
         isSideBarOpen={sidebarOpen}
         onSideBarOpen={() => setSidebarOpen(!sidebarOpen)}
         session={session}
+        dept={dept}
       />
 
       {/* Sidebar */}

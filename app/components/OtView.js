@@ -79,6 +79,11 @@ const OtView = ({ dept, data }) => {
           href={`/${dept}/overtime/slip/edit?id=${data._id}`}
           text={"Edit"}
         />
+        <TextLink
+          isButton
+          href={`/${dept}/overtime/slip/copy?id=${data._id}`}
+          text={"Copy"}
+        />
         <DeleteBtnConfirm
           dept={dept}
           currentId={data._id}

@@ -15,6 +15,7 @@ export default function OvertimeForm({
   nameOptions,
   otTimeOptions,
   isEditing,
+  isCopy,
   overtimeDoc,
   deptName,
 }) {
@@ -29,7 +30,7 @@ export default function OvertimeForm({
     Remarks: "",
   };
 
-  const initData = isEditing ? overtimeDoc : emptyData;
+  const initData = isEditing || isCopy ? overtimeDoc : emptyData;
   const [formData, setFormData] = useState(initData);
 
   const actionFn = isEditing ? editOtEntry : createOtEntry;
@@ -352,7 +353,7 @@ export default function OvertimeForm({
           <div className="flex gap-6 justify-between">
             <Link
               href={
-                isEditing
+                isEditing || isCopy
                   ? `/${deptName}/overtime/slip?id=${overtimeDoc._id}`
                   : `/${deptName}/overtime`
               }
@@ -365,7 +366,11 @@ export default function OvertimeForm({
               type="submit"
               className="mt-6 inline-block px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
             >
-              {isEditing ? "Update Overtime" : "Submit Overtime"}
+              {isEditing
+                ? "Update Overtime"
+                : isCopy
+                ? "Save Changes"
+                : "Submit Overtime"}
             </button>
           </div>
 

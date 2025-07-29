@@ -2,6 +2,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
 import formatDate from "../formatDate";
+import { extractAfterH } from "../extractAfterH";
 
 export const downloadDailyReport = async (records, reportDate, dept) => {
   const logoBase64 = await fetchLogoBase64();
@@ -74,7 +75,7 @@ export const downloadDailyReport = async (records, reportDate, dept) => {
         styles: { halign: "left" }, // left align employee name
       });
 
-      row.push(emp.OtTime);
+      row.push(extractAfterH(emp.OtTime));
       row.push(emp.OtHour);
 
       if (empIndex === 0) {

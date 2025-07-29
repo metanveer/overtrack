@@ -3,6 +3,7 @@ import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
 import formatDate from "../formatDate";
 import round1 from "../round1";
+import { extractAfterH } from "../extractAfterH";
 
 export const downloadEmployeeRecords = async (
   data,
@@ -168,7 +169,7 @@ export const downloadEmployeeRecords = async (
   const body = record.map((entry) => [
     formatDate(entry.Date),
     entry.OtHour,
-    entry.OtTime,
+    extractAfterH(entry.OtTime),
     entry.Unit,
     entry.WorkDescription,
     entry.Type,

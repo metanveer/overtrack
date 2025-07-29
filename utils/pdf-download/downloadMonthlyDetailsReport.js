@@ -2,6 +2,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { fetchLogoBase64 } from "./fetchLogo";
 import formatDate from "../formatDate";
+import { extractAfterH } from "../extractAfterH";
 
 export const downloadMonthlyDetailsReport = async (
   groupedData,
@@ -127,7 +128,7 @@ export const downloadMonthlyDetailsReport = async (
         }
 
         row.push({ content: emp.Name, styles: { halign: "left" } });
-        row.push(emp.OtTime);
+        row.push(extractAfterH(emp.OtTime));
         row.push(roundedOt.toFixed(1)); // 1 decimal place
         dailyTotalOt += roundedOt;
 

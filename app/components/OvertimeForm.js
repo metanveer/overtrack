@@ -54,6 +54,17 @@ export default function OvertimeForm({
   const isWeekend =
     getDayName(formData.Date) === "SAT" || getDayName(formData.Date) === "FRI";
 
+  const isHoliday = formData.Type === "Holiday";
+
+  useEffect(() => {
+    if (isWeekend) {
+      setFormData((prev) => ({
+        ...prev,
+        Type: "Weekend",
+      }));
+    }
+  }, [isWeekend]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -142,7 +153,11 @@ export default function OvertimeForm({
     <form
       onSubmit={handleSubmit}
       className={`max-w-4xl mx-auto p-6 bg-white shadow-xl rounded-2xl space-y-6 border ${
-        isWeekend ? "border-red-400 border-2" : "border-gray-200"
+        isWeekend
+          ? "border-red-400 border-2"
+          : isHoliday
+          ? "border-yellow-400 border-2"
+          : "border-gray-200"
       }`}
     >
       {loading ? (
@@ -196,6 +211,7 @@ export default function OvertimeForm({
               <Select
                 inputId="OtType"
                 classNames={selectStyles}
+                isDisabled={isWeekend}
                 value={
                   formData.Type
                     ? { label: formData.Type, value: formData.Type }

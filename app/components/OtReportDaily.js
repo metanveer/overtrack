@@ -72,7 +72,7 @@ const OtReportDaily = ({ records, date, dept }) => {
                         rowSpan={employeeCount}
                       >
                         <TextLink
-                          href={`/${dept}/overtime/slip?id=${report._id}`}
+                          href={`/${dept}/slip?id=${report._id}`}
                           text={report.WorkDescription}
                         />
                       </td>
@@ -93,7 +93,7 @@ const OtReportDaily = ({ records, date, dept }) => {
                   <td className="px-4 py-2 border border-gray-200 whitespace-nowrap">
                     <TextLink
                       text={emp.Name}
-                      href={`/${dept}/overtime/employee?start=${date}&end=${date}&name=${emp.Name}`}
+                      href={`/${dept}/employee?start=${date}&end=${date}&name=${emp.Name}`}
                     />
                   </td>
                   <td className="px-4 py-2 border border-gray-200">

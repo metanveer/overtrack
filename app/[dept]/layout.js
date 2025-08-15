@@ -21,6 +21,7 @@ export default async function RootLayout({ children, params }) {
   const { Employee, Unit, OtType, OtTime } = await getOtSettings(dept);
 
   const navLinks = getNavLinks(Employee, Unit, OtType, OtTime, dept);
+  //const navLinks = [];
 
   return (
     <LayoutShell dept={dept} navLinks={navLinks} session={session}>

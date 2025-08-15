@@ -108,7 +108,7 @@ const BillingView = ({ data, dept }) => {
       <div className="flex gap-6 mt-6">
         <DownloadPdfButton onClick={() => downloadMonthlyBill(data, dept)} />
         <Link
-          href={`/${dept}/overtime/billing?month=${data.billMonth}&mode=edit`}
+          href={`/${dept}/billing?month=${data.billMonth}&mode=edit`}
           className="flex items-center gap-1 text-sm text-white bg-blue-500 hover:bg-blue-600 px-2 py-1.5 rounded-xl shadow"
         >
           <Pencil size={16} />

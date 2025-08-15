@@ -105,16 +105,16 @@ export async function createOtSettings(prevState, formData) {
     const res = await saveOtSettingsToDb(cleanedData);
 
     if (res.acknowledged && res.modifiedCount > 0) {
-      revalidatePath(`/${_id}/overtime`);
-      revalidatePath(`/${_id}/overtime/entry-form`);
-      revalidatePath(`/${_id}/overtime/settings/edit`);
+      revalidatePath(`/${_id}`);
+      revalidatePath(`/${_id}/entry-form`);
+      revalidatePath(`/${_id}/settings/edit`);
 
       return { success: true, message: "Settings updated successfully!" };
     }
     if (res.acknowledged && res.upsertedCount > 0) {
-      revalidatePath(`/${_id}/overtime`);
-      revalidatePath(`/${_id}/overtime/entry-form`);
-      revalidatePath(`/${_id}/overtime/settings/edit`);
+      revalidatePath(`/${_id}`);
+      revalidatePath(`/${_id}/entry-form`);
+      revalidatePath(`/${_id}/settings/edit`);
 
       return { success: true, message: "Settings created successfully" };
     }

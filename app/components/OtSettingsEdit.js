@@ -39,7 +39,7 @@ const OtSettingsEdit = ({ deptName, dataFromDb }) => {
 
   useEffect(() => {
     if (state && state.success) {
-      router.push(`/${deptName}/overtime/settings`);
+      router.push(`/${deptName}/settings`);
     }
   }, [state, router, deptName]);
 

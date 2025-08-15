@@ -15,8 +15,7 @@ export default async function Page({ params }) {
   const { dept } = await params;
   const { OtType, Unit, Employee, OtTime } = await getOtSettings(dept);
 
-  if (!Employee || !Unit || !OtType || !OtTime)
-    redirect(`/${dept}/overtime/settings`);
+  if (!Employee || !Unit || !OtType || !OtTime) redirect(`/${dept}/settings`);
 
   return (
     <div className="max-w-4xl mx-auto">

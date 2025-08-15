@@ -70,7 +70,7 @@ const BillingMonthSelector = ({ dept, initMonth }) => {
         </div>
         <div className="w-full lg:w-fit whitespace-nowrap flex gap-4">
           <Link
-            href={`/${dept}/overtime/billing?month=${monthSelected}`}
+            href={`/${dept}/billing?month=${monthSelected}`}
             className="w-full text-center px-12 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Get Bill

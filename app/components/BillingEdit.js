@@ -52,7 +52,7 @@ const BillingEdit = ({
 
   useEffect(() => {
     if (state?.success) {
-      router.push(`/${dept}/overtime/billing?month=${billMonth}`);
+      router.push(`/${dept}/billing?month=${billMonth}`);
     }
   }, [state, router, billMonth, dept]);
 
@@ -250,7 +250,7 @@ const BillingEdit = ({
           btnClassName="px-6 py-2.5  font-medium rounded-md shadow transition
              bg-red-600 hover:bg-red-700 text-white"
           text="Close Editor"
-          href={`/${dept}/overtime/billing?month=${month}`}
+          href={`/${dept}/billing?month=${month}`}
         />
       </div>
     </form>

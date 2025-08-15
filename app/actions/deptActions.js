@@ -65,9 +65,9 @@ export async function addDept(label) {
       if (deptSettings.acknowledged && deptSettings.modifiedCount > 0) {
         revalidatePath(`/`);
         revalidatePath(`/${dept}`);
-        revalidatePath(`/${dept}/overtime`);
-        revalidatePath(`/${dept}/overtime/entry-form`);
-        revalidatePath(`/${dept}/overtime/settings/edit`);
+        revalidatePath(`/${dept}`);
+        revalidatePath(`/${dept}/entry-form`);
+        revalidatePath(`/${dept}/settings/edit`);
 
         // return { success: true, message: "Settings updated successfully!" };
       }
@@ -118,9 +118,9 @@ export async function editDept(_id, deptName) {
       if (deptSettings.acknowledged && deptSettings.modifiedCount > 0) {
         revalidatePath(`/`);
         revalidatePath(`/${dept}`);
-        revalidatePath(`/${dept}/overtime`);
-        revalidatePath(`/${dept}/overtime/entry-form`);
-        revalidatePath(`/${dept}/overtime/settings/edit`);
+        revalidatePath(`/${dept}`);
+        revalidatePath(`/${dept}/entry-form`);
+        revalidatePath(`/${dept}/settings/edit`);
 
         // return { success: true, message: "Settings updated successfully!" };
       }

@@ -50,9 +50,9 @@ export async function createOtEntry(prevData, formData) {
 
     if (newOtEntry.acknowledged) {
       revalidatePath(`/${Dept}`);
-      revalidatePath(`/${Dept}/overtime`);
-      revalidatePath(`/${Dept}/overtime/daily`);
-      revalidatePath(`/${Dept}/overtime/monthly`);
+      revalidatePath(`/${Dept}`);
+      revalidatePath(`/${Dept}/daily`);
+      revalidatePath(`/${Dept}/monthly`);
 
       return { success: true, message: "OT entry saved successfully." };
     }
@@ -95,9 +95,9 @@ export async function editOtEntry(prevData, formData) {
 
     if (result.modifiedCount > 0) {
       revalidatePath(`/${Dept}`);
-      revalidatePath(`/${Dept}/overtime`);
-      revalidatePath(`/${Dept}/overtime/daily`);
-      revalidatePath(`/${Dept}/overtime/monthly`);
+      revalidatePath(`/${Dept}`);
+      revalidatePath(`/${Dept}/daily`);
+      revalidatePath(`/${Dept}/monthly`);
       return { success: true, message: "Data updated successfully" };
     }
 
@@ -129,9 +129,9 @@ export async function deleteOtEntry(id, dept) {
       return { success: false, message: "Document not found!" };
     }
     revalidatePath(`/${dept}`);
-    revalidatePath(`/${dept}/overtime`);
-    revalidatePath(`/${dept}/overtime/daily`);
-    revalidatePath(`/${dept}/overtime/monthly`);
+    revalidatePath(`/${dept}`);
+    revalidatePath(`/${dept}/daily`);
+    revalidatePath(`/${dept}/monthly`);
 
     return { success: true, message: "Deleted successfully!" };
   } catch (error) {

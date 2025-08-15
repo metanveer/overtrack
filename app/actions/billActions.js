@@ -64,7 +64,7 @@ export async function createBill(prevData, formData) {
 
     if (newBill.acknowledged) {
       revalidatePath(`/${dept}`);
-      revalidatePath(`/${dept}/overtime/billing`);
+      revalidatePath(`/${dept}/billing`);
 
       return { success: true, message: "Bill data saved successfully." };
     }
@@ -119,7 +119,7 @@ export async function editBill(prevData, formData) {
 
     if (updatedBill.modifiedCount > 0) {
       revalidatePath(`/${dept}`);
-      revalidatePath(`/${dept}/overtime/billing`);
+      revalidatePath(`/${dept}/billing`);
 
       return { success: true, message: "Data updated successfully" };
     }
@@ -151,7 +151,7 @@ export async function deleteBill(month, dept) {
       return { success: false, message: "Document not found!" };
     }
     revalidatePath(`/${dept}`);
-    revalidatePath(`/${dept}/overtime/billing`);
+    revalidatePath(`/${dept}/billing`);
 
     return { success: true, message: "Deleted successfully!" };
   } catch (error) {

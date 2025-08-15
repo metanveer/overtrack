@@ -55,13 +55,13 @@ const CriteriaSelector = ({
         endDateObj.getDate()
       ).padStart(2, "0")}`;
 
-      return `/${dept}/overtime/${
+      return `/${dept}/${
         isUnit ? "unit" : isOtType ? "ot-type" : "employee"
       }?start=${start}&end=${end}&name=${employeeName}`;
     }
 
     if (mode === "range" && isRangeFormValid) {
-      return `/${dept}/overtime/${
+      return `/${dept}/${
         isUnit ? "unit" : isOtType ? "ot-type" : "employee"
       }?start=${startDate}&end=${endDate}&name=${employeeName}`;
     }

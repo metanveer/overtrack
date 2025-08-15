@@ -21,7 +21,7 @@ const Settings = async ({ params }) => {
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <CustomLink
-          href={`/${dept}/overtime/settings/edit`}
+          href={`/${dept}/settings/edit`}
           label={"Edit Dropdown Options"}
         />
       </div>

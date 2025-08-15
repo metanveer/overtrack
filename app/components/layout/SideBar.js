@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 import LogoutBtn from "../auth/LogoutBtn";
 
@@ -12,6 +12,12 @@ const SideBar = ({
   session,
 }) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Build the full current URL path including query string
+  const currentFullPath = searchParams.toString()
+    ? `${pathname}?${searchParams.toString()}`
+    : pathname;
 
   return (
     <>
@@ -37,7 +43,7 @@ const SideBar = ({
               href={href}
               onClick={handleLinkClick}
               className={`pr-2 pl-6 py-2 transition-colors duration-200 ${
-                pathname === href?.split("?")[0]
+                currentFullPath === href
                   ? "text-blue-600 font-semibold bg-blue-100"
                   : "text-black hover:text-blue-600"
               }`}
@@ -49,11 +55,9 @@ const SideBar = ({
             <Link
               href="/profile"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => setIsMenuOpen(false)}
             >
               Profile ({session?.user?.role})
             </Link>
-
             <LogoutBtn />
           </div>
         </nav>

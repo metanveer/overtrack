@@ -87,7 +87,7 @@ const EmployeeOtRecords = ({ data, start, end, dept }) => {
                             text={`${formatDate(entry.Date)} (${getDayName(
                               entry.Date
                             )})`}
-                            href={`/${dept}/overtime/daily?date=${entry.Date}`}
+                            href={`/${dept}/daily?date=${entry.Date}`}
                           />
                         </td>
                         <td className="px-4 py-2">{entry.OtHour}</td>
@@ -98,7 +98,7 @@ const EmployeeOtRecords = ({ data, start, end, dept }) => {
                         <td className="px-4 py-2">
                           <TextLink
                             text={entry.WorkDescription}
-                            href={`/${dept}/overtime/slip?id=${entry._id}`}
+                            href={`/${dept}/slip?id=${entry._id}`}
                           />
                         </td>
                         <td className="px-4 py-2">{entry.Remarks}</td>

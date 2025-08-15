@@ -370,8 +370,8 @@ export default function OvertimeForm({
             <Link
               href={
                 isEditing || isCopy
-                  ? `/${deptName}/overtime/slip?id=${overtimeDoc._id}`
-                  : `/${deptName}/overtime`
+                  ? `/${deptName}/slip?id=${overtimeDoc._id}`
+                  : `/${deptName}`
               }
               className="mt-6 inline-block px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded transition"
             >

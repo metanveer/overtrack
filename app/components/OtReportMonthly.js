@@ -7,7 +7,7 @@ import TextLink from "./TextLink";
 import formatDate, { getDayName } from "@/utils/formatDate";
 import { extractAfterH } from "@/utils/extractAfterH";
 import { downloadNotice } from "@/utils/pdf-download/downloadNotice";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const OtReportMonthly = ({
   unitName,
@@ -18,10 +18,16 @@ const OtReportMonthly = ({
   dept,
   employeePhones,
 }) => {
+  const searchParams = useSearchParams();
+
+  const create_notice = searchParams.get("create_notice");
+
+  const isCreatingNotice = create_notice === "true";
+
   const [printPhoneNumbers, setPrintPhoneNumbers] = useState(true);
   const [printRemarks, setPrintRemarks] = useState(true);
 
-  const [showCheckboxes, setShowCheckboxes] = useState(false);
+  const [showCheckboxes, setShowCheckboxes] = useState(isCreatingNotice);
   const [selectedDates, setSelectedDates] = useState(new Set());
   const [showOnlySelected, setShowOnlySelected] = useState(false);
   const [noticeTitle, setNoticeTitle] = useState("");
@@ -30,8 +36,12 @@ const OtReportMonthly = ({
   const isNotice = showOnlySelected;
   const hasSelectedDates = selectedDates.size > 0;
   const showHolidayNoticeBtn =
-    pathName === `/${dept}/overtime/monthly` && !showCheckboxes;
+    pathName === `/${dept}/monthly` && !showCheckboxes;
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    setShowCheckboxes(isCreatingNotice); // update visibility based on URL param
+  }, [isCreatingNotice]);
 
   // Focus input when it appears
   useEffect(() => {
@@ -225,7 +235,7 @@ const OtReportMonthly = ({
                             className="border border-gray-200 px-2 py-2 align-top text-center font-semibold whitespace-nowrap"
                           >
                             <TextLink
-                              href={`/${dept}/overtime/daily?date=${group._id}`}
+                              href={`/${dept}/daily?date=${group._id}`}
                               text={`${formatDate(group._id)} ${getDayName(
                                 group._id
                               )}`}
@@ -257,7 +267,7 @@ const OtReportMonthly = ({
                                     : item
                                 }
                                 key={index}
-                                href={`/${dept}/overtime/unit?start=${start}&end=${end}&name=${item}`}
+                                href={`/${dept}/unit?start=${start}&end=${end}&name=${item}`}
                               />
                             ))}
                           </td>
@@ -269,14 +279,14 @@ const OtReportMonthly = ({
                             className="border border-gray-200 px-2 py-2 align-top"
                           >
                             <TextLink
-                              href={`/${dept}/overtime/slip?id=${entry._id}`}
+                              href={`/${dept}/slip?id=${entry._id}`}
                               text={entry.WorkDescription}
                             />
                           </td>
                         )}
                         <td className="border border-gray-200 px-2 py-2 whitespace-nowrap">
                           <TextLink
-                            href={`/${dept}/overtime/employee?start=${start}&end=${end}&name=${emp.Name}`}
+                            href={`/${dept}/employee?start=${start}&end=${end}&name=${emp.Name}`}
                             text={emp.Name}
                           />
                         </td>

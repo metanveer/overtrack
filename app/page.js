@@ -2,15 +2,13 @@ import checkAuthPermission from "@/utils/checkAuthPermission";
 import Login from "./components/auth/Login";
 import CustomLink from "./components/CustomLink";
 import LayoutShell from "./components/layout/LayoutShell";
-import { getAllDepts, getPermittedDepts } from "@/lib/mongodb/deptQueries";
+import { getPermittedDepts } from "@/lib/mongodb/deptQueries";
 import { adminOptions } from "./admin/admin-options";
 
 export default async function HomePage({ searchParams }) {
   const { mode } = await searchParams;
 
   const { success, session } = await checkAuthPermission("isLoggedIn");
-
-  // const depts = await getAllDepts();
 
   if (!success) {
     return (

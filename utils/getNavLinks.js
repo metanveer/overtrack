@@ -14,7 +14,7 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
     !otTypes?.length ||
     !otHours?.length
   ) {
-    return [{ href: `/${dept}/overtime/settings`, label: "Settings" }];
+    return [{ href: `/${dept}/settings`, label: "Settings" }];
   }
 
   const firstEmp = employees ? employees[0].Name : "";
@@ -23,33 +23,36 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
 
   return [
     { href: `/${dept}`, label: "Dashboard" },
-    { href: `/${dept}/overtime/entry-form`, label: "Entry Form" },
-    { href: `/${dept}/overtime`, label: "Menu" },
+    { href: `/${dept}/entry-form`, label: "Add Overtime" },
     {
-      href: `/${dept}/overtime/daily?date=${selectedDate}`,
+      href: `/${dept}/monthly?month=${yearMonth}&create_notice=true`,
+      label: "Create Holiday Notice",
+    },
+    {
+      href: `/${dept}/daily?date=${selectedDate}`,
       label: "Daily Report",
     },
     {
-      href: `/${dept}/overtime/monthly?month=${yearMonth}`,
+      href: `/${dept}/monthly?month=${yearMonth}`,
       label: "Monthly Report",
     },
     {
-      href: `/${dept}/overtime/yearly?year=${year}`,
+      href: `/${dept}/yearly?year=${year}`,
       label: "Yearly Report",
     },
     {
-      href: `/${dept}/overtime/employee?start=${start}&end=${end}&name=${firstEmp}`,
+      href: `/${dept}/employee?start=${start}&end=${end}&name=${firstEmp}`,
       label: "Employee Records",
     },
     {
-      href: `/${dept}/overtime/unit?start=${start}&end=${end}&name=${firstUnit}`,
+      href: `/${dept}/unit?start=${start}&end=${end}&name=${firstUnit}`,
       label: "Unit Records",
     },
     {
-      href: `/${dept}/overtime/ot-type?start=${start}&end=${end}&name=${firstOtType}`,
+      href: `/${dept}/ot-type?start=${start}&end=${end}&name=${firstOtType}`,
       label: "OT Type Records",
     },
-    { href: `/${dept}/overtime/billing?month=${yearMonth}`, label: "Billing" },
-    { href: `/${dept}/overtime/settings`, label: "Settings" },
+    { href: `/${dept}/billing?month=${yearMonth}`, label: "Billing" },
+    { href: `/${dept}/settings`, label: "Settings" },
   ];
 }

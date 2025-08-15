@@ -76,12 +76,12 @@ const OtView = ({ dept, data }) => {
         <DownloadPdfButton onClick={() => downloadOtSlip(data, dept)} />
         <TextLink
           isButton
-          href={`/${dept}/overtime/slip/edit?id=${data._id}`}
+          href={`/${dept}/slip/edit?id=${data._id}`}
           text={"Edit"}
         />
         <TextLink
           isButton
-          href={`/${dept}/overtime/slip/copy?id=${data._id}`}
+          href={`/${dept}/slip/copy?id=${data._id}`}
           text={"Copy"}
         />
         <DeleteBtnConfirm

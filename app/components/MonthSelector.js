@@ -70,13 +70,13 @@ const MonthSelector = ({ initMonth, dept }) => {
         </div>
         <div className="w-full flex gap-4">
           <Link
-            href={`/${dept}/overtime/monthly?month=${monthSelected}`}
+            href={`/${dept}/monthly?month=${monthSelected}`}
             className="w-full text-center px-6 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Detailed Report
           </Link>
           <Link
-            href={`/${dept}/overtime/monthly?month=${monthSelected}&type=summary`}
+            href={`/${dept}/monthly?month=${monthSelected}&type=summary`}
             className="w-full text-center px-6 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Summary Report

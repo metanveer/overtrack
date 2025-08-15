@@ -66,7 +66,7 @@ const SearchModal = ({ onClose, dept }) => {
             <Link
               onClick={() => onClose()}
               key={item._id}
-              href={`/${dept}/overtime/slip?id=${item._id}`}
+              href={`/${dept}/slip?id=${item._id}`}
             >
               <div className="border-b py-2 px-2 hover:bg-gray-50 rounded-md transition">
                 <p className="font-medium">{item.WorkDescription}</p>

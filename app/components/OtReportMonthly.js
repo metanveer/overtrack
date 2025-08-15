@@ -18,6 +18,9 @@ const OtReportMonthly = ({
   dept,
   employeePhones,
 }) => {
+  const [printPhoneNumbers, setPrintPhoneNumbers] = useState(true);
+  const [printRemarks, setPrintRemarks] = useState(true);
+
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [selectedDates, setSelectedDates] = useState(new Set());
   const [showOnlySelected, setShowOnlySelected] = useState(false);
@@ -102,6 +105,30 @@ const OtReportMonthly = ({
           )}
         </div>
       </div>
+      {showOnlySelected && (
+        <div className="flex justify-center gap-6 p-4">
+          <label className="flex items-center gap-2 text-sm font-medium cursor-pointer hover:text-blue-700 transition-colors">
+            <input
+              type="checkbox"
+              checked={printPhoneNumbers}
+              onChange={(e) => setPrintPhoneNumbers(e.target.checked)}
+              className="w-4 h-4 accent-blue-600 rounded"
+            />
+            Print Phone Numbers
+          </label>
+
+          <label className="flex items-center gap-2 text-sm font-medium cursor-pointer hover:text-blue-700 transition-colors">
+            <input
+              type="checkbox"
+              checked={printRemarks}
+              onChange={(e) => setPrintRemarks(e.target.checked)}
+              className="w-4 h-4 accent-blue-600 rounded"
+            />
+            Print Remarks
+          </label>
+        </div>
+      )}
+
       {showHolidayNoticeBtn && (
         <button
           onClick={toggleCheckboxes}
@@ -134,11 +161,11 @@ const OtReportMonthly = ({
                   Work Description
                 </th>
                 <th className="border border-gray-200 px-2 py-2">Employee</th>
-                {showOnlySelected && (
+                {showOnlySelected && printPhoneNumbers ? (
                   <th className="border border-gray-200 px-2 py-2">
                     Phone No.
                   </th>
-                )}
+                ) : null}
 
                 {!showOnlySelected && (
                   <>
@@ -148,10 +175,10 @@ const OtReportMonthly = ({
                     <th className="border border-gray-200 px-2 py-2">
                       OT Hour
                     </th>
-                    <th className="border border-gray-200 px-2 py-2">
-                      Remarks
-                    </th>
                   </>
+                )}
+                {printRemarks && (
+                  <th className="border border-gray-200 px-2 py-2">Remarks</th>
                 )}
               </tr>
             </thead>
@@ -253,7 +280,7 @@ const OtReportMonthly = ({
                             text={emp.Name}
                           />
                         </td>
-                        {showOnlySelected && (
+                        {showOnlySelected && printPhoneNumbers && (
                           <td className="border border-gray-200 px-2 py-2 text-sm">
                             {employeePhones?.find((e) => e.Name === emp.Name)
                               ?.Phone || (
@@ -273,7 +300,7 @@ const OtReportMonthly = ({
                           </>
                         )}
 
-                        {!showOnlySelected && empIdx === 0 && (
+                        {printRemarks && empIdx === 0 && (
                           <td
                             rowSpan={entry.Employee.length}
                             className="border border-gray-200 px-2 py-2 align-top max-w-3xs"
@@ -313,7 +340,14 @@ const OtReportMonthly = ({
           <DownloadPdfButton
             onClick={() => {
               if (isNotice) {
-                downloadNotice(visibleData, employeePhones, dept, noticeTitle);
+                downloadNotice(
+                  visibleData,
+                  employeePhones,
+                  dept,
+                  noticeTitle,
+                  printPhoneNumbers,
+                  printRemarks
+                );
                 return;
               }
 

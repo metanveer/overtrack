@@ -7,18 +7,17 @@ export const downloadNotice = async (
   groupedData,
   employeePhones,
   dept,
-  noticeTitle
+  noticeTitle,
+  printPhoneNumbers,
+  printRemarks
 ) => {
   const noticeDate = (dateString) => {
     const date = new Date(dateString);
     date.setDate(date.getDate() - 1);
-
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-
     return `${year}-${month}-${day}`;
-    //return previous date of the given date
   };
 
   const logoBase64 = await fetchLogoBase64();
@@ -28,46 +27,41 @@ export const downloadNotice = async (
     unit: "pt",
     format: "a4",
   });
+
   const documentFont = "times";
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 60;
 
-  // 🖼️ Add logo
+  // Logo
   doc.addImage(logoBase64, "PNG", margin, 40, 50, 60);
 
-  // 🧾 Header
-  doc.setFontSize(18);
-  doc.setFont(documentFont, "bold");
+  // Header
+  doc.setFontSize(18).setFont(documentFont, "bold");
   doc.text("EASTERN REFINERY LIMITED", pageWidth / 2, margin, {
     align: "center",
   });
 
-  doc.setFontSize(12);
-  doc.setFont(documentFont, "normal");
+  doc.setFontSize(12).setFont(documentFont, "normal");
   doc.text("North Patenga, Chattogram", pageWidth / 2, margin + 18, {
     align: "center",
   });
 
-  doc.setFontSize(12);
-  doc.setFont(documentFont, "bold");
+  doc.setFontSize(12).setFont(documentFont, "bold");
   doc.text(`${dept} Department`, pageWidth / 2, margin + 38, {
     align: "center",
   });
 
-  // HOLIDAY DUTY NOTICE TITLE
-  doc.setFontSize(14);
-  doc.setFont(documentFont, "bold");
+  // Notice Title
+  doc.setFontSize(14).setFont(documentFont, "bold");
   const titleText = noticeTitle || "Holiday Duty";
   const x = pageWidth / 2;
   const y = margin + 78;
-
   doc.text(titleText, x, y, { align: "center" });
 
-  // Underline a bit lower
-  const underlineOffset = 5; // adjust as needed
-  doc.setLineWidth(1.5);
-  doc.setDrawColor(0, 0, 0);
+  // Underline
+  const underlineOffset = 5;
+  doc.setLineWidth(1.5).setDrawColor(0, 0, 0);
   const textWidth = doc.getTextWidth(titleText);
   doc.line(
     x - textWidth / 2,
@@ -76,32 +70,29 @@ export const downloadNotice = async (
     y + underlineOffset
   );
 
-  // 📅 DATE
-
+  // Date
   const currentDate = () => {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
-    const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const month = String(today.getMonth() + 1).padStart(2, "0");
     const year = today.getFullYear();
     return `${day}-${month}-${year}`;
   };
 
   function getPhoneNumberByName(name, data) {
     const person = data.find((entry) => entry.Name === name);
-    return person ? person.Phone : "Phone number not found.";
+    return person && person.Phone ? person.Phone : "Not available";
   }
 
-  doc.setFont(documentFont, "bold");
-  doc.setFontSize(11);
+  doc.setFont(documentFont, "bold").setFontSize(11);
   doc.text(
     `Date: ${formatDate(noticeDate(groupedData[0]._id))}`,
     pageWidth - margin,
     margin + 108,
-    {
-      align: "right",
-    }
+    { align: "right" }
   );
 
+  // Build table body
   let body = [];
 
   groupedData.forEach((group) => {
@@ -111,6 +102,7 @@ export const downloadNotice = async (
       0
     );
     let datePrinted = false;
+    let spannedCells = []; // Track row-spanned cells
 
     group.records.forEach((record) => {
       const empLen = record.Employee.length;
@@ -118,24 +110,91 @@ export const downloadNotice = async (
       record.Employee.forEach((emp, empIndex) => {
         const row = [];
 
+        // Date column (once per date group)
         if (!datePrinted) {
-          row.push({
+          const dateCell = {
             content: `${formatDate(date)} (${getDayName(date)})`,
             rowSpan: dateRowSpan,
-          });
+            styles: {
+              lineWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 },
+            },
+          };
+          row.push(dateCell);
+          spannedCells.push(dateCell);
           datePrinted = true;
         }
 
-        row.push({ content: emp.Name, styles: { halign: "left" } });
-        row.push(getPhoneNumberByName(emp.Name, employeePhones));
+        // Employee name
+        row.push({
+          content: emp.Name,
+          styles: {
+            halign: "left",
+            lineWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 },
+          },
+        });
 
-        if (empIndex === 0) {
-          row.push({ content: record.Unit, rowSpan: empLen });
+        // Phone
+        if (printPhoneNumbers) {
           row.push({
+            content: getPhoneNumberByName(emp.Name, employeePhones),
+            styles: {
+              halign: "center",
+              lineWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 },
+            },
+          });
+        }
+
+        // Job details
+        if (empIndex === 0) {
+          const unitCell = {
+            content: record.Unit,
+            rowSpan: empLen,
+            styles: {
+              lineWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 },
+            },
+          };
+          const jobCell = {
             content: record.WorkDescription,
             rowSpan: empLen,
-            styles: { halign: "left" },
+            styles: {
+              halign: "left",
+              lineWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 },
+            },
+          };
+          row.push(unitCell, jobCell);
+          spannedCells.push(unitCell, jobCell);
+
+          if (printRemarks) {
+            const remarkCell = {
+              content: record.Remarks,
+              rowSpan: empLen,
+              styles: {
+                halign: "left",
+                lineWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 },
+              },
+            };
+            row.push(remarkCell);
+            spannedCells.push(remarkCell);
+          }
+        }
+
+        // Thick top border for first row of job
+        if (empIndex === 0) {
+          row.forEach((cell) => {
+            if (typeof cell === "object") cell.styles.lineWidth.top = 1.5;
           });
+        }
+
+        // Thick bottom border for last row of job
+        if (empIndex === empLen - 1) {
+          row.forEach((cell) => {
+            if (typeof cell === "object") cell.styles.lineWidth.bottom = 1.5;
+          });
+          // Update all row-spanned cells for this job
+          spannedCells.forEach((cell) => {
+            cell.styles.lineWidth.bottom = 1.5;
+          });
+          spannedCells = []; // reset for next job
         }
 
         body.push(row);
@@ -143,10 +202,16 @@ export const downloadNotice = async (
     });
   });
 
+  // Build header dynamically
   const headRow = () => {
-    return ["Date", "Employee", "Phone No.", "Assigned To", "Job"];
+    const head = ["Date", "Employee"];
+    if (printPhoneNumbers) head.push("Phone No.");
+    head.push("Assigned To", "Job");
+    if (printRemarks) head.push("Remarks");
+    return head;
   };
 
+  // Table
   autoTable(doc, {
     startY: margin + 128,
     margin: { left: margin, right: margin },
@@ -167,16 +232,17 @@ export const downloadNotice = async (
       fontStyle: "bold",
       halign: "center",
     },
-    columnStyles: {
-      5: { halign: "center" },
-    },
     theme: "grid",
     tableWidth: "auto",
   });
 
-  // 🧾 Footer with correct total page count
-  const pageCount = doc.internal.getNumberOfPages();
+  // Signature
+  const finalY = doc.lastAutoTable.finalY + 90;
+  doc.text("______________________", pageWidth - margin - 130, finalY);
+  doc.text("Authorized Signatory", pageWidth - margin - 120, finalY + 15);
 
+  // Footer
+  const pageCount = doc.internal.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.setFontSize(10);
@@ -185,11 +251,7 @@ export const downloadNotice = async (
     });
   }
   doc.text(`Print date: ${currentDate()}`, margin, pageHeight - 20);
-  // ✍️ Signature
-  const finalY = doc.lastAutoTable.finalY + 70;
-  doc.setFont(documentFont, "normal");
-  // doc.text("______________________", pageWidth - margin - 160, finalY);
-  // doc.text("Manager / AGM", pageWidth - margin - 140, finalY + 15);
 
+  // Save PDF
   doc.save(`Holiday_Duty_Notice_${dept}_${noticeDate(groupedData[0]._id)}.pdf`);
 };

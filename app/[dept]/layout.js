@@ -2,7 +2,6 @@ import LayoutShell from "../components/layout/LayoutShell"; // client layout
 import { getOtSettings } from "@/lib/mongodb/oTSettingsQueries";
 import checkAuthPermission from "@/utils/checkAuthPermission";
 
-import AccessDenied from "../components/auth/AccessDenied";
 import { redirect } from "next/navigation";
 import getNavLinks from "@/utils/getNavLinks";
 
@@ -21,7 +20,6 @@ export default async function RootLayout({ children, params }) {
   const { Employee, Unit, OtType, OtTime } = await getOtSettings(dept);
 
   const navLinks = getNavLinks(Employee, Unit, OtType, OtTime, dept);
-  //const navLinks = [];
 
   return (
     <LayoutShell dept={dept} navLinks={navLinks} session={session}>

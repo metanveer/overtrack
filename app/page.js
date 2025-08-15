@@ -4,6 +4,7 @@ import CustomLink from "./components/CustomLink";
 import LayoutShell from "./components/layout/LayoutShell";
 import { getPermittedDepts } from "@/lib/mongodb/deptQueries";
 import { adminOptions } from "./admin/admin-options";
+import { redirect } from "next/navigation";
 
 export default async function HomePage({ searchParams }) {
   const { mode } = await searchParams;
@@ -19,6 +20,10 @@ export default async function HomePage({ searchParams }) {
   }
 
   const isAdmin = session.user.role === "Admin";
+
+  if (!isAdmin) {
+    redirect(`/${session.user.dept}`);
+  }
 
   const { deptLinks } = await getPermittedDepts(session.user.role);
 

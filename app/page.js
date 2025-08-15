@@ -5,6 +5,7 @@ import LayoutShell from "./components/layout/LayoutShell";
 import { getPermittedDepts } from "@/lib/mongodb/deptQueries";
 import { adminOptions } from "./admin/admin-options";
 import { redirect } from "next/navigation";
+import DashboardLoading from "./components/loading/DashboardLoading";
 
 export default async function HomePage({ searchParams }) {
   const { mode } = await searchParams;

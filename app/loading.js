@@ -1,9 +1,9 @@
-import LoadingSpin from "@/app/components/loading/LoadingSpin";
+import DashboardLoading from "./components/loading/DashboardLoading";
 
 export default function Loading() {
   return (
     <>
-      <LoadingSpin />
+      <DashboardLoading />
     </>
   );
 }

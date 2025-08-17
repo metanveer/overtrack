@@ -192,9 +192,13 @@ export default function OvertimeForm({
             <div>
               <label className="block font-medium text-gray-700 mb-1 flex">
                 Date
-                <p className="text-sm text-blue-700 bg-blue-100 px-2 mx-2 rounded-md">
-                  {formData.Date ? `${getDayName(formData.Date)}` : ""}
-                </p>
+                {formData.Date ? (
+                  <p className="text-sm text-blue-700 bg-blue-100 px-2 mx-2 rounded-md">
+                    {getDayName(formData.Date, "YYYY-MM-DD", "long")}
+                  </p>
+                ) : (
+                  ""
+                )}
               </label>
               <input
                 type="date"

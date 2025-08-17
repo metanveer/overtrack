@@ -3,7 +3,11 @@ export default function formatDate(dateString) {
   return `${day}-${month}-${year}`;
 }
 
-export function getDayName(dateStr, format = "YYYY-MM-DD") {
+export function getDayName(
+  dateStr,
+  format = "YYYY-MM-DD",
+  dayNameLength = "short"
+) {
   let date;
 
   if (format === "YYYY-MM-DD") {
@@ -20,5 +24,7 @@ export function getDayName(dateStr, format = "YYYY-MM-DD") {
     );
   }
 
-  return date.toLocaleDateString("en-US", { weekday: "long" }).toUpperCase();
+  return date
+    .toLocaleDateString("en-US", { weekday: dayNameLength })
+    .toUpperCase();
 }

@@ -190,8 +190,11 @@ export default function OvertimeForm({
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block font-medium text-gray-700 mb-1">
-                Date {formData.Date ? `(${getDayName(formData.Date)})` : ""}
+              <label className="block font-medium text-gray-700 mb-1 flex">
+                Date
+                <p className="text-sm text-blue-700 bg-blue-100 px-2 mx-2 rounded-md">
+                  {formData.Date ? `${getDayName(formData.Date)}` : ""}
+                </p>
               </label>
               <input
                 type="date"
@@ -206,7 +209,7 @@ export default function OvertimeForm({
 
             <div>
               <label className="block font-medium text-gray-700 mb-1">
-                Type
+                Overtime Type
               </label>
               <Select
                 inputId="OtType"
@@ -228,7 +231,7 @@ export default function OvertimeForm({
 
             <div>
               <label className="block font-medium text-gray-700 mb-1">
-                Unit
+                Unit or Work Area
               </label>
               <Select
                 inputId="Unit"
@@ -265,7 +268,7 @@ export default function OvertimeForm({
 
           <div>
             <label className="block font-medium text-gray-700 mb-2">
-              Employees
+              Employee(s)
             </label>
             <div className="space-y-4">
               {formData.Employee.map((emp, idx) => (
@@ -352,7 +355,7 @@ export default function OvertimeForm({
 
           <div>
             <label className="block font-medium text-gray-700 mb-1">
-              Remarks
+              Remarks or Notes <i>(optional)</i>
             </label>
             <textarea
               id="Remarks"

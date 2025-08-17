@@ -26,10 +26,20 @@ export async function createOtEntry(prevData, formData) {
       return { success: false, message: "No data provided." };
     }
 
-    const { Date, Type, Unit, WorkDescription, Employee, Remarks, Dept } =
-      parsedData;
-    if (!Date || !Type || !Unit || !WorkDescription || !Employee || !Dept) {
-      return { success: false, message: "All fields are required." };
+    const { Date, Type, Unit, WorkDescription, Employee, Dept } = parsedData;
+
+    if (
+      !Date ||
+      !Type ||
+      Unit.length === 0 ||
+      !WorkDescription ||
+      !Employee ||
+      !Dept
+    ) {
+      return {
+        success: false,
+        message: "All fields are required except 'Remarks'.",
+      };
     }
 
     const hasEmptyValues = Employee.some((emp) =>

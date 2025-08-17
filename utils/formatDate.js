@@ -20,5 +20,5 @@ export function getDayName(dateStr, format = "YYYY-MM-DD") {
     );
   }
 
-  return date.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
+  return date.toLocaleDateString("en-US", { weekday: "long" }).toUpperCase();
 }

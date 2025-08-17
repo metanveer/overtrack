@@ -4,7 +4,7 @@ import Link from "next/link";
 const NotFound = () => {
   return (
     <main className="flex flex-col items-center justify-start min-h-screen p-4 text-center bg-gray-100">
-      <div className="bg-white p-8 rounded-2xl shadow-md max-w-md w-full">
+      <div className="p-8 rounded-2xl max-w-md w-full">
         {/* Icon */}
         <div className="flex justify-center mb-6">
           <svg
@@ -23,7 +23,7 @@ const NotFound = () => {
         </div>
 
         {/* Heading */}
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <h2 className="text-2xl font-bold text-gray-600 mb-4">
           The requested content is unavailable!
         </h2>
 

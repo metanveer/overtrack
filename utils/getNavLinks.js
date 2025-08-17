@@ -22,6 +22,7 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
   const firstOtType = otTypes ? otTypes[0] : "";
 
   return [
+    { href: `/${dept}/updates`, label: "New Features" },
     { href: `/${dept}`, label: "Dashboard" },
     { href: `/${dept}/entry-form`, label: "Add Overtime" },
     {

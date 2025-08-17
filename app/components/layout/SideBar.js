@@ -45,7 +45,9 @@ const SideBar = ({
               className={`pr-2 pl-6 py-2 transition-colors duration-200 ${
                 currentFullPath === href
                   ? "text-blue-600 font-semibold bg-blue-100"
-                  : "text-black hover:text-blue-600"
+                  : label === "New Features"
+                  ? "text-yellow-600 font-bold hover:text-yellow-700 hover:bg-blue-100"
+                  : "text-gray-900 hover:bg-blue-100"
               }`}
             >
               {label}

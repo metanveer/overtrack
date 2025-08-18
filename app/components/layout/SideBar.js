@@ -43,7 +43,7 @@ const SideBar = ({
               href={href}
               onClick={handleLinkClick}
               className={`pr-2 pl-6 py-2 transition-colors duration-200 ${
-                currentFullPath === href
+                currentFullPath === href || pathname === href?.split("?")[0]
                   ? "text-blue-600 font-semibold bg-blue-100"
                   : label === "New Features"
                   ? "text-yellow-600 font-bold hover:text-yellow-700 hover:bg-blue-100"

@@ -50,6 +50,10 @@ export default function getNavLinks(employees, units, otTypes, otHours, dept) {
       label: "Unit Records",
     },
     {
+      href: `/${dept}/unit/summary?start=${start}&end=${end}`,
+      label: "Units Summary",
+    },
+    {
       href: `/${dept}/ot-type?start=${start}&end=${end}&name=${firstOtType}`,
       label: "OT Type Records",
     },

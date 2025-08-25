@@ -3,6 +3,12 @@ import React from "react";
 
 const updates = [
   {
+    version: "2025-08-25",
+    changes: [
+      "Implemented Unit-wise Overtime Summary page with PDF report download functionality.",
+    ],
+  },
+  {
     version: "2025-08-17",
     changes: [
       "Overtime Entry Form date field now displays the full day name with a highlighted blue background.",

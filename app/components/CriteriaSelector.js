@@ -8,6 +8,7 @@ const CriteriaSelector = ({
   end,
   name,
   isUnit,
+  isUnitsSummary,
   isOtType,
   dept,
 }) => {
@@ -16,6 +17,13 @@ const CriteriaSelector = ({
   const currentYear = currentDate.getFullYear();
 
   function getInitMode() {
+    if (isUnitsSummary) {
+      if (start && end) {
+        return "range";
+      }
+      return "month";
+    }
+
     if (start && end && name) {
       return "range";
     }
@@ -44,8 +52,12 @@ const CriteriaSelector = ({
     { value: "12", label: "December" },
   ];
 
-  const isMonthFormValid = selectedMonth && selectedYear && employeeName;
-  const isRangeFormValid = startDate && endDate && employeeName;
+  const isMonthFormValid = isUnitsSummary
+    ? selectedMonth && selectedYear
+    : selectedMonth && selectedYear && employeeName;
+  const isRangeFormValid = isUnitsSummary
+    ? startDate && endDate
+    : startDate && endDate && employeeName;
 
   const getLink = () => {
     if (mode === "month" && isMonthFormValid) {
@@ -55,15 +67,19 @@ const CriteriaSelector = ({
         endDateObj.getDate()
       ).padStart(2, "0")}`;
 
-      return `/${dept}/${
-        isUnit ? "unit" : isOtType ? "ot-type" : "employee"
-      }?start=${start}&end=${end}&name=${employeeName}`;
+      return isUnitsSummary
+        ? `/${dept}/unit/summary?start=${start}&end=${end}`
+        : `/${dept}/${
+            isUnit ? "unit" : isOtType ? "ot-type" : "employee"
+          }?start=${start}&end=${end}&name=${employeeName}`;
     }
 
     if (mode === "range" && isRangeFormValid) {
-      return `/${dept}/${
-        isUnit ? "unit" : isOtType ? "ot-type" : "employee"
-      }?start=${startDate}&end=${endDate}&name=${employeeName}`;
+      return isUnitsSummary
+        ? `/${dept}/unit/summary?start=${startDate}&end=${endDate}`
+        : `/${dept}/${
+            isUnit ? "unit" : isOtType ? "ot-type" : "employee"
+          }?start=${startDate}&end=${endDate}&name=${employeeName}`;
     }
 
     return "#";
@@ -166,34 +182,35 @@ const CriteriaSelector = ({
             </div>
           </>
         )}
-
-        <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {isUnit
-              ? "Unit Name"
-              : isOtType
-              ? "Overtime Type"
-              : "Employee Name"}
-          </label>
-          <select
-            value={employeeName}
-            onChange={(e) => setEmployeeName(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">
+        {isUnitsSummary ? null : (
+          <div className="flex-1 min-w-[200px]">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               {isUnit
-                ? "Select unit"
+                ? "Unit Name"
                 : isOtType
-                ? "Select OT Type"
-                : "Select employee"}
-            </option>
-            {employeeOptions.map((name) => (
-              <option key={name} value={name}>
-                {name}
+                ? "Overtime Type"
+                : "Employee Name"}
+            </label>
+            <select
+              value={employeeName}
+              onChange={(e) => setEmployeeName(e.target.value)}
+              className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">
+                {isUnit
+                  ? "Select unit"
+                  : isOtType
+                  ? "Select OT Type"
+                  : "Select employee"}
               </option>
-            ))}
-          </select>
-        </div>
+              {employeeOptions.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="flex-1 min-w-[200px]">
           <Link
